@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>David Virelles — Jazzfest Wiki</title>
+<link rel="stylesheet" href="../../template/css/wiki.css">
+</head>
+<body>
+<header id="wiki-header">
+  <a class="logo" href="../../index.html">Jazz<span>fest</span> Wiki</a>
+  <div id="search-wrap">
+    <input id="search-input" type="text" placeholder="Musiker, Band, Jahr …" autocomplete="off">
+    <div id="search-results"></div>
+  </div>
+</header>
+<nav id="wiki-nav">
+  <a href="../../index.html" >Hauptseite</a>
+  <a href="../../musicians/index.html" class="active">Musiker</a>
+  <a href="../../bands/index.html" >Bands</a>
+  <a href="../../years/index.html" >Jahre</a>
+  <a href="../../graph.html" >Netzwerk</a>
+</nav>
+<div id="wiki-body">
+  <div class="wiki-page clearfix">
+    <h1 class="page-title">David Virelles</h1>
+<div class="infobox">
+  <div class="infobox-title">David Virelles</div>
+  <div class="profile-image-wrap"><div class="avatar-fallback">DV</div></div>
+  <table>
+    <tr><td>Instrument</td><td>p</td></tr>
+    <tr><td>Auftritte</td><td><strong>2</strong></td></tr>
+    <tr><td>Erstauftritt</td><td>30. Aug 2014</td></tr>
+    <tr><td>Letzter</td><td>16. Apr 2016</td></tr>
+    <tr><td>Bands</td><td>2</td></tr>
+    <tr><td>Mitschnitte</td><td>1</td></tr>
+    
+  </table>
+</div>
+<p><span class="tag instrument">p</span><a class="tag year" href="../years/2014.html">2014</a><a class="tag year" href="../years/2016.html">2016</a><span class="tag mitschnitt">🎙 1 Mitschnitte</span></p>
+
+<div class="wiki-section">
+  <h2>Auftritte am Jazzfest</h2>
+  <p>2 Auftritte dokumentiert.</p>
+  <table class="wiki-table">
+    <thead><tr><th>Datum</th><th>Band / Projekt</th><th>Instrument</th><th>Ort</th><th>Bühne</th></tr></thead>
+    <tbody><tr>
+  <td>16. Apr 2016</td>
+  <td><a href="../bands/tomasz-stanko-ny-quartet.html">Tomasz Stanko NY Quartet</a> 🎙</td>
+  <td>p</td>
+  <td>Nexus</td>
+  <td>—</td>
+</tr><tr>
+  <td>30. Aug 2014</td>
+  <td><a href="../bands/henry-threadgil-ensemble-double-up-in-remberance-of-lawrence-d-butch-morris-old-locks-and-irregular-verbs.html">Henry Threadgil "Ensemble Double up" In remberance of Lawrence D Butch Morris "Old Locks and irregular Verbs"</a></td>
+  <td>p</td>
+  <td>Festival 14 MS</td>
+  <td>—</td>
+</tr></tbody>
+  </table>
+</div>
+
+<div class='wiki-section'><h2>Mitspieler</h2><div class='mitspieler-list'><a class="tag" href="henry-threadgill.html">Henry Threadgill (1×)</a><a class="tag" href="jason-moran.html">Jason Moran (1×)</a><a class="tag" href="roman-filiu.html">Roman Filiu (1×)</a><a class="tag" href="curtis-macdonald.html">Curtis Macdonald (1×)</a><a class="tag" href="christopher-hoffman.html">Christopher Hoffman (1×)</a><a class="tag" href="jose-davila.html">Jose Davila (1×)</a><a class="tag" href="craig-weinrib.html">Craig Weinrib (1×)</a><a class="tag" href="tomasz-stanko.html">Tomasz Stanko (1×)</a><a class="tag" href="reuben-rogers.html">Reuben Rogers (1×)</a><a class="tag" href="gerald-cleaver.html">Gerald Cleaver (1×)</a></div></div>
+
+
+
+  </div>
+</div>
+<footer id="wiki-footer">
+  Jazzfest Wiki · 5936 Musiker · 13034 Konzerte · 1975–2025
+  · Daten: Jazzfest Wien Chronik + Discogs API
+</footer>
+<script src="../../search-data.js"></script>
+<script>
+const inp = document.getElementById('search-input');
+const res = document.getElementById('search-results');
+const SD = window.JAZZFEST_SEARCH || [];
+inp.addEventListener('input', function() {
+  const q = this.value.toLowerCase().trim();
+  res.innerHTML = '';
+  if (q.length < 2) { res.style.display='none'; return; }
+  const hits = SD.filter(x => x.n.toLowerCase().includes(q)).slice(0, 12);
+  if (!hits.length) { res.style.display='none'; return; }
+  hits.forEach(h => {
+    const a = document.createElement('a');
+    a.href = '../../' + h.u;
+    a.innerHTML = h.n + '<span class="sr-type">' + h.t + '</span>';
+    res.appendChild(a);
+  });
+  res.style.display = 'block';
+});
+document.addEventListener('click', e => { if (!inp.contains(e.target)) res.style.display='none'; });
+</script>
+
+<script>
+(function(){
+  var PW = 'mischa';
+  var KEY = 'jfwiki_auth';
+  if(localStorage.getItem(KEY) === PW) return;
+  // Gate-Overlay erstellen
+  var ov = document.createElement('div');
+  ov.id = 'gate-overlay';
+  ov.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:#f8f9fa;z-index:9999;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;';
+  ov.innerHTML = '<div style="text-align:center;border:1px solid #a2a9b1;padding:40px 48px;background:#fff;max-width:360px;width:90%">'
+    + '<div style="font-size:22px;font-weight:bold;margin-bottom:8px">Jazzfest<span style="color:#3366cc">Wiki</span></div>'
+    + '<div style="font-size:13px;color:#54595d;margin-bottom:24px">Jazzfest Wien Chronik · 1975–2025</div>'
+    + '<input id="gate-pw" type="password" placeholder="Passwort" style="width:100%;padding:8px 12px;border:1px solid #a2a9b1;font-size:14px;margin-bottom:12px;box-sizing:border-box;outline:none">'
+    + '<button onclick="(function(){var v=document.getElementById('gate-pw').value;if(v===''+PW+''){localStorage.setItem(''+KEY+'',v);location.reload();}else{document.getElementById('gate-err').style.display='block'}})()" style="width:100%;padding:8px;background:#3366cc;color:#fff;border:none;font-size:14px;cursor:pointer">Öffnen</button>'
+    + '<div id="gate-err" style="display:none;color:#cc0000;font-size:12px;margin-top:10px">Falsches Passwort</div>'
+    + '</div>';
+  document.body.appendChild(ov);
+  // Enter-Taste
+  document.getElementById('gate-pw').addEventListener('keydown', function(e){
+    if(e.key==='Enter') document.querySelector('#gate-overlay button').click();
+  });
+})();
+</script>
+</body>
+</html>

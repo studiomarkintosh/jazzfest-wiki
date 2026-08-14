@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alfred Vollbauer — Jazzfest Wiki</title>
+<link rel="stylesheet" href="../../template/css/wiki.css">
+</head>
+<body>
+<header id="wiki-header">
+  <a class="logo" href="../../index.html">Jazz<span>fest</span> Wiki</a>
+  <div id="search-wrap">
+    <input id="search-input" type="text" placeholder="Musiker, Band, Jahr …" autocomplete="off">
+    <div id="search-results"></div>
+  </div>
+</header>
+<nav id="wiki-nav">
+  <a href="../../index.html" >Hauptseite</a>
+  <a href="../../musicians/index.html" class="active">Musiker</a>
+  <a href="../../bands/index.html" >Bands</a>
+  <a href="../../years/index.html" >Jahre</a>
+  <a href="../../graph.html" >Netzwerk</a>
+</nav>
+<div id="wiki-body">
+  <div class="wiki-page clearfix">
+    <h1 class="page-title">Alfred Vollbauer</h1>
+<div class="infobox">
+  <div class="infobox-title">Alfred Vollbauer</div>
+  <div class="profile-image-wrap"><div class="avatar-fallback">AV</div></div>
+  <table>
+    <tr><td>Instrument</td><td>dr</td></tr>
+    <tr><td>Auftritte</td><td><strong>3</strong></td></tr>
+    <tr><td>Erstauftritt</td><td>5. May 2006</td></tr>
+    <tr><td>Letzter</td><td>26. Aug 2007</td></tr>
+    <tr><td>Bands</td><td>3</td></tr>
+    <tr><td>Mitschnitte</td><td>0</td></tr>
+    
+  </table>
+</div>
+<p><span class="tag instrument">dr</span><a class="tag year" href="../years/2006.html">2006</a><a class="tag year" href="../years/2007.html">2007</a></p>
+
+<div class="wiki-section">
+  <h2>Auftritte am Jazzfest</h2>
+  <p>3 Auftritte dokumentiert.</p>
+  <table class="wiki-table">
+    <thead><tr><th>Datum</th><th>Band / Projekt</th><th>Instrument</th><th>Ort</th><th>Bühne</th></tr></thead>
+    <tbody><tr>
+  <td>26. Aug 2007</td>
+  <td><a href="../bands/tini-k-and-vienna-soul.html">Tini K. and Vienna Soul</a></td>
+  <td>dr</td>
+  <td>Festival 07 Alte Schmiede</td>
+  <td>—</td>
+</tr><tr>
+  <td>25. Aug 2007</td>
+  <td><a href="../bands/upper-austrian-jazz-orchestra.html">Upper Austrian Jazz Orchestra</a></td>
+  <td>dr</td>
+  <td>Festival 07 RH</td>
+  <td>—</td>
+</tr><tr>
+  <td>5. May 2006</td>
+  <td><a href="../bands/manfred-paul-weinberger-sextett.html">Manfred Paul Weinberger Sextett</a></td>
+  <td>dr</td>
+  <td>Nexus</td>
+  <td>—</td>
+</tr></tbody>
+  </table>
+</div>
+
+<div class='wiki-section'><h2>Mitspieler</h2><div class='mitspieler-list'><a class="tag" href="primus-sitter.html">Primus Sitter (3×)</a><a class="tag" href="christian-maurer.html">Christian Maurer (3×)</a><a class="tag" href="tini-kainrath.html">Tini Kainrath (2×)</a><a class="tag" href="helmar-hill.html">Helmar Hill (2×)</a><a class="tag" href="christian-wendt.html">Christian Wendt (2×)</a><a class="tag" href="manfred-paul-weinberger.html">Manfred Paul Weinberger (1×)</a><a class="tag" href="don-thompson.html">Don Thompson (1×)</a><a class="tag" href="hubert-kalupa.html">Hubert Kalupa (1×)</a><a class="tag" href="rudolph-pilz.html">Rudolph Pilz (1×)</a><a class="tag" href="andy-pranzl.html">Andy Pranzl (1×)</a><a class="tag" href="gerd-rahstorfer.html">Gerd Rahstorfer (1×)</a><a class="tag" href="manfred-weinberger.html">Manfred Weinberger (1×)</a><a class="tag" href="robert-friedl.html">Robert Friedl (1×)</a><a class="tag" href="franz-bachner.html">Franz Bachner (1×)</a><a class="tag" href="christian-bachner.html">Christian Bachner (1×)</a><a class="tag" href="andreas-see.html">Andreas See (1×)</a><a class="tag" href="dominik-stoeger.html">Dominik Stöger (1×)</a><a class="tag" href="hermann-mayr.html">Hermann Mayr (1×)</a><a class="tag" href="christian-kastenhuber.html">Christian Kastenhuber (1×)</a><a class="tag" href="karl-wagner.html">Karl Wagner (1×)</a></div></div>
+
+
+
+  </div>
+</div>
+<footer id="wiki-footer">
+  Jazzfest Wiki · 5936 Musiker · 13034 Konzerte · 1975–2025
+  · Daten: Jazzfest Wien Chronik + Discogs API
+</footer>
+<script src="../../search-data.js"></script>
+<script>
+const inp = document.getElementById('search-input');
+const res = document.getElementById('search-results');
+const SD = window.JAZZFEST_SEARCH || [];
+inp.addEventListener('input', function() {
+  const q = this.value.toLowerCase().trim();
+  res.innerHTML = '';
+  if (q.length < 2) { res.style.display='none'; return; }
+  const hits = SD.filter(x => x.n.toLowerCase().includes(q)).slice(0, 12);
+  if (!hits.length) { res.style.display='none'; return; }
+  hits.forEach(h => {
+    const a = document.createElement('a');
+    a.href = '../../' + h.u;
+    a.innerHTML = h.n + '<span class="sr-type">' + h.t + '</span>';
+    res.appendChild(a);
+  });
+  res.style.display = 'block';
+});
+document.addEventListener('click', e => { if (!inp.contains(e.target)) res.style.display='none'; });
+</script>
+
+<script>
+(function(){
+  var PW = 'mischa';
+  var KEY = 'jfwiki_auth';
+  if(localStorage.getItem(KEY) === PW) return;
+  // Gate-Overlay erstellen
+  var ov = document.createElement('div');
+  ov.id = 'gate-overlay';
+  ov.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:#f8f9fa;z-index:9999;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;';
+  ov.innerHTML = '<div style="text-align:center;border:1px solid #a2a9b1;padding:40px 48px;background:#fff;max-width:360px;width:90%">'
+    + '<div style="font-size:22px;font-weight:bold;margin-bottom:8px">Jazzfest<span style="color:#3366cc">Wiki</span></div>'
+    + '<div style="font-size:13px;color:#54595d;margin-bottom:24px">Jazzfest Wien Chronik · 1975–2025</div>'
+    + '<input id="gate-pw" type="password" placeholder="Passwort" style="width:100%;padding:8px 12px;border:1px solid #a2a9b1;font-size:14px;margin-bottom:12px;box-sizing:border-box;outline:none">'
+    + '<button onclick="(function(){var v=document.getElementById('gate-pw').value;if(v===''+PW+''){localStorage.setItem(''+KEY+'',v);location.reload();}else{document.getElementById('gate-err').style.display='block'}})()" style="width:100%;padding:8px;background:#3366cc;color:#fff;border:none;font-size:14px;cursor:pointer">Öffnen</button>'
+    + '<div id="gate-err" style="display:none;color:#cc0000;font-size:12px;margin-top:10px">Falsches Passwort</div>'
+    + '</div>';
+  document.body.appendChild(ov);
+  // Enter-Taste
+  document.getElementById('gate-pw').addEventListener('keydown', function(e){
+    if(e.key==='Enter') document.querySelector('#gate-overlay button').click();
+  });
+})();
+</script>
+</body>
+</html>
