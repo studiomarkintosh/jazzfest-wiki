@@ -4,7 +4,501 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Joshua Roseman — Jazzfest Wiki</title>
-<link rel="stylesheet" href="../../template/css/wiki.css">
+<style>
+/* Jazzfest Wiki — MediaWiki-inspiriertes Layout + Profil-Images */
+
+:root {
+  --bg: #fff;
+  --bg-content: #f8f9fa;
+  --border: #a2a9b1;
+  --border-light: #eaecf0;
+  --link: #3366cc;
+  --link-hover: #1a3f99;
+  --heading: #000;
+  --text: #202122;
+  --text-muted: #54595d;
+  --infobox-bg: #f8f9fa;
+  --infobox-header: #cee0f2;
+  --nav-bg: #f8f9fa;
+  --nav-border: #a2a9b1;
+  --tag-bg: #eaecf0;
+  --accent: #3366cc;
+  --red: #cc0000;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, 'Linux Libertine', Georgia, Times, serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg-content);
+}
+
+/* HEADER */
+#wiki-header {
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+#wiki-header .logo {
+  font-family: 'Linux Libertine', Georgia, serif;
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--heading);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+#wiki-header .logo span { color: var(--accent); }
+
+#search-wrap { flex: 1; max-width: 400px; position: relative; }
+
+#search-input {
+  width: 100%;
+  padding: 5px 10px;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  font-size: 13px;
+  outline: none;
+}
+
+#search-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(51,102,204,0.15);
+}
+
+#search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-top: none;
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 200;
+  display: none;
+}
+
+#search-results a {
+  display: block;
+  padding: 6px 10px;
+  text-decoration: none;
+  color: var(--text);
+  border-bottom: 1px solid var(--border-light);
+}
+
+#search-results a:hover { background: var(--bg-content); }
+#search-results .sr-type { font-size: 11px; color: var(--text-muted); margin-left: 6px; }
+
+/* NAV */
+#wiki-nav {
+  background: var(--nav-bg);
+  border-bottom: 1px solid var(--nav-border);
+  padding: 0 16px;
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+}
+
+#wiki-nav a {
+  display: block;
+  padding: 8px 14px;
+  text-decoration: none;
+  color: var(--text);
+  font-size: 13px;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+}
+
+#wiki-nav a:hover, #wiki-nav a.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* LAYOUT */
+#wiki-body {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 16px;
+}
+
+.wiki-page {
+  background: var(--bg);
+  border: 1px solid var(--border-light);
+  padding: 20px 24px;
+}
+
+.page-title {
+  font-family: 'Linux Libertine', Georgia, serif;
+  font-size: 28px;
+  font-weight: normal;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 4px;
+  margin-bottom: 16px;
+  color: var(--heading);
+}
+
+/* INFOBOX */
+.infobox {
+  float: right;
+  clear: right;
+  margin: 0 0 16px 24px;
+  background: var(--infobox-bg);
+  border: 1px solid var(--border);
+  font-size: 13px;
+  max-width: 240px;
+  min-width: 200px;
+}
+
+.infobox-title {
+  background: var(--infobox-header);
+  text-align: center;
+  padding: 6px 10px;
+  font-weight: bold;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+
+/* PROFIL-IMAGE */
+.profile-image-wrap {
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  background: #e8ecf0;
+}
+
+.profile-image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Avatar-Fallback (Initialen) */
+.avatar-fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 52px;
+  font-weight: bold;
+  color: var(--text-muted);
+  background: linear-gradient(135deg, #d0daea 0%, #b8c8de 100%);
+  letter-spacing: -2px;
+  user-select: none;
+}
+
+.infobox table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.infobox td {
+  padding: 4px 8px;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.infobox td:first-child {
+  color: var(--text-muted);
+  width: 45%;
+}
+
+/* MUSICIAN-GRID INDEX (mit Bild) */
+.musician-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 10px;
+  margin: 12px 0;
+}
+
+.musician-card {
+  background: var(--bg);
+  border: 1px solid var(--border-light);
+  text-decoration: none;
+  color: var(--text);
+  display: block;
+  overflow: hidden;
+  transition: border-color 0.15s;
+}
+
+.musician-card:hover {
+  border-color: var(--accent);
+  text-decoration: none;
+}
+
+.mc-image-wrap {
+  width: 100%;
+  aspect-ratio: 1;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #d8e4f0 0%, #c0d0e0 100%);
+}
+
+.musician-card .mc-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  position: absolute;
+  top: 0; left: 0;
+  z-index: 1;
+}
+
+.mc-avatar-bg {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  font-weight: bold;
+  color: #7a8fa8;
+  z-index: 0;
+}
+
+.musician-card .mc-avatar {
+  width: 100%;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  font-weight: bold;
+  color: #888;
+  background: linear-gradient(135deg, #d8e4f0 0%, #c0d0e0 100%);
+  letter-spacing: -1px;
+}
+
+.musician-card .mc-info {
+  padding: 8px 10px;
+}
+
+.musician-card .mc-name {
+  font-weight: bold;
+  font-size: 13px;
+  line-height: 1.3;
+}
+
+.musician-card .mc-meta {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* SECTIONS */
+.wiki-section { margin: 20px 0; }
+
+.wiki-section h2 {
+  font-family: 'Linux Libertine', Georgia, serif;
+  font-size: 20px;
+  font-weight: normal;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 2px;
+  margin-bottom: 12px;
+  color: var(--heading);
+}
+
+/* TABLES */
+.wiki-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin: 8px 0;
+}
+
+.wiki-table th {
+  background: var(--bg-content);
+  border: 1px solid var(--border);
+  padding: 6px 10px;
+  text-align: left;
+  font-weight: bold;
+}
+
+.wiki-table td {
+  border: 1px solid var(--border-light);
+  padding: 5px 10px;
+  vertical-align: top;
+}
+
+.wiki-table tr:hover td { background: #f0f4ff; }
+
+/* TAGS */
+.tag {
+  display: inline-block;
+  background: var(--tag-bg);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 1px 7px;
+  font-size: 12px;
+  margin: 2px;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.tag:hover { background: var(--border); }
+.tag.instrument { background: #ddeeff; border-color: #99bbdd; }
+.tag.year { background: #eeffdd; border-color: #99cc77; }
+.tag.mitschnitt { background: #fff0cc; border-color: #ccaa44; }
+
+/* LINKS */
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; color: var(--link-hover); }
+
+/* INDEX-STATS */
+.index-stats {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 16px 0;
+}
+
+.stat-card {
+  background: var(--infobox-bg);
+  border: 1px solid var(--border);
+  padding: 12px 20px;
+  text-align: center;
+  min-width: 120px;
+  flex: 1;
+}
+
+.stat-card .number {
+  font-size: 28px;
+  font-weight: bold;
+  color: var(--accent);
+  display: block;
+}
+
+.stat-card .label { font-size: 12px; color: var(--text-muted); }
+
+/* RELEASES */
+.release-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.release-card {
+  display: flex;
+  gap: 8px;
+  background: var(--bg-content);
+  border: 1px solid var(--border-light);
+  padding: 8px;
+  max-width: 260px;
+  text-decoration: none;
+  color: var(--text);
+}
+
+.release-card img { width: 56px; height: 56px; object-fit: cover; flex-shrink: 0; }
+.release-card .rc-no-image {
+  width: 56px; height: 56px; flex-shrink: 0;
+  background: #dde4ee;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; color: #888;
+}
+.release-card .rc-title { font-size: 12px; font-weight: bold; line-height: 1.3; }
+.release-card .rc-year { font-size: 11px; color: var(--text-muted); }
+.release-card:hover { border-color: var(--accent); }
+
+/* MITSPIELER */
+.mitspieler-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 8px 0;
+}
+
+/* ALPHABET NAV */
+.alpha-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 8px 0 16px;
+}
+
+.alpha-nav a {
+  display: block;
+  width: 28px;
+  height: 28px;
+  text-align: center;
+  line-height: 28px;
+  border: 1px solid var(--border);
+  font-size: 13px;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.alpha-nav a:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* GRAPH */
+#graph-container {
+  width: 100%;
+  height: 650px;
+  background: #fff;
+  border: 1px solid var(--border);
+  position: relative;
+}
+
+#graph-tooltip {
+  position: absolute;
+  background: rgba(0,0,0,0.85);
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  pointer-events: none;
+  display: none;
+  z-index: 10;
+}
+
+/* YEAR */
+.concert-entry {
+  border-left: 3px solid var(--border);
+  padding: 6px 12px;
+  margin: 4px 0;
+}
+.concert-entry:hover { border-left-color: var(--accent); background: var(--bg-content); }
+.concert-date { font-size: 12px; color: var(--text-muted); }
+.concert-band { font-weight: bold; }
+.concert-musiker { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+/* FOOTER */
+#wiki-footer {
+  text-align: center;
+  padding: 20px;
+  color: var(--text-muted);
+  font-size: 12px;
+  border-top: 1px solid var(--border-light);
+  margin-top: 40px;
+}
+
+/* CLEARFIX */
+.clearfix::after { content: ""; display: table; clear: both; }
+
+@media (max-width: 600px) {
+  .infobox { float: none; margin: 0 0 16px; max-width: 100%; }
+  .musician-grid { grid-template-columns: repeat(2, 1fr); }
+  #graph-container { height: 400px; }
+}
+
+</style>
 </head>
 <body>
 <header id="wiki-header">
