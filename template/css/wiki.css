@@ -234,12 +234,19 @@ body {
   text-decoration: none;
 }
 
-.musician-card .mc-image {
+.musician-card .mc-image,
+.musician-card .mc-thumb {
   width: 100%;
   aspect-ratio: 1;
   object-fit: cover;
   display: block;
   background: #e0e6ee;
+}
+.musician-card .mc-thumb-placeholder {
+  width: 100%;
+  aspect-ratio: 1;
+  display: block;
+  background: linear-gradient(135deg, #d8e4f0 0%, #c0d0e0 100%);
 }
 
 .musician-card .mc-avatar {
