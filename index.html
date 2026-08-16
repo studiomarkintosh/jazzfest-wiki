@@ -3,581 +3,137 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Hauptseite &mdash; Jazzfest Wiki</title>
-<style>
-/* Jazzfest Wiki — MediaWiki-inspiriertes Layout + Profil-Images */
-
-:root {
-  --bg: #fff;
-  --bg-content: #f8f9fa;
-  --border: #a2a9b1;
-  --border-light: #eaecf0;
-  --link: #3366cc;
-  --link-hover: #1a3f99;
-  --heading: #000;
-  --text: #202122;
-  --text-muted: #54595d;
-  --infobox-bg: #f8f9fa;
-  --infobox-header: #cee0f2;
-  --nav-bg: #f8f9fa;
-  --nav-border: #a2a9b1;
-  --tag-bg: #eaecf0;
-  --accent: #3366cc;
-  --red: #cc0000;
-}
-
-* { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-  font-family: -apple-system, 'Linux Libertine', Georgia, Times, serif;
-  font-size: 14px;
-  line-height: 1.6;
-  color: var(--text);
-  background: var(--bg-content);
-}
-
-/* HEADER */
-#wiki-header {
-  background: var(--bg);
-  border-bottom: 1px solid var(--border);
-  padding: 8px 16px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-#wiki-header .logo {
-  font-family: 'Linux Libertine', Georgia, serif;
-  font-size: 18px;
-  font-weight: bold;
-  color: var(--heading);
-  text-decoration: none;
-  white-space: nowrap;
-}
-
-#wiki-header .logo span { color: var(--accent); }
-
-#search-wrap { flex: 1; max-width: 400px; position: relative; }
-
-#search-input {
-  width: 100%;
-  padding: 5px 10px;
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  font-size: 13px;
-  outline: none;
-}
-
-#search-input:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 2px rgba(51,102,204,0.15);
-}
-
-#search-results {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-top: none;
-  max-height: 300px;
-  overflow-y: auto;
-  z-index: 200;
-  display: none;
-}
-
-#search-results a {
-  display: block;
-  padding: 6px 10px;
-  text-decoration: none;
-  color: var(--text);
-  border-bottom: 1px solid var(--border-light);
-}
-
-#search-results a:hover { background: var(--bg-content); }
-#search-results .sr-type { font-size: 11px; color: var(--text-muted); margin-left: 6px; }
-
-/* NAV */
-#wiki-nav {
-  background: var(--nav-bg);
-  border-bottom: 1px solid var(--nav-border);
-  padding: 0 16px;
-  display: flex;
-  gap: 0;
-  overflow-x: auto;
-}
-
-#wiki-nav a {
-  display: block;
-  padding: 8px 14px;
-  text-decoration: none;
-  color: var(--text);
-  font-size: 13px;
-  border-bottom: 2px solid transparent;
-  white-space: nowrap;
-}
-
-#wiki-nav a:hover, #wiki-nav a.active {
-  color: var(--accent);
-  border-bottom-color: var(--accent);
-}
-
-/* LAYOUT */
-#wiki-body {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px 16px;
-}
-
-.wiki-page {
-  background: var(--bg);
-  border: 1px solid var(--border-light);
-  padding: 20px 24px;
-}
-
-.page-title {
-  font-family: 'Linux Libertine', Georgia, serif;
-  font-size: 28px;
-  font-weight: normal;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 4px;
-  margin-bottom: 16px;
-  color: var(--heading);
-}
-
-/* INFOBOX */
-.infobox {
-  float: right;
-  clear: right;
-  margin: 0 0 16px 24px;
-  background: var(--infobox-bg);
-  border: 1px solid var(--border);
-  font-size: 13px;
-  max-width: 240px;
-  min-width: 200px;
-}
-
-.infobox-title {
-  background: var(--infobox-header);
-  text-align: center;
-  padding: 6px 10px;
-  font-weight: bold;
-  border-bottom: 1px solid var(--border);
-  font-size: 14px;
-}
-
-/* PROFIL-IMAGE */
-.profile-image-wrap {
-  width: 100%;
-  aspect-ratio: 1;
-  overflow: hidden;
-  border-bottom: 1px solid var(--border);
-  position: relative;
-  background: #e8ecf0;
-}
-
-.profile-image-wrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-/* Avatar-Fallback (Initialen) */
-.avatar-fallback {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 52px;
-  font-weight: bold;
-  color: var(--text-muted);
-  background: linear-gradient(135deg, #d0daea 0%, #b8c8de 100%);
-  letter-spacing: -2px;
-  user-select: none;
-}
-
-.infobox table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.infobox td {
-  padding: 4px 8px;
-  vertical-align: top;
-  border-bottom: 1px solid var(--border-light);
-}
-
-.infobox td:first-child {
-  color: var(--text-muted);
-  width: 45%;
-}
-
-/* MUSICIAN-GRID INDEX (mit Bild) */
-.musician-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 10px;
-  margin: 12px 0;
-}
-
-.musician-card {
-  background: var(--bg);
-  border: 1px solid var(--border-light);
-  text-decoration: none;
-  color: var(--text);
-  display: block;
-  overflow: hidden;
-  transition: border-color 0.15s;
-}
-
-.musician-card:hover {
-  border-color: var(--accent);
-  text-decoration: none;
-}
-
-.mc-image-wrap {
-  width: 100%;
-  aspect-ratio: 1;
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(135deg, #d8e4f0 0%, #c0d0e0 100%);
-}
-
-.musician-card .mc-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  position: absolute;
-  top: 0; left: 0;
-  z-index: 1;
-}
-
-.mc-avatar-bg {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 36px;
-  font-weight: bold;
-  color: #7a8fa8;
-  z-index: 0;
-}
-
-.musician-card .mc-avatar {
-  width: 100%;
-  aspect-ratio: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 36px;
-  font-weight: bold;
-  color: #888;
-  background: linear-gradient(135deg, #d8e4f0 0%, #c0d0e0 100%);
-  letter-spacing: -1px;
-}
-
-.musician-card .mc-info {
-  padding: 8px 10px;
-}
-
-.musician-card .mc-name {
-  font-weight: bold;
-  font-size: 13px;
-  line-height: 1.3;
-}
-
-.musician-card .mc-meta {
-  font-size: 11px;
-  color: var(--text-muted);
-  margin-top: 2px;
-}
-
-/* SECTIONS */
-.wiki-section { margin: 20px 0; }
-
-.wiki-section h2 {
-  font-family: 'Linux Libertine', Georgia, serif;
-  font-size: 20px;
-  font-weight: normal;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 2px;
-  margin-bottom: 12px;
-  color: var(--heading);
-}
-
-/* TABLES */
-.wiki-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13px;
-  margin: 8px 0;
-}
-
-.wiki-table th {
-  background: var(--bg-content);
-  border: 1px solid var(--border);
-  padding: 6px 10px;
-  text-align: left;
-  font-weight: bold;
-}
-
-.wiki-table td {
-  border: 1px solid var(--border-light);
-  padding: 5px 10px;
-  vertical-align: top;
-}
-
-.wiki-table tr:hover td { background: #f0f4ff; }
-
-/* TAGS */
-.tag {
-  display: inline-block;
-  background: var(--tag-bg);
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  padding: 1px 7px;
-  font-size: 12px;
-  margin: 2px;
-  color: var(--text);
-  text-decoration: none;
-}
-
-.tag:hover { background: var(--border); }
-.tag.instrument { background: #ddeeff; border-color: #99bbdd; }
-.tag.year { background: #eeffdd; border-color: #99cc77; }
-.tag.mitschnitt { background: #fff0cc; border-color: #ccaa44; }
-
-/* LINKS */
-a { color: var(--link); text-decoration: none; }
-a:hover { text-decoration: underline; color: var(--link-hover); }
-
-/* INDEX-STATS */
-.index-stats {
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-  margin: 16px 0;
-}
-
-.stat-card {
-  background: var(--infobox-bg);
-  border: 1px solid var(--border);
-  padding: 12px 20px;
-  text-align: center;
-  min-width: 120px;
-  flex: 1;
-}
-
-.stat-card .number {
-  font-size: 28px;
-  font-weight: bold;
-  color: var(--accent);
-  display: block;
-}
-
-.stat-card .label { font-size: 12px; color: var(--text-muted); }
-
-/* RELEASES */
-.release-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 10px 0;
-}
-
-.release-card {
-  display: flex;
-  gap: 8px;
-  background: var(--bg-content);
-  border: 1px solid var(--border-light);
-  padding: 8px;
-  max-width: 260px;
-  text-decoration: none;
-  color: var(--text);
-}
-
-.release-card img { width: 56px; height: 56px; object-fit: cover; flex-shrink: 0; }
-.release-card .rc-no-image {
-  width: 56px; height: 56px; flex-shrink: 0;
-  background: #dde4ee;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 22px; color: #888;
-}
-.release-card .rc-title { font-size: 12px; font-weight: bold; line-height: 1.3; }
-.release-card .rc-year { font-size: 11px; color: var(--text-muted); }
-.release-card:hover { border-color: var(--accent); }
-
-/* MITSPIELER */
-.mitspieler-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin: 8px 0;
-}
-
-/* ALPHABET NAV */
-.alpha-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin: 8px 0 16px;
-}
-
-.alpha-nav a {
-  display: block;
-  width: 28px;
-  height: 28px;
-  text-align: center;
-  line-height: 28px;
-  border: 1px solid var(--border);
-  font-size: 13px;
-  color: var(--text);
-  text-decoration: none;
-}
-
-.alpha-nav a:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
-
-/* GRAPH */
-#graph-container {
-  width: 100%;
-  height: 650px;
-  background: #fff;
-  border: 1px solid var(--border);
-  position: relative;
-}
-
-#graph-tooltip {
-  position: absolute;
-  background: rgba(0,0,0,0.85);
-  color: #fff;
-  padding: 8px 12px;
-  border-radius: 4px;
-  font-size: 12px;
-  pointer-events: none;
-  display: none;
-  z-index: 10;
-}
-
-/* YEAR */
-.concert-entry {
-  border-left: 3px solid var(--border);
-  padding: 6px 12px;
-  margin: 4px 0;
-}
-.concert-entry:hover { border-left-color: var(--accent); background: var(--bg-content); }
-.concert-date { font-size: 12px; color: var(--text-muted); }
-.concert-band { font-weight: bold; }
-.concert-musiker { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-
-/* FOOTER */
-#wiki-footer {
-  text-align: center;
-  padding: 20px;
-  color: var(--text-muted);
-  font-size: 12px;
-  border-top: 1px solid var(--border-light);
-  margin-top: 40px;
-}
-
-/* CLEARFIX */
-.clearfix::after { content: ""; display: table; clear: both; }
-
-@media (max-width: 600px) {
-  .infobox { float: none; margin: 0 0 16px; max-width: 100%; }
-  .musician-grid { grid-template-columns: repeat(2, 1fr); }
-  #graph-container { height: 400px; }
-}
-
-</style>
+<title>Hauptseite — Jazzfest Wiki</title>
+<link rel="stylesheet" href="../template/css/wiki.css">
 </head>
 <body>
 <header id="wiki-header">
-  <a class="logo" href="index.html">Jazz<span>fest</span> Wiki</a>
-  <div id="search-wrap" style="position:relative;flex:1;max-width:400px">
-    <input id="search-input" type="text" placeholder="Musiker, Band, Jahr &hellip;" autocomplete="off">
+  <a class="logo" href="../index.html">Jazz<span>fest</span> Wiki</a>
+  <div id="search-wrap" style="position:relative">
+    <input id="search-input" type="text" placeholder="Musiker, Band, Jahr …" autocomplete="off">
     <div id="search-results"></div>
   </div>
 </header>
 <nav id="wiki-nav">
-  <a href="index.html" class="active">Hauptseite</a>
-  <a href="musicians/index.html">Musiker</a>
-  <a href="bands/index.html">Bands</a>
-  <a href="years/index.html">Jahre</a>
-  <a href="festivals.html">Festivalchronik</a>
-  <a href="graph.html">Netzwerk</a>
+  <a href="../index.html" class="active">Hauptseite</a>
+  <a href="../musicians/index.html" >Musiker</a>
+  <a href="../bands/index.html" >Bands</a>
+  <a href="../years/index.html" >Jahre</a>
+  <a href="../graph.html" >Netzwerk</a>
 </nav>
 <div id="wiki-body">
   <div class="wiki-page clearfix">
-    <h1 class="page-title">Jazzfest Wien &mdash; Chronik-Wiki</h1>
-    <div class="index-stats">
-      <div class="stat-card"><span class="number">5936</span><span class="label">Musiker</span></div>
-      <div class="stat-card"><span class="number">4446</span><span class="label">Bands &amp; Projekte</span></div>
-      <div class="stat-card"><span class="number">13034</span><span class="label">Konzert-Eintr&auml;ge</span></div>
-      <div class="stat-card"><span class="number">50</span><span class="label">Jahre</span></div>
-    </div>
-    <div class="wiki-section">
-      <h2>Top-Musiker</h2>
-      <div class="musician-grid"><a class="musician-card" href="musicians/wolfgang-puschnig.html"><div class="mc-img-wrap" style="width:100%;aspect-ratio:1;overflow:hidden;position:relative;background:linear-gradient(135deg,#d8e4f0,#c0d0e0)"><span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:36px;font-weight:bold;color:#7a8fa8">WP</span><img style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block" src="https://i.discogs.com/FYXDpSj8IFrQmu8XfhfgPFRL2LseKDXhf8FqegMi0Xs/rs:fit/g:sm/q:40/h:150/w:150/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9BLTQ0MTE3/LTE2MDk2Nzg3MDkt/OTc3OS5qcGVn.jpeg" alt="Wolfgang Puschnig" loading="lazy"></div><div class="mc-info"><div class="mc-name">Wolfgang Puschnig</div><div class="mc-meta">41&#215; &middot; as, fl</div></div></a><a class="musician-card" href="musicians/jim-black.html"><div class="mc-img-wrap" style="width:100%;aspect-ratio:1;overflow:hidden;position:relative;background:linear-gradient(135deg,#d8e4f0,#c0d0e0)"><span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:36px;font-weight:bold;color:#7a8fa8">JB</span><img style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block" src="https://i.discogs.com/nDloVV0qUqfJUmYD16gok4SegvB7DAQBOazEjzAX8Lo/rs:fit/g:sm/q:40/h:150/w:150/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9BLTI1Mjc1/Mi0xMTI4MzgwMTgy/LmpwZWc.jpeg" alt="Jim Black" loading="lazy"></div><div class="mc-info"><div class="mc-name">Jim Black</div><div class="mc-meta">32&#215; &middot; dr</div></div></a><a class="musician-card" href="musicians/lukas-kranzelbinder.html"><div class="mc-img-wrap" style="width:100%;aspect-ratio:1;overflow:hidden;position:relative;background:linear-gradient(135deg,#d8e4f0,#c0d0e0)"><span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:36px;font-weight:bold;color:#7a8fa8">LK</span><img style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block" src="https://i.discogs.com/SBsupiUb8oz1pfbRQIRyjJHX2BhiH-YzGzt6l3TgdSU/rs:fit/g:sm/q:40/h:150/w:150/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9BLTQzNjkw/NzYtMTQ4Mzk5MTUy/Mi04Mzg0LmpwZWc.jpeg" alt="Lukas Kranzelbinder" loading="lazy"></div><div class="mc-info"><div class="mc-name">Lukas Kranzelbinder</div><div class="mc-meta">30&#215; &middot; b</div></div></a><a class="musician-card" href="musicians/lukas-koenig.html"><div class="mc-img-wrap" style="width:100%;aspect-ratio:1;overflow:hidden;position:relative;background:linear-gradient(135deg,#d8e4f0,#c0d0e0)"><span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:36px;font-weight:bold;color:#7a8fa8">LK</span><img style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block" src="https://i.discogs.com/a5k9516GyXdw_ZeUwv55rwf0rYehzPwzT0DTmH8XpEQ/rs:fit/g:sm/q:40/h:150/w:150/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9BLTM5NzQ4/NzUtMTQ2ODE3NDQ3/NC0zNzU2LmpwZWc.jpeg" alt="Lukas König" loading="lazy"></div><div class="mc-info"><div class="mc-name">Lukas König</div><div class="mc-meta">26&#215; &middot; dr</div></div></a><a class="musician-card" href="musicians/tom-jelinek.html"><div class="mc-img-wrap" style="width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#d8e4f0,#c0d0e0);font-size:36px;font-weight:bold;color:#7a8fa8">TJ</div><div class="mc-info"><div class="mc-name">Tom Jelinek</div><div class="mc-meta">25&#215; &middot; g, voc</div></div></a><a class="musician-card" href="musicians/tim-berne.html"><div class="mc-img-wrap" style="width:100%;aspect-ratio:1;overflow:hidden;position:relative;background:linear-gradient(135deg,#d8e4f0,#c0d0e0)"><span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:36px;font-weight:bold;color:#7a8fa8">TB</span><img style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block" src="https://i.discogs.com/dx5iLu-4v_bOFdvc6SoxSwmriINyDK_PZo7DaU8o-K4/rs:fit/g:sm/q:40/h:150/w:150/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9BLTIyMjU5/Ni0xNDQ0OTcyMDk5/LTcyOTQuanBlZw.jpeg" alt="Tim Berne" loading="lazy"></div><div class="mc-info"><div class="mc-name">Tim Berne</div><div class="mc-meta">24&#215; &middot; as</div></div></a><a class="musician-card" href="musicians/pheeroan-aklaff.html"><div class="mc-img-wrap" style="width:100%;aspect-ratio:1;overflow:hidden;position:relative;background:linear-gradient(135deg,#d8e4f0,#c0d0e0)"><span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:36px;font-weight:bold;color:#7a8fa8">PA</span><img style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block" src="https://i.discogs.com/hbDTlLdiqAcNcizWehPwhlvfDwU4mJSB_RU0Wajsimg/rs:fit/g:sm/q:40/h:150/w:150/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9BLTI4Mjk4/OC0xMzEzODc0NDE2/LmpwZWc.jpeg" alt="Pheeroan akLaff" loading="lazy"></div><div class="mc-info"><div class="mc-name">Pheeroan akLaff</div><div class="mc-meta">22&#215; &middot; dr</div></div></a><a class="musician-card" href="musicians/herbert-pirker.html"><div class="mc-img-wrap" style="width:100%;aspect-ratio:1;overflow:hidden;position:relative;background:linear-gradient(135deg,#d8e4f0,#c0d0e0)"><span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:36px;font-weight:bold;color:#7a8fa8">HP</span><img style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block" src="https://i.discogs.com/B1rI7wND91zClVvcvJF9znimkaNFauvlJM-yZ9utryo/rs:fit/g:sm/q:40/h:150/w:150/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9BLTEyMzg2/MzEtMTM2ODk4OTM4/My03MTc5LmpwZWc.jpeg" alt="Herbert Pirker" loading="lazy"></div><div class="mc-info"><div class="mc-name">Herbert Pirker</div><div class="mc-meta">22&#215; &middot; dr</div></div></a><a class="musician-card" href="musicians/hans-fuchs.html"><div class="mc-img-wrap" style="width:100%;aspect-ratio:1;overflow:hidden;position:relative;background:linear-gradient(135deg,#d8e4f0,#c0d0e0)"><span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:36px;font-weight:bold;color:#7a8fa8">HF</span><img style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block" src="https://i.discogs.com/8WfbRwSgIvZegHkKDVrRv7BWX7MbM4erAvLLZc1jp-s/rs:fit/g:sm/q:40/h:150/w:150/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9BLTE1OTg5/MzQtMTY4ODU4ODkw/OC04NjAyLmpwZWc.jpeg" alt="Hans Fuchs" loading="lazy"></div><div class="mc-info"><div class="mc-name">Hans Fuchs</div><div class="mc-meta">20&#215; &middot; g</div></div></a><a class="musician-card" href="musicians/peter-medek.html"><div class="mc-img-wrap" style="width:100%;aspect-ratio:1;overflow:hidden;position:relative;background:linear-gradient(135deg,#d8e4f0,#c0d0e0)"><span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:36px;font-weight:bold;color:#7a8fa8">PM</span><img style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block" src="https://i.discogs.com/nRauYyAK4ED33twHo-od6IsxhjPMhHIwIwZ0DJ8KFEs/rs:fit/g:sm/q:40/h:150/w:150/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9BLTI5NTU2/OTktMTYyMjMyMzky/NC0xNTYyLmpwZWc.jpeg" alt="Peter Medek" loading="lazy"></div><div class="mc-info"><div class="mc-name">Peter Medek</div><div class="mc-meta">20&#215; &middot; key, voc</div></div></a><a class="musician-card" href="musicians/klaus-dickbauer.html"><div class="mc-img-wrap" style="width:100%;aspect-ratio:1;overflow:hidden;position:relative;background:linear-gradient(135deg,#d8e4f0,#c0d0e0)"><span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:36px;font-weight:bold;color:#7a8fa8">KD</span><img style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block" src="https://i.discogs.com/ER-dc6lX297_R3iz5HrOhEgNJLxZxeCGG4joo72EnpA/rs:fit/g:sm/q:40/h:150/w:150/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9BLTc3MDc0/NC0xMzk2NTIzOTAy/LTMyOTEuanBlZw.jpeg" alt="Klaus Dickbauer" loading="lazy"></div><div class="mc-info"><div class="mc-name">Klaus Dickbauer</div><div class="mc-meta">19&#215; &middot; reeds</div></div></a><a class="musician-card" href="musicians/florian-bramboeck.html"><div class="mc-img-wrap" style="width:100%;aspect-ratio:1;overflow:hidden;position:relative;background:linear-gradient(135deg,#d8e4f0,#c0d0e0)"><span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:36px;font-weight:bold;color:#7a8fa8">FB</span><img style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block" src="https://i.discogs.com/wHqCweeGuYxvX6LzDfivSWcOFKLgQgIGno0MEYbs40k/rs:fit/g:sm/q:40/h:150/w:150/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9BLTEzMTM1/NTEtMTMzNTI4Mzk0/OS5qcGVn.jpeg" alt="Florian Bramböck" loading="lazy"></div><div class="mc-info"><div class="mc-name">Florian Bramböck</div><div class="mc-meta">18&#215; &middot; reeds</div></div></a><a class="musician-card" href="musicians/ingebrigt-h-ker-flaten.html"><div class="mc-img-wrap" style="width:100%;aspect-ratio:1;overflow:hidden;position:relative;background:linear-gradient(135deg,#d8e4f0,#c0d0e0)"><span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:36px;font-weight:bold;color:#7a8fa8">IF</span><img style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block" src="https://i.discogs.com/2iUJ0-rRDJIyXJ7uZoc0OqLl831L95YnndyM3NTu3f4/rs:fit/g:sm/q:40/h:150/w:150/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9BLTIzMTE2/Ny0xMzk2NDM5MTg1/LTE4MTIuanBlZw.jpeg" alt="Ingebrigt Håker Flaten" loading="lazy"></div><div class="mc-info"><div class="mc-name">Ingebrigt Håker Flaten</div><div class="mc-meta">18&#215; &middot; b</div></div></a><a class="musician-card" href="musicians/brandon-ross.html"><div class="mc-img-wrap" style="width:100%;aspect-ratio:1;overflow:hidden;position:relative;background:linear-gradient(135deg,#d8e4f0,#c0d0e0)"><span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:36px;font-weight:bold;color:#7a8fa8">BR</span><img style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block" src="https://i.discogs.com/dgMs4BI3Yiqd2qiJGnL6ZsyLeXEAXX4Gpks_lHJXdWs/rs:fit/g:sm/q:40/h:150/w:150/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9BLTI4MjIz/NS0xMTE4NzM5Mzg4/LmpwZw.jpeg" alt="Brandon Ross" loading="lazy"></div><div class="mc-info"><div class="mc-name">Brandon Ross</div><div class="mc-meta">17&#215; &middot; g</div></div></a><a class="musician-card" href="musicians/david-murray.html"><div class="mc-img-wrap" style="width:100%;aspect-ratio:1;overflow:hidden;position:relative;background:linear-gradient(135deg,#d8e4f0,#c0d0e0)"><span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:36px;font-weight:bold;color:#7a8fa8">DM</span><img style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block" src="https://i.discogs.com/SjKFw1b6e9mi5BmeRXGg6EJS8yc_0wJukufzk0UeHso/rs:fit/g:sm/q:40/h:150/w:150/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9BLTI1OTE1/NC0xNTQ4NzIyMDYy/LTg3MDkuanBlZw.jpeg" alt="David Murray" loading="lazy"></div><div class="mc-info"><div class="mc-name">David Murray</div><div class="mc-meta">16&#215; &middot; ts, bcl</div></div></a><a class="musician-card" href="musicians/oliver-lake.html"><div class="mc-img-wrap" style="width:100%;aspect-ratio:1;overflow:hidden;position:relative;background:linear-gradient(135deg,#d8e4f0,#c0d0e0)"><span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:36px;font-weight:bold;color:#7a8fa8">OL</span><img style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block" src="https://i.discogs.com/NKQFfiXckaqwVGzHNLXmnb3BBvpVsui6EnpDdLvzZ90/rs:fit/g:sm/q:40/h:150/w:150/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9BLTQ5NzU5/LTExMjgzODI0OTAu/anBlZw.jpeg" alt="Oliver Lake" loading="lazy"></div><div class="mc-info"><div class="mc-name">Oliver Lake</div><div class="mc-meta">16&#215; &middot; as</div></div></a></div>
-      <p><a href="musicians/index.html">&rarr; Alle 5936 Musiker</a></p>
-    </div>
-    <div class="wiki-section">
-      <h2>Jahreschroniken</h2>
-      <p><a href="years/2011.html">2011</a> &middot; <a href="years/2012.html">2012</a> &middot; <a href="years/2013.html">2013</a> &middot; <a href="years/2014.html">2014</a> &middot; <a href="years/2015.html">2015</a> &middot; <a href="years/2016.html">2016</a> &middot; <a href="years/2017.html">2017</a> &middot; <a href="years/2018.html">2018</a> &middot; <a href="years/2019.html">2019</a> &middot; <a href="years/2020.html">2020</a> &middot; <a href="years/2021.html">2021</a> &middot; <a href="years/2022.html">2022</a> &middot; <a href="years/2023.html">2023</a> &middot; <a href="years/2024.html">2024</a> &middot; <a href="years/2025.html">2025</a></p>
-      <p><a href="years/index.html">&rarr; Alle Jahre</a></p>
-    </div>
-    <div class="wiki-section">
-      <h2>Musiker-Netzwerk</h2>
-      <p>Interaktiver Graph der 500 meistaufgetretenen Musiker und ihrer Verbindungen.</p>
-      <p><a href="graph.html">&rarr; Netzwerk &ouml;ffnen</a></p>
-    </div>
+    <h1 class="page-title">Jazzfest Wien Wiki</h1>
+
+<div class="index-stats">
+  <div class="stat-card"><span class="number">5936</span><span class="label">Musiker</span></div>
+  <div class="stat-card"><span class="number">4446</span><span class="label">Bands & Projekte</span></div>
+  <div class="stat-card"><span class="number">13034</span><span class="label">Konzert-Einträge</span></div>
+  <div class="stat-card"><span class="number">50</span><span class="label">Jahre</span></div>
+</div>
+
+<div class="wiki-section">
+  <h2>Top Musiker nach Auftritten</h2>
+  <div class="musician-grid"><a class="musician-card" href="musicians/wolfgang-puschnig.html">
+  <div class="mc-name">Wolfgang Puschnig</div>
+  <div class="mc-meta">41 Auftritte · Altsaxofon, Flöte</div>
+</a><a class="musician-card" href="musicians/jim-black.html">
+  <div class="mc-name">Jim Black</div>
+  <div class="mc-meta">32 Auftritte · Schlagzeug</div>
+</a><a class="musician-card" href="musicians/lukas-kranzelbinder.html">
+  <div class="mc-name">Lukas Kranzelbinder</div>
+  <div class="mc-meta">30 Auftritte · Kontrabass</div>
+</a><a class="musician-card" href="musicians/lukas-koenig.html">
+  <div class="mc-name">Lukas König</div>
+  <div class="mc-meta">26 Auftritte · Schlagzeug</div>
+</a><a class="musician-card" href="musicians/tom-jelinek.html">
+  <div class="mc-name">Tom Jelinek</div>
+  <div class="mc-meta">25 Auftritte · Gitarre, Gesang</div>
+</a><a class="musician-card" href="musicians/tim-berne.html">
+  <div class="mc-name">Tim Berne</div>
+  <div class="mc-meta">24 Auftritte · Altsaxofon</div>
+</a><a class="musician-card" href="musicians/pheeroan-aklaff.html">
+  <div class="mc-name">Pheeroan akLaff</div>
+  <div class="mc-meta">22 Auftritte · Schlagzeug</div>
+</a><a class="musician-card" href="musicians/herbert-pirker.html">
+  <div class="mc-name">Herbert Pirker</div>
+  <div class="mc-meta">22 Auftritte · Schlagzeug</div>
+</a><a class="musician-card" href="musicians/hans-fuchs.html">
+  <div class="mc-name">Hans Fuchs</div>
+  <div class="mc-meta">20 Auftritte · Gitarre</div>
+</a><a class="musician-card" href="musicians/peter-medek.html">
+  <div class="mc-name">Peter Medek</div>
+  <div class="mc-meta">20 Auftritte · Keyboard, Gesang</div>
+</a><a class="musician-card" href="musicians/klaus-dickbauer.html">
+  <div class="mc-name">Klaus Dickbauer</div>
+  <div class="mc-meta">19 Auftritte · Rohrblattinstr.</div>
+</a><a class="musician-card" href="musicians/florian-bramboeck.html">
+  <div class="mc-name">Florian Bramböck</div>
+  <div class="mc-meta">18 Auftritte · Rohrblattinstr.</div>
+</a></div>
+  <p><a href="musicians/index.html">→ Alle 5936 Musiker</a></p>
+</div>
+
+<div class="wiki-section">
+  <h2>Jahreschroniken</h2>
+  <p><a href="years/2011.html">Jazzfest 11</a> · <a href="years/2012.html">Jazzfest 12</a> · <a href="years/2013.html">Jazzfest 13</a> · <a href="years/2014.html">Jazzfest 14</a> · <a href="years/2015.html">Jazzfest 15</a> · <a href="years/2016.html">Jazzfest 16</a> · <a href="years/2017.html">Jazzfest 17</a> · <a href="years/2018.html">Jazzfest 18</a> · <a href="years/2019.html">Jazzfest 19</a> · <a href="years/2020.html">Jazzfest 20</a> · <a href="years/2021.html">Jazzfest 21</a> · <a href="years/2022.html">Jazzfest 22</a> · <a href="years/2023.html">Jazzfest 23</a> · <a href="years/2024.html">Jazzfest 24</a> · <a href="years/2025.html">Jazzfest 25</a></p>
+  <p><a href="years/index.html">→ Alle Jahre</a></p>
+</div>
+
+<div class="wiki-section">
+  <h2>Netzwerk</h2>
+  <p>Wer hat mit wem gespielt? Der interaktive Graph zeigt Verbindungen zwischen den 500 meistaufgetretenen Musikern.</p>
+  <p><a href="graph.html">→ Musiker-Netzwerk öffnen</a></p>
+</div>
   </div>
 </div>
 <footer id="wiki-footer">
-  Jazzfest Wiki &middot; 5936 Musiker &middot; 13034 Konzerte &middot; 1975&ndash;2025
-  &middot; Daten: Jazzfest Wien Chronik + Discogs API
+  Jazzfest Wiki · 5936 Musiker · 13034 Konzerte · 1975–2025
+  · Daten: Jazzfest Wien Chronik + Discogs API
 </footer>
-<script src="search-data.js"></script>
 <script>
-var inp=document.getElementById('search-input');
-var res=document.getElementById('search-results');
-var SD=window.JAZZFEST_SEARCH||[];
-inp.addEventListener('input',function(){
-  var q=this.value.toLowerCase().trim();
-  res.innerHTML='';
-  if(q.length<2){res.style.display='none';return;}
-  var hits=SD.filter(function(x){return x.n.toLowerCase().indexOf(q)>=0;}).slice(0,12);
-  if(!hits.length){res.style.display='none';return;}
-  hits.forEach(function(h){
-    var a=document.createElement('a');
-    a.href=h.u;
-    a.innerHTML=h.n+'<span class="sr-type">'+h.t+'</span>';
+// Globale Suche
+const SEARCH_DATA = window.JAZZFEST_SEARCH || [];
+const inp = document.getElementById('search-input');
+const res = document.getElementById('search-results');
+inp.addEventListener('input', function() {
+  const q = this.value.toLowerCase().trim();
+  res.innerHTML = '';
+  if (q.length < 2) { res.style.display='none'; return; }
+  const hits = SEARCH_DATA.filter(x => x.n.toLowerCase().includes(q)).slice(0, 12);
+  if (!hits.length) { res.style.display='none'; return; }
+  hits.forEach(h => {
+    const a = document.createElement('a');
+    a.href = '../' + h.u;
+    a.innerHTML = h.n + '<span class="sr-type">' + h.t + '</span>';
     res.appendChild(a);
   });
-  res.style.display='block';
+  res.style.display = 'block';
 });
-document.addEventListener('click',function(e){if(!inp.contains(e.target))res.style.display='none';});
+document.addEventListener('click', e => { if (!inp.contains(e.target)) res.style.display='none'; });
 </script>
+
 <script>
 (function(){
-  var PW='mischa',KEY='jfwiki_auth';
-  if(localStorage.getItem(KEY)===PW)return;
-  var ov=document.createElement('div');
-  ov.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;background:#f8f9fa;z-index:9999;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif';
-  ov.innerHTML='<div style="text-align:center;border:1px solid #a2a9b1;padding:40px 48px;background:#fff;max-width:360px;width:90%"><div style="font-size:22px;font-weight:bold;margin-bottom:8px">Jazzfest<span style="color:#3366cc">Wiki</span></div><div style="font-size:13px;color:#54595d;margin-bottom:24px">Jazzfest Wien Chronik &middot; 1975&ndash;2025</div><input id="gpw" type="password" placeholder="Passwort" style="width:100%;padding:8px 12px;border:1px solid #a2a9b1;font-size:14px;margin-bottom:12px;box-sizing:border-box"><button id="gbtn" style="width:100%;padding:8px;background:#3366cc;color:#fff;border:none;font-size:14px;cursor:pointer">&Ouml;ffnen</button><div id="gerr" style="display:none;color:#cc0000;font-size:12px;margin-top:10px">Falsches Passwort</div></div>';
+  var PW = 'mischa';
+  var KEY = 'jfwiki_auth';
+  if(localStorage.getItem(KEY) === PW) return;
+  // Gate-Overlay erstellen
+  var ov = document.createElement('div');
+  ov.id = 'gate-overlay';
+  ov.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:#f8f9fa;z-index:9999;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;';
+  ov.innerHTML = '<div style="text-align:center;border:1px solid #a2a9b1;padding:40px 48px;background:#fff;max-width:360px;width:90%">'
+    + '<div style="font-size:22px;font-weight:bold;margin-bottom:8px">Jazzfest<span style="color:#3366cc">Wiki</span></div>'
+    + '<div style="font-size:13px;color:#54595d;margin-bottom:24px">Jazzfest Wien Chronik · 1975–2025</div>'
+    + '<input id="gate-pw" type="password" placeholder="Passwort" style="width:100%;padding:8px 12px;border:1px solid #a2a9b1;font-size:14px;margin-bottom:12px;box-sizing:border-box;outline:none">'
+    + '<button onclick="(function(){var v=document.getElementById('gate-pw').value;if(v===''+PW+''){localStorage.setItem(''+KEY+'',v);location.reload();}else{document.getElementById('gate-err').style.display='block'}})()" style="width:100%;padding:8px;background:#3366cc;color:#fff;border:none;font-size:14px;cursor:pointer">Öffnen</button>'
+    + '<div id="gate-err" style="display:none;color:#cc0000;font-size:12px;margin-top:10px">Falsches Passwort</div>'
+    + '</div>';
   document.body.appendChild(ov);
-  function tryLogin(){var v=document.getElementById('gpw').value;if(v===PW){localStorage.setItem(KEY,PW);location.reload();}else{document.getElementById('gerr').style.display='block';}}
-  document.getElementById('gbtn').addEventListener('click',tryLogin);
-  document.getElementById('gpw').addEventListener('keydown',function(e){if(e.key==='Enter')tryLogin();});
+  // Enter-Taste
+  document.getElementById('gate-pw').addEventListener('keydown', function(e){
+    if(e.key==='Enter') document.querySelector('#gate-overlay button').click();
+  });
 })();
 </script>
 </body>

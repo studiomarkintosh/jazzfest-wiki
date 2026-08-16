@@ -4,2537 +4,2042 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>2018 — Jazzfest Wiki</title>
-<style>
-/* Jazzfest Wiki — MediaWiki-inspiriertes Layout + Profil-Images */
-
-:root {
-  --bg: #fff;
-  --bg-content: #f8f9fa;
-  --border: #a2a9b1;
-  --border-light: #eaecf0;
-  --link: #3366cc;
-  --link-hover: #1a3f99;
-  --heading: #000;
-  --text: #202122;
-  --text-muted: #54595d;
-  --infobox-bg: #f8f9fa;
-  --infobox-header: #cee0f2;
-  --nav-bg: #f8f9fa;
-  --nav-border: #a2a9b1;
-  --tag-bg: #eaecf0;
-  --accent: #3366cc;
-  --red: #cc0000;
-}
-
-* { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-  font-family: -apple-system, 'Linux Libertine', Georgia, Times, serif;
-  font-size: 14px;
-  line-height: 1.6;
-  color: var(--text);
-  background: var(--bg-content);
-}
-
-/* HEADER */
-#wiki-header {
-  background: var(--bg);
-  border-bottom: 1px solid var(--border);
-  padding: 8px 16px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-#wiki-header .logo {
-  font-family: 'Linux Libertine', Georgia, serif;
-  font-size: 18px;
-  font-weight: bold;
-  color: var(--heading);
-  text-decoration: none;
-  white-space: nowrap;
-}
-
-#wiki-header .logo span { color: var(--accent); }
-
-#search-wrap { flex: 1; max-width: 400px; position: relative; }
-
-#search-input {
-  width: 100%;
-  padding: 5px 10px;
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  font-size: 13px;
-  outline: none;
-}
-
-#search-input:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 2px rgba(51,102,204,0.15);
-}
-
-#search-results {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-top: none;
-  max-height: 300px;
-  overflow-y: auto;
-  z-index: 200;
-  display: none;
-}
-
-#search-results a {
-  display: block;
-  padding: 6px 10px;
-  text-decoration: none;
-  color: var(--text);
-  border-bottom: 1px solid var(--border-light);
-}
-
-#search-results a:hover { background: var(--bg-content); }
-#search-results .sr-type { font-size: 11px; color: var(--text-muted); margin-left: 6px; }
-
-/* NAV */
-#wiki-nav {
-  background: var(--nav-bg);
-  border-bottom: 1px solid var(--nav-border);
-  padding: 0 16px;
-  display: flex;
-  gap: 0;
-  overflow-x: auto;
-}
-
-#wiki-nav a {
-  display: block;
-  padding: 8px 14px;
-  text-decoration: none;
-  color: var(--text);
-  font-size: 13px;
-  border-bottom: 2px solid transparent;
-  white-space: nowrap;
-}
-
-#wiki-nav a:hover, #wiki-nav a.active {
-  color: var(--accent);
-  border-bottom-color: var(--accent);
-}
-
-/* LAYOUT */
-#wiki-body {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px 16px;
-}
-
-.wiki-page {
-  background: var(--bg);
-  border: 1px solid var(--border-light);
-  padding: 20px 24px;
-}
-
-.page-title {
-  font-family: 'Linux Libertine', Georgia, serif;
-  font-size: 28px;
-  font-weight: normal;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 4px;
-  margin-bottom: 16px;
-  color: var(--heading);
-}
-
-/* INFOBOX */
-.infobox {
-  float: right;
-  clear: right;
-  margin: 0 0 16px 24px;
-  background: var(--infobox-bg);
-  border: 1px solid var(--border);
-  font-size: 13px;
-  max-width: 240px;
-  min-width: 200px;
-}
-
-.infobox-title {
-  background: var(--infobox-header);
-  text-align: center;
-  padding: 6px 10px;
-  font-weight: bold;
-  border-bottom: 1px solid var(--border);
-  font-size: 14px;
-}
-
-/* PROFIL-IMAGE */
-.profile-image-wrap {
-  width: 100%;
-  aspect-ratio: 1;
-  overflow: hidden;
-  border-bottom: 1px solid var(--border);
-  position: relative;
-  background: #e8ecf0;
-}
-
-.profile-image-wrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-/* Avatar-Fallback (Initialen) */
-.avatar-fallback {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 52px;
-  font-weight: bold;
-  color: var(--text-muted);
-  background: linear-gradient(135deg, #d0daea 0%, #b8c8de 100%);
-  letter-spacing: -2px;
-  user-select: none;
-}
-
-.infobox table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.infobox td {
-  padding: 4px 8px;
-  vertical-align: top;
-  border-bottom: 1px solid var(--border-light);
-}
-
-.infobox td:first-child {
-  color: var(--text-muted);
-  width: 45%;
-}
-
-/* MUSICIAN-GRID INDEX (mit Bild) */
-.musician-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 10px;
-  margin: 12px 0;
-}
-
-.musician-card {
-  background: var(--bg);
-  border: 1px solid var(--border-light);
-  text-decoration: none;
-  color: var(--text);
-  display: block;
-  overflow: hidden;
-  transition: border-color 0.15s;
-}
-
-.musician-card:hover {
-  border-color: var(--accent);
-  text-decoration: none;
-}
-
-.mc-image-wrap {
-  width: 100%;
-  aspect-ratio: 1;
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(135deg, #d8e4f0 0%, #c0d0e0 100%);
-}
-
-.musician-card .mc-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  position: absolute;
-  top: 0; left: 0;
-  z-index: 1;
-}
-
-.mc-avatar-bg {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 36px;
-  font-weight: bold;
-  color: #7a8fa8;
-  z-index: 0;
-}
-
-.musician-card .mc-avatar {
-  width: 100%;
-  aspect-ratio: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 36px;
-  font-weight: bold;
-  color: #888;
-  background: linear-gradient(135deg, #d8e4f0 0%, #c0d0e0 100%);
-  letter-spacing: -1px;
-}
-
-.musician-card .mc-info {
-  padding: 8px 10px;
-}
-
-.musician-card .mc-name {
-  font-weight: bold;
-  font-size: 13px;
-  line-height: 1.3;
-}
-
-.musician-card .mc-meta {
-  font-size: 11px;
-  color: var(--text-muted);
-  margin-top: 2px;
-}
-
-/* SECTIONS */
-.wiki-section { margin: 20px 0; }
-
-.wiki-section h2 {
-  font-family: 'Linux Libertine', Georgia, serif;
-  font-size: 20px;
-  font-weight: normal;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 2px;
-  margin-bottom: 12px;
-  color: var(--heading);
-}
-
-/* TABLES */
-.wiki-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13px;
-  margin: 8px 0;
-}
-
-.wiki-table th {
-  background: var(--bg-content);
-  border: 1px solid var(--border);
-  padding: 6px 10px;
-  text-align: left;
-  font-weight: bold;
-}
-
-.wiki-table td {
-  border: 1px solid var(--border-light);
-  padding: 5px 10px;
-  vertical-align: top;
-}
-
-.wiki-table tr:hover td { background: #f0f4ff; }
-
-/* TAGS */
-.tag {
-  display: inline-block;
-  background: var(--tag-bg);
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  padding: 1px 7px;
-  font-size: 12px;
-  margin: 2px;
-  color: var(--text);
-  text-decoration: none;
-}
-
-.tag:hover { background: var(--border); }
-.tag.instrument { background: #ddeeff; border-color: #99bbdd; }
-.tag.year { background: #eeffdd; border-color: #99cc77; }
-.tag.mitschnitt { background: #fff0cc; border-color: #ccaa44; }
-
-/* LINKS */
-a { color: var(--link); text-decoration: none; }
-a:hover { text-decoration: underline; color: var(--link-hover); }
-
-/* INDEX-STATS */
-.index-stats {
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-  margin: 16px 0;
-}
-
-.stat-card {
-  background: var(--infobox-bg);
-  border: 1px solid var(--border);
-  padding: 12px 20px;
-  text-align: center;
-  min-width: 120px;
-  flex: 1;
-}
-
-.stat-card .number {
-  font-size: 28px;
-  font-weight: bold;
-  color: var(--accent);
-  display: block;
-}
-
-.stat-card .label { font-size: 12px; color: var(--text-muted); }
-
-/* RELEASES */
-.release-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 10px 0;
-}
-
-.release-card {
-  display: flex;
-  gap: 8px;
-  background: var(--bg-content);
-  border: 1px solid var(--border-light);
-  padding: 8px;
-  max-width: 260px;
-  text-decoration: none;
-  color: var(--text);
-}
-
-.release-card img { width: 56px; height: 56px; object-fit: cover; flex-shrink: 0; }
-.release-card .rc-no-image {
-  width: 56px; height: 56px; flex-shrink: 0;
-  background: #dde4ee;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 22px; color: #888;
-}
-.release-card .rc-title { font-size: 12px; font-weight: bold; line-height: 1.3; }
-.release-card .rc-year { font-size: 11px; color: var(--text-muted); }
-.release-card:hover { border-color: var(--accent); }
-
-/* MITSPIELER */
-.mitspieler-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin: 8px 0;
-}
-
-/* ALPHABET NAV */
-.alpha-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin: 8px 0 16px;
-}
-
-.alpha-nav a {
-  display: block;
-  width: 28px;
-  height: 28px;
-  text-align: center;
-  line-height: 28px;
-  border: 1px solid var(--border);
-  font-size: 13px;
-  color: var(--text);
-  text-decoration: none;
-}
-
-.alpha-nav a:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
-
-/* GRAPH */
-#graph-container {
-  width: 100%;
-  height: 650px;
-  background: #fff;
-  border: 1px solid var(--border);
-  position: relative;
-}
-
-#graph-tooltip {
-  position: absolute;
-  background: rgba(0,0,0,0.85);
-  color: #fff;
-  padding: 8px 12px;
-  border-radius: 4px;
-  font-size: 12px;
-  pointer-events: none;
-  display: none;
-  z-index: 10;
-}
-
-/* YEAR */
-.concert-entry {
-  border-left: 3px solid var(--border);
-  padding: 6px 12px;
-  margin: 4px 0;
-}
-.concert-entry:hover { border-left-color: var(--accent); background: var(--bg-content); }
-.concert-date { font-size: 12px; color: var(--text-muted); }
-.concert-band { font-weight: bold; }
-.concert-musiker { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-
-/* FOOTER */
-#wiki-footer {
-  text-align: center;
-  padding: 20px;
-  color: var(--text-muted);
-  font-size: 12px;
-  border-top: 1px solid var(--border-light);
-  margin-top: 40px;
-}
-
-/* CLEARFIX */
-.clearfix::after { content: ""; display: table; clear: both; }
-
-@media (max-width: 600px) {
-  .infobox { float: none; margin: 0 0 16px; max-width: 100%; }
-  .musician-grid { grid-template-columns: repeat(2, 1fr); }
-  #graph-container { height: 400px; }
-}
-
-</style>
+<link rel="stylesheet" href="../../template/css/wiki.css">
 </head>
 <body>
 <header id="wiki-header">
-  <a class="logo" href="../index.html">Jazz<span>fest</span> Wiki</a>
-  <div id="search-wrap">
+  <a class="logo" href="../../index.html">Jazz<span>fest</span> Wiki</a>
+  <div id="search-wrap" style="position:relative">
     <input id="search-input" type="text" placeholder="Musiker, Band, Jahr …" autocomplete="off">
     <div id="search-results"></div>
   </div>
 </header>
 <nav id="wiki-nav">
-  <a href="../index.html">Hauptseite</a>
-  <a href="../musicians/index.html">Musiker</a>
-  <a href="../bands/index.html">Bands</a>
-  <a href="../years/index.html" class="active">Jahre</a>
-  <a href="../festivals.html">Festivalchronik</a>
-  <a href="../graph.html">Netzwerk</a>
+  <a href="../../index.html" >Hauptseite</a>
+  <a href="../../musicians/index.html" >Musiker</a>
+  <a href="../../bands/index.html" >Bands</a>
+  <a href="../../years/index.html" class="active">Jahre</a>
+  <a href="../../graph.html" >Netzwerk</a>
 </nav>
 <div id="wiki-body">
   <div class="wiki-page clearfix">
     <h1 class="page-title">Jazzfest 2018</h1>
 <div class="wiki-section">
-  <p><strong>504 Konzert-Einträge</strong></p>
+  <p><strong>504 Konzerte</strong></p>
   <div class="year-concerts"><div class="concert-entry">
-  <div class="concert-date">10. Jan 2018 · Nexus spezial </div>
+  <div class="concert-date">10. Jan 2018 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/die-anden-7000km-laengs-durch-suedamerika.html">Die Anden – 7000Km Längs durch Südamerika</a></div>
   <div class='concert-musiker'>Heiko Beyer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">11. Jan 2018 · Nexus Kino </div>
+  <div class="concert-date">11. Jan 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/kasperlund-die-grossminimutti.html">Kasperlund die Großminimutti</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">11. Jan 2018 · Nexus Kino </div>
+  <div class="concert-date">11. Jan 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/the-big-sick.html">The big Sick</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">12. Jan 2018 · Nexus Kino </div>
+  <div class="concert-date">12. Jan 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/maenner-kino-jigsaw.html">Männer Kino: Jigsaw</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">13. Jan 2018 · Nexus spezial </div>
+  <div class="concert-date">13. Jan 2018 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/musikwohnzimmer-magic-delphin.html">Musikwohnzimmer: Magic Delphin</a></div>
   <div class='concert-musiker'>Robert Aichinger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">13. Jan 2018 · Nexus spezial </div>
+  <div class="concert-date">13. Jan 2018 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/musikwohnzimmer-magic-delphin.html">Musikwohnzimmer: Magic Delphin</a></div>
   <div class='concert-musiker'>Benjamin Lageder</div>
 </div><div class="concert-entry">
-  <div class="concert-date">13. Jan 2018 · Nexus spezial </div>
+  <div class="concert-date">13. Jan 2018 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/musikwohnzimmer-magic-delphin.html">Musikwohnzimmer: Magic Delphin</a></div>
   <div class='concert-musiker'>Manuel Schönegger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">13. Jan 2018 · Nexus spezial </div>
+  <div class="concert-date">13. Jan 2018 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/musikwohnzimmer-magic-delphin.html">Musikwohnzimmer: Magic Delphin</a></div>
   <div class='concert-musiker'>Fabian Uitz</div>
 </div><div class="concert-entry">
-  <div class="concert-date">13. Jan 2018 · Nexus Theater </div>
+  <div class="concert-date">13. Jan 2018 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/gschnagga-theater-eine-kuh-macht-muede.html">Gschnagga Theater: Eine Kuh macht müde</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">17. Jan 2018 · Nexus my Uni </div>
+  <div class="concert-date">17. Jan 2018 · Nexus my Uni · </div>
   <div class="concert-band"><a href="../bands/fake-news.html">Fake News</a></div>
   <div class='concert-musiker'>Josef Trappel Dr</div>
 </div><div class="concert-entry">
-  <div class="concert-date">18. Jan 2018 · Nexus Kino </div>
+  <div class="concert-date">18. Jan 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/django-ein-leben-fuer-die-musik.html">Django – Ein Leben für die Musik</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">18. Jan 2018 · Nexus Kino </div>
+  <div class="concert-date">18. Jan 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/paddington-2.html">Paddington 2</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">19. Jan 2018 · Winterfestival 18 </div>
+  <div class="concert-date">19. Jan 2018 · Winterfestival 18 · </div>
   <div class="concert-band"><a href="../bands/adam-baldych-helgie-lien-trio-brothers.html">Adam Baldych & Helgie Lien Trio Brothers</a></div>
   <div class='concert-musiker'>Adam Baldych</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Jan 2018 · Winterfestival 18 </div>
+  <div class="concert-date">19. Jan 2018 · Winterfestival 18 · </div>
   <div class="concert-band"><a href="../bands/adam-baldych-helgie-lien-trio-brothers.html">Adam Baldych & Helgie Lien Trio Brothers</a></div>
   <div class='concert-musiker'>Helge Lien</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Jan 2018 · Winterfestival 18 </div>
+  <div class="concert-date">19. Jan 2018 · Winterfestival 18 · </div>
   <div class="concert-band"><a href="../bands/adam-baldych-helgie-lien-trio-brothers.html">Adam Baldych & Helgie Lien Trio Brothers</a></div>
   <div class='concert-musiker'>Thomas Fonnesbaek</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Jan 2018 · Winterfestival 18 </div>
+  <div class="concert-date">19. Jan 2018 · Winterfestival 18 · </div>
   <div class="concert-band"><a href="../bands/adam-baldych-helgie-lien-trio-brothers.html">Adam Baldych & Helgie Lien Trio Brothers</a></div>
   <div class='concert-musiker'>Mats Eilertsen</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Jan 2018 · Winterfestival 18 </div>
+  <div class="concert-date">19. Jan 2018 · Winterfestival 18 · </div>
   <div class="concert-band"><a href="../bands/adam-baldych-helgie-lien-trio-brothers.html">Adam Baldych & Helgie Lien Trio Brothers</a></div>
   <div class='concert-musiker'>Per Oddvar</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Jan 2018 · Winterfestival 18 </div>
+  <div class="concert-date">19. Jan 2018 · Winterfestival 18 · </div>
   <div class="concert-band"><a href="../bands/edi-nulz-cd-release-el-perro-grande.html">Edi Nulz CD release El Perro Grande</a></div>
   <div class='concert-musiker'>Julian Pajzs</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Jan 2018 · Winterfestival 18 </div>
+  <div class="concert-date">19. Jan 2018 · Winterfestival 18 · </div>
   <div class="concert-band"><a href="../bands/edi-nulz-cd-release-el-perro-grande.html">Edi Nulz CD release El Perro Grande</a></div>
   <div class='concert-musiker'>Siegmar Brecher</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Jan 2018 · Winterfestival 18 </div>
+  <div class="concert-date">19. Jan 2018 · Winterfestival 18 · </div>
   <div class="concert-band"><a href="../bands/edi-nulz-cd-release-el-perro-grande.html">Edi Nulz CD release El Perro Grande</a></div>
   <div class='concert-musiker'>Valentin Schuster</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Jan 2018 · Winterfestival 18 </div>
+  <div class="concert-date">20. Jan 2018 · Winterfestival 18 · </div>
   <div class="concert-band"><a href="../bands/dickbauer-collective.html">Dickbauer Collective</a></div>
   <div class='concert-musiker'>Klaus Dickbauer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Jan 2018 · Winterfestival 18 </div>
+  <div class="concert-date">20. Jan 2018 · Winterfestival 18 · </div>
   <div class="concert-band"><a href="../bands/dickbauer-collective.html">Dickbauer Collective</a></div>
   <div class='concert-musiker'>Mario Rom</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Jan 2018 · Winterfestival 18 </div>
+  <div class="concert-date">20. Jan 2018 · Winterfestival 18 · </div>
   <div class="concert-band"><a href="../bands/dickbauer-collective.html">Dickbauer Collective</a></div>
   <div class='concert-musiker'>Stephan Dickbauer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Jan 2018 · Winterfestival 18 </div>
+  <div class="concert-date">20. Jan 2018 · Winterfestival 18 · </div>
   <div class="concert-band"><a href="../bands/dickbauer-collective.html">Dickbauer Collective</a></div>
   <div class='concert-musiker'>Johannes Dickbauer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Jan 2018 · Winterfestival 18 </div>
+  <div class="concert-date">20. Jan 2018 · Winterfestival 18 · </div>
   <div class="concert-band"><a href="../bands/dickbauer-collective.html">Dickbauer Collective</a></div>
   <div class='concert-musiker'>Asja Valcic</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Jan 2018 · Winterfestival 18 </div>
+  <div class="concert-date">20. Jan 2018 · Winterfestival 18 · </div>
   <div class="concert-band"><a href="../bands/dickbauer-collective.html">Dickbauer Collective</a></div>
   <div class='concert-musiker'>Christian Wendt</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Jan 2018 · Winterfestival 18 </div>
+  <div class="concert-date">20. Jan 2018 · Winterfestival 18 · </div>
   <div class="concert-band"><a href="../bands/dickbauer-collective.html">Dickbauer Collective</a></div>
   <div class='concert-musiker'>Mathias Ruppnig</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Jan 2018 · Winterfestival 18 </div>
+  <div class="concert-date">20. Jan 2018 · Winterfestival 18 · </div>
   <div class="concert-band"><a href="../bands/michel-portal-quintet-invite-nils-wogram-lander-gyselinck.html">Michel Portal Quintet invite Nils Wogram & Lander Gyselinck</a></div>
   <div class='concert-musiker'>Michel Portal</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Jan 2018 · Winterfestival 18 </div>
+  <div class="concert-date">20. Jan 2018 · Winterfestival 18 · </div>
   <div class="concert-band"><a href="../bands/michel-portal-quintet-invite-nils-wogram-lander-gyselinck.html">Michel Portal Quintet invite Nils Wogram & Lander Gyselinck</a></div>
   <div class='concert-musiker'>Nils Wogram</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Jan 2018 · Winterfestival 18 </div>
+  <div class="concert-date">20. Jan 2018 · Winterfestival 18 · </div>
   <div class="concert-band"><a href="../bands/michel-portal-quintet-invite-nils-wogram-lander-gyselinck.html">Michel Portal Quintet invite Nils Wogram & Lander Gyselinck</a></div>
   <div class='concert-musiker'>Bojan Zulficarpasic</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Jan 2018 · Winterfestival 18 </div>
+  <div class="concert-date">20. Jan 2018 · Winterfestival 18 · </div>
   <div class="concert-band"><a href="../bands/michel-portal-quintet-invite-nils-wogram-lander-gyselinck.html">Michel Portal Quintet invite Nils Wogram & Lander Gyselinck</a></div>
   <div class='concert-musiker'>Bruno Chevillion</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Jan 2018 · Winterfestival 18 </div>
+  <div class="concert-date">20. Jan 2018 · Winterfestival 18 · </div>
   <div class="concert-band"><a href="../bands/michel-portal-quintet-invite-nils-wogram-lander-gyselinck.html">Michel Portal Quintet invite Nils Wogram & Lander Gyselinck</a></div>
   <div class='concert-musiker'>Lander Gyselinck</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Jan 2018 · Nexus Kino </div>
+  <div class="concert-date">25. Jan 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/coco-lebendiger-als-dasleben.html">Coco – Lebendiger als dasLeben</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">25. Jan 2018 · Nexus Kino </div>
+  <div class="concert-date">25. Jan 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/the-square.html">The Square</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">26. Jan 2018 · Nexus Café </div>
+  <div class="concert-date">26. Jan 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-the-attic-o-r.html">Lokale Bandrunde: The Attic O.R.</a></div>
   <div class='concert-musiker'>Sara  Brandner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Jan 2018 · Nexus Café </div>
+  <div class="concert-date">26. Jan 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-the-attic-o-r.html">Lokale Bandrunde: The Attic O.R.</a></div>
   <div class='concert-musiker'>Martin Niederl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Jan 2018 · Nexus Café </div>
+  <div class="concert-date">26. Jan 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-the-attic-o-r.html">Lokale Bandrunde: The Attic O.R.</a></div>
   <div class='concert-musiker'>Joahnnes Moser</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Jan 2018 · Nexus Café </div>
+  <div class="concert-date">26. Jan 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-the-attic-o-r.html">Lokale Bandrunde: The Attic O.R.</a></div>
   <div class='concert-musiker'>Sebastian Arzbacher</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Jan 2018 · Nexus Kabarett </div>
+  <div class="concert-date">27. Jan 2018 · Nexus Kabarett · </div>
   <div class="concert-band"><a href="../bands/clemens-maria-schreiner-immer-ich.html">Clemens Maria Schreiner – Immer Ich</a></div>
   <div class='concert-musiker'>Clemens Schreiner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">1. Feb 2018 · Nexus Kino </div>
+  <div class="concert-date">1. Feb 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/kasperl-und-indianer-kleiner-baer.html">Kasperl und Indianer kleiner Bär</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">1. Feb 2018 · Nexus Kino </div>
+  <div class="concert-date">1. Feb 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/licht.html">Licht</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">2. Feb 2018 · Nexus Café </div>
+  <div class="concert-date">2. Feb 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-julie-and-the-blue-eyes.html">Lokale Bandrunde: Julie and the Blue Eyes</a></div>
   <div class='concert-musiker'>Julia Herzog</div>
 </div><div class="concert-entry">
-  <div class="concert-date">2. Feb 2018 · Nexus Café </div>
+  <div class="concert-date">2. Feb 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-julie-and-the-blue-eyes.html">Lokale Bandrunde: Julie and the Blue Eyes</a></div>
   <div class='concert-musiker'>Daniel Zech</div>
 </div><div class="concert-entry">
-  <div class="concert-date">2. Feb 2018 · Nexus Café </div>
+  <div class="concert-date">2. Feb 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-julie-and-the-blue-eyes.html">Lokale Bandrunde: Julie and the Blue Eyes</a></div>
   <div class='concert-musiker'>Thomas Ortner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">2. Feb 2018 · Nexus Café </div>
+  <div class="concert-date">2. Feb 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-julie-and-the-blue-eyes.html">Lokale Bandrunde: Julie and the Blue Eyes</a></div>
   <div class='concert-musiker'>Jack Kreuzer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">2. Feb 2018 · Nexus Café </div>
+  <div class="concert-date">2. Feb 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-julie-and-the-blue-eyes.html">Lokale Bandrunde: Julie and the Blue Eyes</a></div>
   <div class='concert-musiker'>Klaus Hasholzner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">2. Feb 2018 · Nexus Kino </div>
+  <div class="concert-date">2. Feb 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/die-beste-aller-welten.html">Die Beste aller Welten</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">3. Feb 2018 · Nexus Café </div>
+  <div class="concert-date">3. Feb 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/musikwohnzimmer-sofia-talvik.html">Musikwohnzimmer: Sofia Talvik</a></div>
   <div class='concert-musiker'>Sofia Talvik</div>
 </div><div class="concert-entry">
-  <div class="concert-date">3. Feb 2018 · Nexus Theater </div>
+  <div class="concert-date">3. Feb 2018 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/gschnagga-theater-kalif-storch.html">Gschnagga Theater: Kalif Storch</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">7. Feb 2018 · Nexus spezial </div>
+  <div class="concert-date">7. Feb 2018 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/oman-emirate-uebermorgenland.html">Oman & Emirate – Übermorgenland</a></div>
   <div class='concert-musiker'>Hartmut Fiebig</div>
 </div><div class="concert-entry">
-  <div class="concert-date">8. Feb 2018 · Nexus Kino </div>
+  <div class="concert-date">8. Feb 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/burg-schreckenstein-2.html">Burg Schreckenstein 2</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">8. Feb 2018 · Nexus Kino </div>
+  <div class="concert-date">8. Feb 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/the-battle-of-sexes.html">The Battle of Sexes</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">9. Feb 2018 · Nexus Kino </div>
+  <div class="concert-date">9. Feb 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/mannerkino-harri-pinter-drecksau.html">Mannerkino: Harri Pinter Drecksau</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">10. Feb 2018 · Nexus spezial </div>
+  <div class="concert-date">10. Feb 2018 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/rock-me-amadeus-das-nexus-haelt-hof-faschingsball.html">Rock me Amadeus – Das Nexus hält Hof Faschingsball</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">14. Feb 2018 · Nexus my Uni </div>
+  <div class="concert-date">14. Feb 2018 · Nexus my Uni · </div>
   <div class="concert-band"><a href="../bands/die-bildung-von-geschmack.html">Die Bildung von Geschmack</a></div>
   <div class='concert-musiker'>Eva Derndorfer Dr</div>
 </div><div class="concert-entry">
-  <div class="concert-date">15. Feb 2018 · Nexus Kino </div>
+  <div class="concert-date">15. Feb 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/ferdinand-geht-stierisch-ab.html">Ferdinand geht stierisch ab</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">15. Feb 2018 · Nexus Kino </div>
+  <div class="concert-date">15. Feb 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/lieber-leben.html">Lieber Leben</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">16. Feb 2018 · Nexus Ausstellung </div>
+  <div class="concert-date">16. Feb 2018 · Nexus Ausstellung · </div>
   <div class="concert-band"><a href="../bands/vernissage-g-r-a-m-touchdown.html">Vernissage: G.R.A.M. "Touchdown"</a></div>
   <div class='concert-musiker'>Martin Behr</div>
 </div><div class="concert-entry">
-  <div class="concert-date">16. Feb 2018 · Nexus Ausstellung </div>
+  <div class="concert-date">16. Feb 2018 · Nexus Ausstellung · </div>
   <div class="concert-band"><a href="../bands/vernissage-g-r-a-m-touchdown.html">Vernissage: G.R.A.M. "Touchdown"</a></div>
   <div class='concert-musiker'>Günther Holler-Schuster</div>
 </div><div class="concert-entry">
-  <div class="concert-date">17. Feb 2018 · Nexus spezial </div>
+  <div class="concert-date">17. Feb 2018 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/wortklauberei-der-poetryslam.html">Wortklauberei: Der Poetryslam</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">20. Feb 2018 · Nexus spezial </div>
+  <div class="concert-date">20. Feb 2018 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/migration-und-welteite-wanderbewegungen.html">Migration und Welteite Wanderbewegungen</a></div>
   <div class='concert-musiker'>Karim El-Gawhary</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Feb 2018 · Nexus Kino </div>
+  <div class="concert-date">22. Feb 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/hannah-ein-buddhistischer-weg-zur-freiheit.html">Hannah – Ein Buddhistischer Weg zur Freiheit</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">22. Feb 2018 · Nexus Kino </div>
+  <div class="concert-date">22. Feb 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/tad-stone-und-das-geheimnis-von-koenig-midas.html">Tad Stone und das Geheimnis von König Midas</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">23. Feb 2018 · Nexus Café </div>
+  <div class="concert-date">23. Feb 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/musikwohnzimmer-onk-lou-solo.html">Musikwohnzimmer: Onk Lou solo</a></div>
   <div class='concert-musiker'>Onk Lou</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Feb 2018 · Nexus Kabarett </div>
+  <div class="concert-date">24. Feb 2018 · Nexus Kabarett · </div>
   <div class="concert-band"><a href="../bands/bloezinger-bis-morgen.html">Blözinger – Bis Morgen</a></div>
   <div class='concert-musiker'>Blözinger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Feb 2018 · Nexus Theater </div>
+  <div class="concert-date">28. Feb 2018 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/alpenputtel.html">Alpenputtel</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">1. Mar 2018 · Nexus Kino </div>
+  <div class="concert-date">1. Mar 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/arthur-claire.html">Arthur & Claire</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">1. Mar 2018 · Nexus Kino </div>
+  <div class="concert-date">1. Mar 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/kasperl-und-die-bananenspur.html">Kasperl und die Bananenspur</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">3. Mar 2018 · Nexus Kino </div>
+  <div class="concert-date">3. Mar 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/filmfruehstueck-die-goettliche-ordnung.html">Filmfrühstück: Die Göttliche Ordnung</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">6. Mar 2018 · Nexus my Uni </div>
+  <div class="concert-date">6. Mar 2018 · Nexus my Uni · </div>
   <div class="concert-band"><a href="../bands/werbung-und-sexismen.html">Werbung und Sexismen</a></div>
   <div class='concert-musiker'>Doris Guth Dr</div>
 </div><div class="concert-entry">
-  <div class="concert-date">7. Mar 2018 · Nexus Kino </div>
+  <div class="concert-date">7. Mar 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/die-beste-aller-welten.html">Die Beste aller Welten</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">8. Mar 2018 · Nexus Kino </div>
+  <div class="concert-date">8. Mar 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/hilfe-ich-hab-meine-eltern-geschrumpft.html">Hilfe, Ich hab meine Eltern geschrumpft</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">8. Mar 2018 · Nexus Kino </div>
+  <div class="concert-date">8. Mar 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/virginia-hill.html">Virginia Hill</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">10. Mar 2018 · Nexus Café </div>
+  <div class="concert-date">10. Mar 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/musikwohnzimmer-balto-bart-budwig.html">Musikwohnzimmer: Balto & Bart Budwig</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">13. Mar 2018 · Nexus Theater </div>
+  <div class="concert-date">13. Mar 2018 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/einsteins-fragment.html">Einsteins Fragment</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">14. Mar 2018 · Nexus Theater </div>
+  <div class="concert-date">14. Mar 2018 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/einsteins-fragment.html">Einsteins Fragment</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">16. Mar 2018 · Nexus Theater </div>
+  <div class="concert-date">16. Mar 2018 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/einsteins-fragment.html">Einsteins Fragment</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">17. Mar 2018 · Nexus Theater </div>
+  <div class="concert-date">17. Mar 2018 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/einsteins-fragment.html">Einsteins Fragment</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">20. Mar 2018 · Nexus Theater </div>
+  <div class="concert-date">20. Mar 2018 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/einsteins-fragment.html">Einsteins Fragment</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">22. Mar 2018 · Nexus Kino </div>
+  <div class="concert-date">22. Mar 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/die-kleine-hexe.html">Die kleine Hexe</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">22. Mar 2018 · Nexus Kino </div>
+  <div class="concert-date">22. Mar 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/three-billboards-outside-ebbing-missouri.html">Three Billboards outside Ebbing, Missouri</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">23. Mar 2018 · Nexus Singer Songwriter </div>
+  <div class="concert-date">23. Mar 2018 · Nexus Singer Songwriter · </div>
   <div class="concert-band"><a href="../bands/lilly-among-clouds.html">Lilly among Clouds</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">23. Mar 2018 · Nexus Singer Songwriter </div>
+  <div class="concert-date">23. Mar 2018 · Nexus Singer Songwriter · </div>
   <div class="concert-band"><a href="../bands/lina-maly.html">Lina Maly</a></div>
   <div class='concert-musiker'>Lina Maly</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Mar 2018 · Nexus Singer Songwriter </div>
+  <div class="concert-date">23. Mar 2018 · Nexus Singer Songwriter · </div>
   <div class="concert-band"><a href="../bands/onk-lou-the-better-life-inc.html">Onk Lou & The better Life Inc</a></div>
   <div class='concert-musiker'>Onk Lou</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Mar 2018 · Nexus Singer Songwriter </div>
+  <div class="concert-date">23. Mar 2018 · Nexus Singer Songwriter · </div>
   <div class="concert-band"><a href="../bands/schreng-schreng-lala.html">Schreng Schreng & LaLa</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">24. Mar 2018 · Nexus Singer Songwriter </div>
+  <div class="concert-date">24. Mar 2018 · Nexus Singer Songwriter · </div>
   <div class="concert-band"><a href="../bands/ailbhe-reddy.html">Ailbhe Reddy</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">24. Mar 2018 · Nexus Singer Songwriter </div>
+  <div class="concert-date">24. Mar 2018 · Nexus Singer Songwriter · </div>
   <div class="concert-band"><a href="../bands/luisa.html">Luisa</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">24. Mar 2018 · Nexus Singer Songwriter </div>
+  <div class="concert-date">24. Mar 2018 · Nexus Singer Songwriter · </div>
   <div class="concert-band"><a href="../bands/mani-orrason.html">Mani Orrason</a></div>
   <div class='concert-musiker'>Mani Orrason</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Mar 2018 · Nexus Singer Songwriter </div>
+  <div class="concert-date">24. Mar 2018 · Nexus Singer Songwriter · </div>
   <div class="concert-band"><a href="../bands/marcel-brell.html">Marcel Brell</a></div>
   <div class='concert-musiker'>Marcel Brell</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Mar 2018 · Nexus spezial </div>
+  <div class="concert-date">28. Mar 2018 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/sun-trip.html">Sun Trip</a></div>
   <div class='concert-musiker'>Anita Burholzer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Mar 2018 · Nexus spezial </div>
+  <div class="concert-date">28. Mar 2018 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/sun-trip.html">Sun Trip</a></div>
   <div class='concert-musiker'>Andreas Hübl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">29. Mar 2018 · Nexus Kino </div>
+  <div class="concert-date">29. Mar 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/das-leben-ist-ein-fest.html">Das Leben ist ein Fest</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">29. Mar 2018 · Nexus Kino </div>
+  <div class="concert-date">29. Mar 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/wendy-2-freundschaft-fuer-immer.html">Wendy 2 – Freundschaft für immer</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">30. Mar 2018 · Nexus Café </div>
+  <div class="concert-date">30. Mar 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/loakle-bandrunde-happy-hoagascht.html">Loakle Bandrunde: Happy Hoagascht</a></div>
   <div class='concert-musiker'>Stefan Schipflinger </div>
 </div><div class="concert-entry">
-  <div class="concert-date">30. Mar 2018 · Nexus Café </div>
+  <div class="concert-date">30. Mar 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/loakle-bandrunde-happy-hoagascht.html">Loakle Bandrunde: Happy Hoagascht</a></div>
   <div class='concert-musiker'>Florian Schwarzenbacher</div>
 </div><div class="concert-entry">
-  <div class="concert-date">30. Mar 2018 · Nexus Café </div>
+  <div class="concert-date">30. Mar 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/loakle-bandrunde-happy-hoagascht.html">Loakle Bandrunde: Happy Hoagascht</a></div>
   <div class='concert-musiker'>Ludwig Schwarzenbacher</div>
 </div><div class="concert-entry">
-  <div class="concert-date">30. Mar 2018 · Nexus Café </div>
+  <div class="concert-date">30. Mar 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/loakle-bandrunde-happy-hoagascht.html">Loakle Bandrunde: Happy Hoagascht</a></div>
   <div class='concert-musiker'>Mario Maierhofer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">31. Mar 2018 · Nexus Kabarett </div>
+  <div class="concert-date">31. Mar 2018 · Nexus Kabarett · </div>
   <div class="concert-band"><a href="../bands/bernie-wagner-babylon.html">Bernie Wagner: Babylon!</a></div>
   <div class='concert-musiker'>Bernie Wagner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">31. Mar 2018 · Nexus Theater </div>
+  <div class="concert-date">31. Mar 2018 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/gschnagga-theater-die-schildkroeten-liebesgeschichte.html">Gschnagga Theater: Die Schildkröten-Liebesgeschichte</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">3. Apr 2018 · Nexus Kino </div>
+  <div class="concert-date">3. Apr 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/die-beste-aller-welten.html">Die Beste aller Welten</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">4. Apr 2018 · Nexus spezial </div>
+  <div class="concert-date">4. Apr 2018 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/toskana-das-hez-italiens.html">Toskana – Das Hez Italiens</a></div>
   <div class='concert-musiker'>Martin Schulte – Kellinghaus</div>
 </div><div class="concert-entry">
-  <div class="concert-date">5. Apr 2018 · Nexus Kino </div>
+  <div class="concert-date">5. Apr 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/kasperl-und-das-steinmandl.html">Kasperl und das Steinmandl</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">5. Apr 2018 · Nexus Kino </div>
+  <div class="concert-date">5. Apr 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/the-florida-project.html">The Florida Project</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">6. Apr 2018 · Nexus Ausstellung </div>
+  <div class="concert-date">6. Apr 2018 · Nexus Ausstellung · </div>
   <div class="concert-band"><a href="../bands/lois-hechenblaickner-hinter-den-bergen.html">Lois Hechenblaickner: Hinter den Bergen</a></div>
   <div class='concert-musiker'>Lois Hechenblaickner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">7. Apr 2018 · Nexus Café </div>
+  <div class="concert-date">7. Apr 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-the-dukes.html">Lokale Bandrunde: The Dukes</a></div>
   <div class='concert-musiker'>Stefan Harml</div>
 </div><div class="concert-entry">
-  <div class="concert-date">7. Apr 2018 · Nexus Café </div>
+  <div class="concert-date">7. Apr 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-the-dukes.html">Lokale Bandrunde: The Dukes</a></div>
   <div class='concert-musiker'>David Walcher</div>
 </div><div class="concert-entry">
-  <div class="concert-date">7. Apr 2018 · Nexus Café </div>
+  <div class="concert-date">7. Apr 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-the-dukes.html">Lokale Bandrunde: The Dukes</a></div>
   <div class='concert-musiker'>Tommy Tranninger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">11. Apr 2018 · Nexus my Uni </div>
+  <div class="concert-date">11. Apr 2018 · Nexus my Uni · </div>
   <div class="concert-band"><a href="../bands/so-redn-mia-ein-streifzug-durch-die-dialekte-salzburgs.html">So redn mia – Ein Streifzug durch die Dialekte Salzburgs</a></div>
   <div class='concert-musiker'>Hannes Scheutz</div>
 </div><div class="concert-entry">
-  <div class="concert-date">12. Apr 2018 · Nexus Kino </div>
+  <div class="concert-date">12. Apr 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/die-biene-maja-die-honigspiele.html">Die Biene Maja – Die Honigspiele</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">12. Apr 2018 · Nexus Kino </div>
+  <div class="concert-date">12. Apr 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/ein-dorf-sieht-schwarz.html">Ein Dorf sieht schwarz</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">13. Apr 2018 · Nexus spezial </div>
+  <div class="concert-date">13. Apr 2018 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/lois-hechenblaickner-wenn-die-idylle-truegt.html">Lois Hechenblaickner: Wenn die Idylle trügt</a></div>
   <div class='concert-musiker'>Lois Hechenblaickner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">14. Apr 2018 · Nexus spezial </div>
+  <div class="concert-date">14. Apr 2018 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/wortklauberei-im-dialekt-der-poetry-slam-im-nexus.html">Wortklauberei im Dialekt: Der Poetry Slam im Nexus</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">14. Apr 2018 · Nexus spezial </div>
+  <div class="concert-date">14. Apr 2018 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/wortklauberei-poetry-workshop.html">Wortklauberei: Poetry Workshop</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">14. Apr 2018 · Nexus Theater </div>
+  <div class="concert-date">14. Apr 2018 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/gschnagga-theater-die-koenigin-der-farben.html">Gschnagga Theater: Die Königin der Farben</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">18. Apr 2018 · Nexus spezial </div>
+  <div class="concert-date">18. Apr 2018 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/joe-pichler-zentralamerika-und-kuba.html">Joe Pichler: Zentralamerika und Kuba</a></div>
   <div class='concert-musiker'>Joe Pichler</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Apr 2018 · Nexus Kino </div>
+  <div class="concert-date">19. Apr 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/die-wunderuebung.html">Die Wunderübung</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">19. Apr 2018 · Nexus Kino </div>
+  <div class="concert-date">19. Apr 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/mein-freund-die-giraffe.html">Mein Freund, die Giraffe</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">20. Apr 2018 · Nexus </div>
+  <div class="concert-date">20. Apr 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/peter-ratzenbeck-friends.html">Peter Ratzenbeck & Friends</a></div>
   <div class='concert-musiker'>Peter Ratzenbeck</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Apr 2018 · Nexus </div>
+  <div class="concert-date">20. Apr 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/peter-ratzenbeck-friends.html">Peter Ratzenbeck & Friends</a></div>
   <div class='concert-musiker'>Roland Neuwirth</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Apr 2018 · Nexus </div>
+  <div class="concert-date">20. Apr 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/peter-ratzenbeck-friends.html">Peter Ratzenbeck & Friends</a></div>
   <div class='concert-musiker'>Schiffkowitz</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Apr 2018 · Nexus </div>
+  <div class="concert-date">20. Apr 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/peter-ratzenbeck-friends.html">Peter Ratzenbeck & Friends</a></div>
   <div class='concert-musiker'>Zappa & Judith</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Apr 2018 · Nexus </div>
+  <div class="concert-date">20. Apr 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/peter-ratzenbeck-friends.html">Peter Ratzenbeck & Friends</a></div>
   <div class='concert-musiker'>Christoph Schellhorn</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Apr 2018 · Nexus </div>
+  <div class="concert-date">20. Apr 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/peter-ratzenbeck-friends.html">Peter Ratzenbeck & Friends</a></div>
   <div class='concert-musiker'>Franko Morone</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Apr 2018 · Nexus Café </div>
+  <div class="concert-date">21. Apr 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/musikwohnzimmer-alicia-edelweiss.html">Musikwohnzimmer: Alicia Edelweiss</a> 🎙</div>
   <div class='concert-musiker'>Alicia Edelweiss</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Apr 2018 · Nexus Café </div>
+  <div class="concert-date">21. Apr 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/musikwohnzimmer-alpine-dweller.html">Musikwohnzimmer: Alpine Dweller</a> 🎙</div>
   <div class='concert-musiker'>Joana Maialena Karácsonyi</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Apr 2018 · Nexus Café </div>
+  <div class="concert-date">21. Apr 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/musikwohnzimmer-alpine-dweller.html">Musikwohnzimmer; Alpine Dweller</a> 🎙</div>
   <div class='concert-musiker'>Flora Marlene Dorothea Geißelbrecht</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Apr 2018 · Nexus Café </div>
+  <div class="concert-date">21. Apr 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/musikwohnzimmer-alpine-dweller.html">Musikwohnzimmer; Alpine Dweller</a> 🎙</div>
   <div class='concert-musiker'>Matthias Franz Elias Schinnerl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Apr 2018 · Nexus Kino </div>
+  <div class="concert-date">26. Apr 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/fuenf-freunde-und-das-tal-der-dinosaurier.html">Fünf Freunde und das Tal der Dinosaurier</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">26. Apr 2018 · Nexus Kino </div>
+  <div class="concert-date">26. Apr 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/zwei-herren-im-anzug.html">Zwei Herren im Anzug</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">27. Apr 2018 · Nexus Kino </div>
+  <div class="concert-date">27. Apr 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/maennerkino-death-wish.html">Männerkino: Death Wish</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">28. Apr 2018 · Nexus Kabarett </div>
+  <div class="concert-date">28. Apr 2018 · Nexus Kabarett · </div>
   <div class="concert-band"><a href="../bands/thomas-maurer-zukunft.html">Thomas Maurer: Zukunft!</a></div>
   <div class='concert-musiker'>Thomas Maurer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">3. May 2018 · Nexus Kino </div>
+  <div class="concert-date">3. May 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/kasperl-und-die-kristallkugel.html">Kasperl und die Kristallkugel</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">3. May 2018 · Nexus Kino </div>
+  <div class="concert-date">3. May 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/lucky.html">Lucky</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">4. May 2018 · Nexus Ausstellung </div>
+  <div class="concert-date">4. May 2018 · Nexus Ausstellung · </div>
   <div class="concert-band"><a href="../bands/vernissage-helmut-johanna-kandl-glueck-auf.html">Vernissage Helmut & Johanna Kandl: Glück auf</a></div>
   <div class='concert-musiker'>Helmut Kandl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">4. May 2018 · Nexus Ausstellung </div>
+  <div class="concert-date">4. May 2018 · Nexus Ausstellung · </div>
   <div class="concert-band"><a href="../bands/vernissage-helmut-johanna-kandl-glueck-auf.html">Vernissage Helmut & Johanna Kandl: Glück auf</a></div>
   <div class='concert-musiker'>Johanna Kandl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">9. May 2018 · Nexus my Uni </div>
+  <div class="concert-date">9. May 2018 · Nexus my Uni · </div>
   <div class="concert-band"><a href="../bands/das-kulinarische-erbe-der-alpen.html">Das Kulinarische Erbe der Alpen</a></div>
   <div class='concert-musiker'>Dominik Flammer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">9. May 2018 · Nexus spezial </div>
+  <div class="concert-date">9. May 2018 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/slow-food-markt-im-nexus.html">Slow Food Markt im Nexus</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">10. May 2018 · Nexus Kino </div>
+  <div class="concert-date">10. May 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/holz-erde-fleisch.html">Holz Erde Fleisch</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">10. May 2018 · Nexus Kino </div>
+  <div class="concert-date">10. May 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/jim-knopf-und-lukas-der-lokomotivfuehrer.html">Jim Knopf und Lukas der Lokomotivführer</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">11. May 2018 · Nexus Kino </div>
+  <div class="concert-date">11. May 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/maenner-kino-tomb-raider.html">Männer Kino: Tomb Raider</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">12. May 2018 · Nexus Café </div>
+  <div class="concert-date">12. May 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/the-steam-radios.html">The Steam Radios</a></div>
   <div class='concert-musiker'>Dona Smith</div>
 </div><div class="concert-entry">
-  <div class="concert-date">12. May 2018 · Nexus Café </div>
+  <div class="concert-date">12. May 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/the-steam-radios.html">The Steam Radios</a></div>
   <div class='concert-musiker'>Klaus Schickhofer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">12. May 2018 · Nexus Café </div>
+  <div class="concert-date">12. May 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/the-steam-radios.html">The Steam Radios</a></div>
   <div class='concert-musiker'>Haley Resch</div>
 </div><div class="concert-entry">
-  <div class="concert-date">12. May 2018 · Nexus Café </div>
+  <div class="concert-date">12. May 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/the-steam-radios.html">The Steam Radios</a></div>
   <div class='concert-musiker'>Walter Graf</div>
 </div><div class="concert-entry">
-  <div class="concert-date">17. May 2018 · Nexus Kino </div>
+  <div class="concert-date">17. May 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/madame-aurora-und-der-duft-des-fruehlings.html">Madame Aurora und der Duft des Frühlings</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">17. May 2018 · Nexus Kino </div>
+  <div class="concert-date">17. May 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/papa-moll-und-die-entfuehrung-des-fliegenden-hundes.html">Papa Moll und die Entführung des fliegenden Hundes</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">18. May 2018 · Nexus </div>
+  <div class="concert-date">18. May 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/oesterreichisches-ensemble-fuer-neue-musik-peter-ruzicka-streichquartett-nr-7-possibile-a-chaque-instant.html">Österreichisches Ensemble für neue Musik: Peter Ruzicka Streichquartett Nr 7  Possibile a Chaque Instant</a></div>
   <div class='concert-musiker'>Ekkehart Windrich</div>
 </div><div class="concert-entry">
-  <div class="concert-date">18. May 2018 · Nexus </div>
+  <div class="concert-date">18. May 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/oesterreichisches-ensemble-fuer-neue-musik-peter-ruzicka-streichquartett-nr-7-possibile-a-chaque-instant.html">Österreichisches Ensemble für neue Musik: Peter Ruzicka Streichquartett Nr 7  Possibile a Chaque Instant</a></div>
   <div class='concert-musiker'>Michaela Girardi</div>
 </div><div class="concert-entry">
-  <div class="concert-date">18. May 2018 · Nexus </div>
+  <div class="concert-date">18. May 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/oesterreichisches-ensemble-fuer-neue-musik-peter-ruzicka-streichquartett-nr-7-possibile-a-chaque-instant.html">Österreichisches Ensemble für neue Musik: Peter Ruzicka Streichquartett Nr 7  Possibile a Chaque Instant</a></div>
   <div class='concert-musiker'>Jutas Javorka</div>
 </div><div class="concert-entry">
-  <div class="concert-date">18. May 2018 · Nexus </div>
+  <div class="concert-date">18. May 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/oesterreichisches-ensemble-fuer-neue-musik-peter-ruzicka-streichquartett-nr-7-possibile-a-chaque-instant.html">Österreichisches Ensemble für neue Musik: Peter Ruzicka Streichquartett Nr 7  Possibile a Chaque Instant</a></div>
   <div class='concert-musiker'>Peter Sigl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. May 2018 · Nexus Café </div>
+  <div class="concert-date">19. May 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/muskwohnzimmer-at-pavillon.html">Muskwohnzimmer: AT Pavillon</a></div>
   <div class='concert-musiker'>Mwita Mataro</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. May 2018 · Nexus Café </div>
+  <div class="concert-date">19. May 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/muskwohnzimmer-at-pavillon.html">Muskwohnzimmer: AT Pavillon</a></div>
   <div class='concert-musiker'>Bernhart Melchart</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. May 2018 · Nexus Café </div>
+  <div class="concert-date">19. May 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/muskwohnzimmer-at-pavillon.html">Muskwohnzimmer: AT Pavillon</a></div>
   <div class='concert-musiker'>Tobias Kobl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. May 2018 · Nexus Café </div>
+  <div class="concert-date">19. May 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/muskwohnzimmer-at-pavillon.html">Muskwohnzimmer: AT Pavillon</a></div>
   <div class='concert-musiker'>Paul Ameli</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. May 2018 · Nexus Theater </div>
+  <div class="concert-date">19. May 2018 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/gschnagga-theater-der-sturm.html">Gschnagga Theater: Der Sturm</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">23. May 2018 · Nexus Theater </div>
+  <div class="concert-date">23. May 2018 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/virginia-hill.html">Virginia Hill</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">24. May 2018 · Nexus Ausstellung </div>
+  <div class="concert-date">24. May 2018 · Nexus Ausstellung · </div>
   <div class="concert-band"><a href="../bands/anne-frank-lasst-mich-ich-selbst-sein.html">Anne Frank, lasst mich ich selbst sein</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">24. May 2018 · Nexus Kino </div>
+  <div class="concert-date">24. May 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/das-etruskische-laecheln.html">Das Etruskische Lächeln</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">24. May 2018 · Nexus Kino </div>
+  <div class="concert-date">24. May 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/das-zeitraetsel.html">Das Zeiträtsel</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">25. May 2018 · Nexus Café </div>
+  <div class="concert-date">25. May 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-instant-karma.html">Lokale Bandrunde: Instant Karma</a></div>
   <div class='concert-musiker'>Alex Wimmer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. May 2018 · Nexus Café </div>
+  <div class="concert-date">25. May 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-instant-karma.html">Lokale Bandrunde: Instant Karma</a></div>
   <div class='concert-musiker'>Chris  Pucher</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. May 2018 · Nexus Café </div>
+  <div class="concert-date">25. May 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-instant-karma.html">Lokale Bandrunde: Instant Karma</a></div>
   <div class='concert-musiker'>Alex Fraueneder</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. May 2018 · Nexus Café </div>
+  <div class="concert-date">25. May 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-instant-karma.html">Lokale Bandrunde: Instant Karma</a></div>
   <div class='concert-musiker'>Chris Gruber</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. May 2018 · Nexus Theater </div>
+  <div class="concert-date">26. May 2018 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/in-der-mitte-der-welt-von-salem-chreiki.html">In der Mitte der Welt: von Salem Chreiki</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">5. Jun 2018 · Nexus Theater </div>
+  <div class="concert-date">5. Jun 2018 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/arabesque.html">Arabesque</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">6. Jun 2018 · Nexus my Uni </div>
+  <div class="concert-date">6. Jun 2018 · Nexus my Uni · </div>
   <div class="concert-band"><a href="../bands/kuenstliche-intelligenz-die-machine-weiss-mehr-als-wir.html">Künstliche Intelligenz – Die Machine weiss mehr als wir</a></div>
   <div class='concert-musiker'>Hans Peter Haberlander</div>
 </div><div class="concert-entry">
-  <div class="concert-date">7. Jun 2018 · Nexus Kino </div>
+  <div class="concert-date">7. Jun 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/herrliche-zeiten.html">Herrliche Zeiten</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">7. Jun 2018 · Nexus Kino </div>
+  <div class="concert-date">7. Jun 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/kasperl-und-der-sprechende-fussball.html">Kasperl und der sprechende Fussball</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">9. Jun 2018 · Nexus Kino </div>
+  <div class="concert-date">9. Jun 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/maennerkino-red-sparrow.html">Männerkino: Red Sparrow</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">14. Jun 2018 · Nexus Kino </div>
+  <div class="concert-date">14. Jun 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/der-buchladen-der-florence-green.html">Der Buchladen der Florence Green</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">14. Jun 2018 · Nexus Kino </div>
+  <div class="concert-date">14. Jun 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/early-man-steinzeit-bereit.html">Early Man – Steinzeit bereit</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">15. Jun 2018 · Nexus Café </div>
+  <div class="concert-date">15. Jun 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/mitsumma.html">Mitsumma</a></div>
   <div class='concert-musiker'>Birgit Margreiter</div>
 </div><div class="concert-entry">
-  <div class="concert-date">15. Jun 2018 · Nexus Café </div>
+  <div class="concert-date">15. Jun 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/mitsumma.html">Mitsumma</a></div>
   <div class='concert-musiker'>Sonja Pirchner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">15. Jun 2018 · Nexus Café </div>
+  <div class="concert-date">15. Jun 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/mitsumma.html">Mitsumma</a></div>
   <div class='concert-musiker'>Bernhard Jäger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">15. Jun 2018 · Nexus Café </div>
+  <div class="concert-date">15. Jun 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/mitsumma.html">Mitsumma</a></div>
   <div class='concert-musiker'>Geri Reis</div>
 </div><div class="concert-entry">
-  <div class="concert-date">15. Jun 2018 · Nexus Café </div>
+  <div class="concert-date">15. Jun 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/mitsumma.html">Mitsumma</a></div>
   <div class='concert-musiker'>Heinz Steiner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">16. Jun 2018 · Nexus Café </div>
+  <div class="concert-date">16. Jun 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/likale-bandrunde-the-fountains.html">Likale Bandrunde; The Fountains</a></div>
   <div class='concert-musiker'>Lisa Mosslechner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">16. Jun 2018 · Nexus Café </div>
+  <div class="concert-date">16. Jun 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/likale-bandrunde-the-fountains.html">Likale Bandrunde; The Fountains</a></div>
   <div class='concert-musiker'>Stefan Schäfer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">16. Jun 2018 · Nexus Café </div>
+  <div class="concert-date">16. Jun 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/likale-bandrunde-the-fountains.html">Likale Bandrunde; The Fountains</a></div>
   <div class='concert-musiker'>Paul Sternath</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Jun 2018 · Nexus Theater </div>
+  <div class="concert-date">19. Jun 2018 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/einsteins-fragment.html">Einsteins Fragment</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">19. Jun 2018 · Nexus Theater </div>
+  <div class="concert-date">19. Jun 2018 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/einsteins-fragment.html">Einsteins Fragment</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">19. Jun 2018 · Nexus Theater </div>
+  <div class="concert-date">19. Jun 2018 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/einsteins-fragment.html">Einsteins Fragment</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">19. Jun 2018 · Nexus Theater </div>
+  <div class="concert-date">19. Jun 2018 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/einsteins-fragment.html">Einsteins Fragment</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">19. Jun 2018 · Nexus Theater </div>
+  <div class="concert-date">19. Jun 2018 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/einsteins-fragment.html">Einsteins Fragment</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">28. Jun 2018 · Nexus Kino </div>
+  <div class="concert-date">28. Jun 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/liliane-susewind.html">Liliane Susewind</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">28. Jun 2018 · Nexus Kino </div>
+  <div class="concert-date">28. Jun 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/wohne-lieber-ungewoehnlich.html">Wohne lieber ungewöhnlich</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">30. Jun 2018 · Nexus Café </div>
+  <div class="concert-date">30. Jun 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/the-rotting-bones.html">The rotting Bones</a></div>
   <div class='concert-musiker'>Marcus Gordon</div>
 </div><div class="concert-entry">
-  <div class="concert-date">30. Jun 2018 · Nexus Café </div>
+  <div class="concert-date">30. Jun 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/the-rotting-bones.html">The rotting Bones</a></div>
   <div class='concert-musiker'>Chris Rettenbacher</div>
 </div><div class="concert-entry">
-  <div class="concert-date">30. Jun 2018 · Nexus Café </div>
+  <div class="concert-date">30. Jun 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/the-rotting-bones.html">The rotting Bones</a></div>
   <div class='concert-musiker'>Robert Dollmann</div>
 </div><div class="concert-entry">
-  <div class="concert-date">30. Jun 2018 · Nexus Café </div>
+  <div class="concert-date">30. Jun 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/the-rotting-bones.html">The rotting Bones</a></div>
   <div class='concert-musiker'>Ferdl Schätzl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">2. Aug 2018 · Nexus Theater </div>
+  <div class="concert-date">2. Aug 2018 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/heimatabend.html">Heimatabend</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">3. Aug 2018 · Nexus Theater </div>
+  <div class="concert-date">3. Aug 2018 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/heimatabend.html">Heimatabend</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">4. Aug 2018 · Nexus Theater </div>
+  <div class="concert-date">4. Aug 2018 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/heimatabend.html">Heimatabend</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">9. Aug 2018 · Nexus Kino </div>
+  <div class="concert-date">9. Aug 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/dolmetscher.html">Dolmetscher</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">11. Aug 2018 · Nexus Café </div>
+  <div class="concert-date">11. Aug 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-taylor-s-avocation.html">Lokale Bandrunde: Taylor’s aVOCation</a></div>
   <div class='concert-musiker'>Eva Schneider</div>
 </div><div class="concert-entry">
-  <div class="concert-date">11. Aug 2018 · Nexus Café </div>
+  <div class="concert-date">11. Aug 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-taylor-s-avocation.html">Lokale Bandrunde: Taylor’s aVOCation</a></div>
   <div class='concert-musiker'>Daniel Zech</div>
 </div><div class="concert-entry">
-  <div class="concert-date">16. Aug 2018 · Nexus Kino </div>
+  <div class="concert-date">16. Aug 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/the-king-mit-elvis-durch-amerika.html">The King: Mit Elvis durch Amerika</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">17. Aug 2018 · Nexus Café </div>
+  <div class="concert-date">17. Aug 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/blueswuzln.html">Blueswuzln</a></div>
   <div class='concert-musiker'>Fred Hölzl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">17. Aug 2018 · Nexus Café </div>
+  <div class="concert-date">17. Aug 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/blueswuzln.html">Blueswuzln</a></div>
   <div class='concert-musiker'>Benedikt Halus-Woll</div>
 </div><div class="concert-entry">
-  <div class="concert-date">17. Aug 2018 · Nexus Café </div>
+  <div class="concert-date">17. Aug 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/blueswuzln.html">Blueswuzln</a></div>
   <div class='concert-musiker'>Hannes Gappmaier</div>
 </div><div class="concert-entry">
-  <div class="concert-date">17. Aug 2018 · Nexus Café </div>
+  <div class="concert-date">17. Aug 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/blueswuzln.html">Blueswuzln</a></div>
   <div class='concert-musiker'>Georg Gruber</div>
 </div><div class="concert-entry">
-  <div class="concert-date">18. Aug 2018 · Nexus Café </div>
+  <div class="concert-date">18. Aug 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/the-blues-messengers.html">The Blues Messengers</a></div>
   <div class='concert-musiker'>Oliver Mally</div>
 </div><div class="concert-entry">
-  <div class="concert-date">18. Aug 2018 · Nexus Café </div>
+  <div class="concert-date">18. Aug 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/the-blues-messengers.html">The Blues Messengers</a></div>
   <div class='concert-musiker'>Alex Meik</div>
 </div><div class="concert-entry">
-  <div class="concert-date">18. Aug 2018 · Nexus Café </div>
+  <div class="concert-date">18. Aug 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/the-blues-messengers.html">The Blues Messengers</a></div>
   <div class='concert-musiker'>Peter Müller</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2018 · Festival 18 CS </div>
+  <div class="concert-date">23. Aug 2018 · Festival 18 CS · </div>
   <div class="concert-band"><a href="../bands/la-chiva-gantiva.html">La Chiva Gantiva</a></div>
   <div class='concert-musiker'>Rafael Espinel</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2018 · Festival 18 CS </div>
+  <div class="concert-date">23. Aug 2018 · Festival 18 CS · </div>
   <div class="concert-band"><a href="../bands/la-chiva-gantiva.html">La Chiva Gantiva</a></div>
   <div class='concert-musiker'>Tuan Ho Duc</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2018 · Festival 18 CS </div>
+  <div class="concert-date">23. Aug 2018 · Festival 18 CS · </div>
   <div class="concert-band"><a href="../bands/la-chiva-gantiva.html">La Chiva Gantiva</a></div>
   <div class='concert-musiker'>Felipe Deckers</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2018 · Festival 18 CS </div>
+  <div class="concert-date">23. Aug 2018 · Festival 18 CS · </div>
   <div class="concert-band"><a href="../bands/la-chiva-gantiva.html">La Chiva Gantiva</a></div>
   <div class='concert-musiker'>Jose Buc Chavez</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2018 · Festival 18 CS </div>
+  <div class="concert-date">23. Aug 2018 · Festival 18 CS · </div>
   <div class="concert-band"><a href="../bands/la-chiva-gantiva.html">La Chiva Gantiva</a></div>
   <div class='concert-musiker'>Natalia Gantiva</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2018 · Festival 18 CS </div>
+  <div class="concert-date">23. Aug 2018 · Festival 18 CS · </div>
   <div class="concert-band"><a href="../bands/la-chiva-gantiva.html">La Chiva Gantiva</a></div>
   <div class='concert-musiker'>Martin Mereau</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2018 · Festival 18 CS </div>
+  <div class="concert-date">23. Aug 2018 · Festival 18 CS · </div>
   <div class="concert-band"><a href="../bands/mokoomba.html">Mokoomba</a></div>
   <div class='concert-musiker'>Mathias Muzaza</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2018 · Festival 18 CS </div>
+  <div class="concert-date">23. Aug 2018 · Festival 18 CS · </div>
   <div class="concert-band"><a href="../bands/mokoomba.html">Mokoomba</a></div>
   <div class='concert-musiker'>Trustworth Samende</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2018 · Festival 18 CS </div>
+  <div class="concert-date">23. Aug 2018 · Festival 18 CS · </div>
   <div class="concert-band"><a href="../bands/mokoomba.html">Mokoomba</a></div>
   <div class='concert-musiker'>Donald Moyo</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2018 · Festival 18 CS </div>
+  <div class="concert-date">23. Aug 2018 · Festival 18 CS · </div>
   <div class="concert-band"><a href="../bands/mokoomba.html">Mokoomba</a></div>
   <div class='concert-musiker'>Abundance Mutori</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2018 · Festival 18 CS </div>
+  <div class="concert-date">23. Aug 2018 · Festival 18 CS · </div>
   <div class="concert-band"><a href="../bands/mokoomba.html">Mokoomba</a></div>
   <div class='concert-musiker'>Miti Mugande</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2018 · Festival 18 CS </div>
+  <div class="concert-date">23. Aug 2018 · Festival 18 CS · </div>
   <div class="concert-band"><a href="../bands/mokoomba.html">Mokoomba</a></div>
   <div class='concert-musiker'>Ndaba Coster Moyo</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2018 · Festival 18 SC </div>
+  <div class="concert-date">23. Aug 2018 · Festival 18 SC · </div>
   <div class="concert-band"><a href="../bands/little-rosies-kindergarten.html">Little Rosies Kindergarten</a></div>
   <div class='concert-musiker'>Anna Anderluh</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2018 · Festival 18 SC </div>
+  <div class="concert-date">23. Aug 2018 · Festival 18 SC · </div>
   <div class="concert-band"><a href="../bands/little-rosies-kindergarten.html">Little Rosies Kindergarten</a></div>
   <div class='concert-musiker'>Anna Widauer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2018 · Festival 18 SC </div>
+  <div class="concert-date">23. Aug 2018 · Festival 18 SC · </div>
   <div class="concert-band"><a href="../bands/little-rosies-kindergarten.html">Little Rosies Kindergarten</a></div>
   <div class='concert-musiker'>Florian Sigharter</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2018 · Festival 18 SC </div>
+  <div class="concert-date">23. Aug 2018 · Festival 18 SC · </div>
   <div class="concert-band"><a href="../bands/little-rosies-kindergarten.html">Little Rosies Kindergarten</a></div>
   <div class='concert-musiker'>Matteo Haitzmann</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2018 · Festival 18 SC </div>
+  <div class="concert-date">23. Aug 2018 · Festival 18 SC · </div>
   <div class="concert-band"><a href="../bands/little-rosies-kindergarten.html">Little Rosies Kindergarten</a></div>
   <div class='concert-musiker'>Clemens Sainitzer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2018 · Festival 18 SC </div>
+  <div class="concert-date">23. Aug 2018 · Festival 18 SC · </div>
   <div class="concert-band"><a href="../bands/little-rosies-kindergarten.html">Little Rosies Kindergarten</a></div>
   <div class='concert-musiker'>Johannes Bankl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2018 · Festival 18 SC </div>
+  <div class="concert-date">23. Aug 2018 · Festival 18 SC · </div>
   <div class="concert-band"><a href="../bands/little-rosies-kindergarten.html">Little Rosies Kindergarten</a></div>
   <div class='concert-musiker'>Lisa Hofmaninger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2018 · Festival 18 SC </div>
+  <div class="concert-date">23. Aug 2018 · Festival 18 SC · </div>
   <div class="concert-band"><a href="../bands/little-rosies-kindergarten.html">Little Rosies Kindergarten</a></div>
   <div class='concert-musiker'>Werner Zangerle</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2018 · Festival 18 SC </div>
+  <div class="concert-date">23. Aug 2018 · Festival 18 SC · </div>
   <div class="concert-band"><a href="../bands/little-rosies-kindergarten.html">Little Rosies Kindergarten</a></div>
   <div class='concert-musiker'>Robert Schröck</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2018 · Festival 18 SC </div>
+  <div class="concert-date">23. Aug 2018 · Festival 18 SC · </div>
   <div class="concert-band"><a href="../bands/little-rosies-kindergarten.html">Little Rosies Kindergarten</a></div>
   <div class='concert-musiker'>Lukas Leitner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2018 · Festival 18 SC </div>
+  <div class="concert-date">23. Aug 2018 · Festival 18 SC · </div>
   <div class="concert-band"><a href="../bands/little-rosies-kindergarten.html">Little Rosies Kindergarten</a></div>
   <div class='concert-musiker'>Helmuth Mühlbacher</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2018 · Festival 18 SC </div>
+  <div class="concert-date">23. Aug 2018 · Festival 18 SC · </div>
   <div class="concert-band"><a href="../bands/little-rosies-kindergarten.html">Little Rosies Kindergarten</a></div>
   <div class='concert-musiker'>Philipp Kienberger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2018 · Festival 18 SC </div>
+  <div class="concert-date">23. Aug 2018 · Festival 18 SC · </div>
   <div class="concert-band"><a href="../bands/little-rosies-kindergarten.html">Little Rosies Kindergarten</a></div>
   <div class='concert-musiker'>Judith Schwarz</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2018 · Festival 18 SC </div>
+  <div class="concert-date">23. Aug 2018 · Festival 18 SC · </div>
   <div class="concert-band"><a href="../bands/raoul-bjoerkenheim-ecstasy-doors-of-perception.html">Raoul Björkenheim eCsTaSy Doors of Perception</a></div>
   <div class='concert-musiker'>Raoul Björkenheim</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2018 · Festival 18 SC </div>
+  <div class="concert-date">23. Aug 2018 · Festival 18 SC · </div>
   <div class="concert-band"><a href="../bands/raoul-bjoerkenheim-ecstasy-doors-of-perception.html">Raoul Björkenheim eCsTaSy Doors of Perception</a></div>
   <div class='concert-musiker'>Pauli Lyytinen</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2018 · Festival 18 SC </div>
+  <div class="concert-date">23. Aug 2018 · Festival 18 SC · </div>
   <div class="concert-band"><a href="../bands/raoul-bjoerkenheim-ecstasy-doors-of-perception.html">Raoul Björkenheim eCsTaSy Doors of Perception</a></div>
   <div class='concert-musiker'>Jori Huhtala</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2018 · Festival 18 SC </div>
+  <div class="concert-date">23. Aug 2018 · Festival 18 SC · </div>
   <div class="concert-band"><a href="../bands/raoul-bjoerkenheim-ecstasy-doors-of-perception.html">Raoul Björkenheim eCsTaSy Doors of Perception</a></div>
   <div class='concert-musiker'>Markku Ounaskari</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2018 · Nexus Ausstellung </div>
+  <div class="concert-date">23. Aug 2018 · Nexus Ausstellung · </div>
   <div class="concert-band"><a href="../bands/helmut-johanna-kandl-glueck-auf.html">Helmut & Johanna Kandl: Glück auf</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 CS </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 CS · </div>
   <div class="concert-band"><a href="../bands/el-flecha-negra.html">El Flecha Negra</a></div>
   <div class='concert-musiker'>Cristian Kata</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 CS </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 CS · </div>
   <div class="concert-band"><a href="../bands/el-flecha-negra.html">El Flecha Negra</a></div>
   <div class='concert-musiker'>Tatan Luis Gonzales</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 CS </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 CS · </div>
   <div class="concert-band"><a href="../bands/el-flecha-negra.html">El Flecha Negra</a></div>
   <div class='concert-musiker'>Christian Ovalle</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 CS </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 CS · </div>
   <div class="concert-band"><a href="../bands/el-flecha-negra.html">El Flecha Negra</a></div>
   <div class='concert-musiker'>Myron Manson</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 CS </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 CS · </div>
   <div class="concert-band"><a href="../bands/el-flecha-negra.html">El Flecha Negra</a></div>
   <div class='concert-musiker'>Denis Molina</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 CS </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 CS · </div>
   <div class="concert-band"><a href="../bands/malaka-hostel.html">Malaka Hostel</a></div>
   <div class='concert-musiker'>Myron Manson</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 CS </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 CS · </div>
   <div class="concert-band"><a href="../bands/malaka-hostel.html">Malaka Hostel</a></div>
   <div class='concert-musiker'>Werner Wilz</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 CS </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 CS · </div>
   <div class="concert-band"><a href="../bands/malaka-hostel.html">Malaka Hostel</a></div>
   <div class='concert-musiker'>Holger Gainsburg</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 CS </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 CS · </div>
   <div class="concert-band"><a href="../bands/malaka-hostel.html">Malaka Hostel</a></div>
   <div class='concert-musiker'>Tatan Luis Gonzales</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 CS </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 CS · </div>
   <div class="concert-band"><a href="../bands/malaka-hostel.html">Malaka Hostel</a></div>
   <div class='concert-musiker'>Jonathan Ziegler</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 CS </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 CS · </div>
   <div class="concert-band"><a href="../bands/malaka-hostel.html">Malaka Hostel</a></div>
   <div class='concert-musiker'>Grischa Kursawe</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/marc-ribot-songs-of-resistance.html">Marc Ribot: Songs of Resistance</a></div>
   <div class='concert-musiker'>Marc Ribot</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/marc-ribot-songs-of-resistance.html">Marc Ribot: Songs of Resistance</a></div>
   <div class='concert-musiker'>Jay Rodriguez</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/marc-ribot-songs-of-resistance.html">Marc Ribot: Songs of Resistance</a></div>
   <div class='concert-musiker'>Nick Dunston</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/marc-ribot-songs-of-resistance.html">Marc Ribot: Songs of Resistance</a></div>
   <div class='concert-musiker'>Nasheet Waits</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/th-o-ceccaldi-freaks.html">Théo Ceccaldi “Freaks”</a></div>
   <div class='concert-musiker'>Théo Ceccaldi</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/th-o-ceccaldi-freaks.html">Théo Ceccaldi “Freaks”</a></div>
   <div class='concert-musiker'>Matthieu Metzger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/th-o-ceccaldi-freaks.html">Théo Ceccaldi “Freaks”</a></div>
   <div class='concert-musiker'>Hugues Mayot</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/th-o-ceccaldi-freaks.html">Théo Ceccaldi “Freaks”</a></div>
   <div class='concert-musiker'>Valentin Ceccaldi</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/th-o-ceccaldi-freaks.html">Théo Ceccaldi “Freaks”</a></div>
   <div class='concert-musiker'>Ciani Caserotto</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/th-o-ceccaldi-freaks.html">Théo Ceccaldi “Freaks”</a></div>
   <div class='concert-musiker'>Etienne Zemniak</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/ulrich-dechsler-liminal-zone.html">Ulrich Dechsler Liminal Zone</a></div>
   <div class='concert-musiker'>Ulrich Drechsler</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/ulrich-dechsler-liminal-zone.html">Ulrich Dechsler Liminal Zone</a></div>
   <div class='concert-musiker'>Clara Luzia</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/ulrich-dechsler-liminal-zone.html">Ulrich Dechsler Liminal Zone</a></div>
   <div class='concert-musiker'>Özlem Bulut</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/ulrich-dechsler-liminal-zone.html">Ulrich Dechsler Liminal Zone</a></div>
   <div class='concert-musiker'>Yasmin Hafedh</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/ulrich-dechsler-liminal-zone.html">Ulrich Dechsler Liminal Zone</a></div>
   <div class='concert-musiker'>Peter Zirbs</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/ulrich-dechsler-liminal-zone.html">Ulrich Dechsler Liminal Zone</a></div>
   <div class='concert-musiker'>Simon Raab</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/ulrich-dechsler-liminal-zone.html">Ulrich Dechsler Liminal Zone</a></div>
   <div class='concert-musiker'>Judith Ferstl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/ulrich-dechsler-liminal-zone.html">Ulrich Dechsler Liminal Zone</a></div>
   <div class='concert-musiker'>Judith Schwarz</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/virta-hurmos.html">Virta "Hurmos"</a></div>
   <div class='concert-musiker'>Antti Hevosmaa</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/virta-hurmos.html">Virta "Hurmos"</a></div>
   <div class='concert-musiker'>Heikki Selamo</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/virta-hurmos.html">Virta "Hurmos"</a></div>
   <div class='concert-musiker'>Erik Fräki</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/virta-hurmos.html">Virta "Hurmos"</a></div>
   <div class='concert-musiker'>Jere Sountausta</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/virta-hurmos.html">Virta "Hurmos"</a></div>
   <div class='concert-musiker'>Mika Savolainen</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 Nexus+ </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 Nexus+ · </div>
   <div class="concert-band"><a href="../bands/schmieds-puls.html">Schmieds Puls</a></div>
   <div class='concert-musiker'>Mira Lu Kovacs</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 Nexus+ </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 Nexus+ · </div>
   <div class="concert-band"><a href="../bands/schmieds-puls.html">Schmieds Puls</a></div>
   <div class='concert-musiker'>Walter Singer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 Nexus+ </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 Nexus+ · </div>
   <div class="concert-band"><a href="../bands/schmieds-puls.html">Schmieds Puls</a></div>
   <div class='concert-musiker'>Christian Grobauer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 Nexus+ </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 Nexus+ · </div>
   <div class="concert-band"><a href="../bands/three-for-silver-the-way-we-burn.html">Three for Silver: The Way we burn</a></div>
   <div class='concert-musiker'>Lucas Warford</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 Nexus+ </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 Nexus+ · </div>
   <div class="concert-band"><a href="../bands/three-for-silver-the-way-we-burn.html">Three for Silver: The Way we burn</a></div>
   <div class='concert-musiker'>Willo Sertain</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 Nexus+ </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 Nexus+ · </div>
   <div class="concert-band"><a href="../bands/three-for-silver-the-way-we-burn.html">Three for Silver: The Way we burn</a></div>
   <div class='concert-musiker'>Greg Allison</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 SC </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 SC · </div>
   <div class="concert-band"><a href="../bands/chamber-4-city-of-light.html">Chamber 4 City of Light</a></div>
   <div class='concert-musiker'>Luis Vicente</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 SC </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 SC · </div>
   <div class="concert-band"><a href="../bands/chamber-4-city-of-light.html">Chamber 4 City of Light</a></div>
   <div class='concert-musiker'>Theo Ceccaldi</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 SC </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 SC · </div>
   <div class="concert-band"><a href="../bands/chamber-4-city-of-light.html">Chamber 4 City of Light</a></div>
   <div class='concert-musiker'>Valentin Ceccaldi</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 SC </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 SC · </div>
   <div class="concert-band"><a href="../bands/chamber-4-city-of-light.html">Chamber 4 City of Light</a></div>
   <div class='concert-musiker'>Marcelo Dos Reis</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 SC </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 SC · </div>
   <div class="concert-band"><a href="../bands/kuu-lampedus-lullaby.html">KUU! Lampedus Lullaby</a></div>
   <div class='concert-musiker'>Jelena Kuljic</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 SC </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 SC · </div>
   <div class="concert-band"><a href="../bands/kuu-lampedus-lullaby.html">KUU! Lampedus Lullaby</a></div>
   <div class='concert-musiker'>Franko Möbus</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 SC </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 SC · </div>
   <div class="concert-band"><a href="../bands/kuu-lampedus-lullaby.html">KUU! Lampedus Lullaby</a></div>
   <div class='concert-musiker'>Kalle Kalima</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2018 · Festival 18 SC </div>
+  <div class="concert-date">24. Aug 2018 · Festival 18 SC · </div>
   <div class="concert-band"><a href="../bands/kuu-lampedus-lullaby.html">KUU! Lampedus Lullaby</a></div>
   <div class='concert-musiker'>Christian Lillinger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 CS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 CS · </div>
   <div class="concert-band"><a href="../bands/branko-galoic-skakavac-orkestar.html">Branko Galoic & Skakavac Orkestar</a></div>
   <div class='concert-musiker'>Branko Galoic</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 CS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 CS · </div>
   <div class="concert-band"><a href="../bands/branko-galoic-skakavac-orkestar.html">Branko Galoic & Skakavac Orkestar</a></div>
   <div class='concert-musiker'>Sandra Tadic</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 CS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 CS · </div>
   <div class="concert-band"><a href="../bands/branko-galoic-skakavac-orkestar.html">Branko Galoic & Skakavac Orkestar</a></div>
   <div class='concert-musiker'>Chris Corstens</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 CS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 CS · </div>
   <div class="concert-band"><a href="../bands/branko-galoic-skakavac-orkestar.html">Branko Galoic & Skakavac Orkestar</a></div>
   <div class='concert-musiker'>Patrick Votrian</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 CS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 CS · </div>
   <div class="concert-band"><a href="../bands/branko-galoic-skakavac-orkestar.html">Branko Galoic & Skakavac Orkestar</a></div>
   <div class='concert-musiker'>Vit Witowski Polak</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 CS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 CS · </div>
   <div class="concert-band"><a href="../bands/branko-galoic-skakavac-orkestar.html">Branko Galoic & Skakavac Orkestar</a></div>
   <div class='concert-musiker'>Igor Plzak</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 CS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 CS · </div>
   <div class="concert-band"><a href="../bands/orges-the-ockus-rockus-band.html">Orges & the Ockus -Rockus Band</a></div>
   <div class='concert-musiker'>Orges Toce</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 CS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 CS · </div>
   <div class="concert-band"><a href="../bands/orges-the-ockus-rockus-band.html">Orges & the Ockus -Rockus Band</a></div>
   <div class='concert-musiker'>Christian Eberle</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 CS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 CS · </div>
   <div class="concert-band"><a href="../bands/orges-the-ockus-rockus-band.html">Orges & the Ockus -Rockus Band</a></div>
   <div class='concert-musiker'>Bernd Satzinger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 CS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 CS · </div>
   <div class="concert-band"><a href="../bands/orges-the-ockus-rockus-band.html">Orges & the Ockus -Rockus Band</a></div>
   <div class='concert-musiker'>Benny Omerzell</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 CS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 CS · </div>
   <div class="concert-band"><a href="../bands/orges-the-ockus-rockus-band.html">Orges & the Ockus -Rockus Band</a></div>
   <div class='concert-musiker'>Martin Eberle</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 Huggenberg </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 Huggenberg · </div>
   <div class="concert-band"><a href="../bands/fainschmitz.html">Fainschmitz</a></div>
   <div class='concert-musiker'>Matthias Vieider</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 Huggenberg </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 Huggenberg · </div>
   <div class="concert-band"><a href="../bands/fainschmitz.html">Fainschmitz</a></div>
   <div class='concert-musiker'>Alexander Kranabetter</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 Huggenberg </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 Huggenberg · </div>
   <div class="concert-band"><a href="../bands/fainschmitz.html">Fainschmitz</a></div>
   <div class='concert-musiker'>Jannis Klenke</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 Huggenberg </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 Huggenberg · </div>
   <div class="concert-band"><a href="../bands/fainschmitz.html">Fainschmitz</a></div>
   <div class='concert-musiker'>Martin Burk</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/a-pride-of-lions.html">A Pride of Lions</a></div>
   <div class='concert-musiker'>Joe McPhee</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/a-pride-of-lions.html">A Pride of Lions</a></div>
   <div class='concert-musiker'>Daunik Lazro</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/a-pride-of-lions.html">A Pride of Lions</a></div>
   <div class='concert-musiker'>Guillaume Seguron</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/a-pride-of-lions.html">A Pride of Lions</a></div>
   <div class='concert-musiker'>Joshua Abrams</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/a-pride-of-lions.html">A Pride of Lions</a></div>
   <div class='concert-musiker'>Chad Taylor</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/chansons-du-crepuscule.html">Chansons du Crepuscule</a></div>
   <div class='concert-musiker'>Elliott Sharp</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/chansons-du-crepuscule.html">Chansons du Crepuscule</a></div>
   <div class='concert-musiker'>Helene Breschand</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/chansons-du-crepuscule.html">Chansons du Crepuscule</a></div>
   <div class='concert-musiker'>Shayna Dulberger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/chansons-du-crepuscule.html">Chansons du Crepuscule</a></div>
   <div class='concert-musiker'>Maurice DeMartin</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/nicole-mitchell-mandorla-awakening.html">Nicole Mitchell: Mandorla awakening</a></div>
   <div class='concert-musiker'>Nicole Mitchell</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/nicole-mitchell-mandorla-awakening.html">Nicole Mitchell: Mandorla awakening</a></div>
   <div class='concert-musiker'>Avery r Young</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/nicole-mitchell-mandorla-awakening.html">Nicole Mitchell: Mandorla awakening</a></div>
   <div class='concert-musiker'>Kojiro Umezaki</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/nicole-mitchell-mandorla-awakening.html">Nicole Mitchell: Mandorla awakening</a></div>
   <div class='concert-musiker'>Renee Baker</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/nicole-mitchell-mandorla-awakening.html">Nicole Mitchell: Mandorla awakening</a></div>
   <div class='concert-musiker'>Helene Breschand</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/nicole-mitchell-mandorla-awakening.html">Nicole Mitchell: Mandorla awakening</a></div>
   <div class='concert-musiker'>Tomeka Reid</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/nicole-mitchell-mandorla-awakening.html">Nicole Mitchell: Mandorla awakening</a></div>
   <div class='concert-musiker'>Alex Wing</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/nicole-mitchell-mandorla-awakening.html">Nicole Mitchell: Mandorla awakening</a></div>
   <div class='concert-musiker'>Eigen Aoki</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/nicole-mitchell-mandorla-awakening.html">Nicole Mitchell: Mandorla awakening</a></div>
   <div class='concert-musiker'>Jovia Armstrong</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/punkt-vrt-plastic.html">Punkt.vrt.Plastic</a></div>
   <div class='concert-musiker'>Kaja Draksler</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/punkt-vrt-plastic.html">Punkt.vrt.Plastic</a></div>
   <div class='concert-musiker'>Petter Eldh</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/punkt-vrt-plastic.html">Punkt.vrt.Plastic</a></div>
   <div class='concert-musiker'>Christian Lillinger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/schnellertollermeier.html">Schnellertollermeier</a></div>
   <div class='concert-musiker'>Andi Schnellmann</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/schnellertollermeier.html">Schnellertollermeier</a></div>
   <div class='concert-musiker'>David Meier</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/schnellertollermeier.html">Schnellertollermeier</a></div>
   <div class='concert-musiker'>Manuel Troller</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/shabaka-hutchings-feat-shake-stew.html">Shabaka Hutchings feat. Shake Stew</a></div>
   <div class='concert-musiker'>Shabaka Hutchings</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/shabaka-hutchings-feat-shake-stew.html">Shabaka Hutchings feat. Shake Stew</a></div>
   <div class='concert-musiker'>Lukas Kranzelbinder</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/shabaka-hutchings-feat-shake-stew.html">Shabaka Hutchings feat. Shake Stew</a></div>
   <div class='concert-musiker'>Mario Rom</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/shabaka-hutchings-feat-shake-stew.html">Shabaka Hutchings feat. Shake Stew</a></div>
   <div class='concert-musiker'>Clemens Salesny</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/shabaka-hutchings-feat-shake-stew.html">Shabaka Hutchings feat. Shake Stew</a></div>
   <div class='concert-musiker'>Johannes Schleiermacher</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/shabaka-hutchings-feat-shake-stew.html">Shabaka Hutchings feat. Shake Stew</a></div>
   <div class='concert-musiker'>Oliver Potratz</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/shabaka-hutchings-feat-shake-stew.html">Shabaka Hutchings feat. Shake Stew</a></div>
   <div class='concert-musiker'>Niki Dolp</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/shabaka-hutchings-feat-shake-stew.html">Shabaka Hutchings feat. Shake Stew</a></div>
   <div class='concert-musiker'>Mathias Koch</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 Nexus+ </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 Nexus+ · </div>
   <div class="concert-band"><a href="../bands/bomba-titinka-hot-air-balloon.html">Bomba Titinka Hot Air Balloon</a></div>
   <div class='concert-musiker'>Dario Mattoni</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 Nexus+ </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 Nexus+ · </div>
   <div class="concert-band"><a href="../bands/bomba-titinka-hot-air-balloon.html">Bomba Titinka Hot Air Balloon</a></div>
   <div class='concert-musiker'>Ludovica Signorelli</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 Nexus+ </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 Nexus+ · </div>
   <div class="concert-band"><a href="../bands/bomba-titinka-hot-air-balloon.html">Bomba Titinka Hot Air Balloon</a></div>
   <div class='concert-musiker'>Marco Indino</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 Nexus+ </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 Nexus+ · </div>
   <div class="concert-band"><a href="../bands/bomba-titinka-hot-air-balloon.html">Bomba Titinka Hot Air Balloon</a></div>
   <div class='concert-musiker'>Elia  Sommacal</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 Nexus+ </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 Nexus+ · </div>
   <div class="concert-band"><a href="../bands/bomba-titinka-hot-air-balloon.html">Bomba Titinka Hot Air Balloon</a></div>
   <div class='concert-musiker'>Gianloca Bissoli</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 Nexus+ </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 Nexus+ · </div>
   <div class="concert-band"><a href="../bands/late-night-show-kokoroko.html">Late Night Show: Kokoroko</a></div>
   <div class='concert-musiker'>Sheila Maurice-Grey</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 Nexus+ </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 Nexus+ · </div>
   <div class="concert-band"><a href="../bands/late-night-show-kokoroko.html">Late Night Show: Kokoroko</a></div>
   <div class='concert-musiker'>theo Kinoshi</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 Nexus+ </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 Nexus+ · </div>
   <div class="concert-band"><a href="../bands/late-night-show-kokoroko.html">Late Night Show: Kokoroko</a></div>
   <div class='concert-musiker'>Richie Seivwright</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 Nexus+ </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 Nexus+ · </div>
   <div class="concert-band"><a href="../bands/late-night-show-kokoroko.html">Late Night Show: Kokoroko</a></div>
   <div class='concert-musiker'>Oscar Jerome</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 Nexus+ </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 Nexus+ · </div>
   <div class="concert-band"><a href="../bands/late-night-show-kokoroko.html">Late Night Show: Kokoroko</a></div>
   <div class='concert-musiker'>Onome Ighamr</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 Nexus+ </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 Nexus+ · </div>
   <div class="concert-band"><a href="../bands/rasgarasga.html">Rasgarasga</a></div>
   <div class='concert-musiker'>Franziska Schuster</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 Nexus+ </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 Nexus+ · </div>
   <div class="concert-band"><a href="../bands/rasgarasga.html">Rasgarasga</a></div>
   <div class='concert-musiker'>Lukas Fischer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 Nexus+ </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 Nexus+ · </div>
   <div class="concert-band"><a href="../bands/rasgarasga.html">Rasgarasga</a></div>
   <div class='concert-musiker'>Jonas Krause</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 Nexus+ </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 Nexus+ · </div>
   <div class="concert-band"><a href="../bands/rasgarasga.html">Rasgarasga</a></div>
   <div class='concert-musiker'>Benedikt Fischer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 Nexus+ </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 Nexus+ · </div>
   <div class="concert-band"><a href="../bands/rasgarasga.html">Rasgarasga</a></div>
   <div class='concert-musiker'>Gregor Brändle</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 Nexus+ </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 Nexus+ · </div>
   <div class="concert-band"><a href="../bands/rasgarasga.html">Rasgarasga</a></div>
   <div class='concert-musiker'>Felix Knothe</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 SC </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 SC · </div>
   <div class="concert-band"><a href="../bands/sharp-koenig.html">Sharp / König</a></div>
   <div class='concert-musiker'>Elliott Sharp</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 SC </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 SC · </div>
   <div class="concert-band"><a href="../bands/sharp-koenig.html">Sharp / König</a></div>
   <div class='concert-musiker'>Lukas König</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 SC </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 SC · </div>
   <div class="concert-band"><a href="../bands/synesthetic-4.html">Synesthetic 4</a></div>
   <div class='concert-musiker'>Vincent Pongracz</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 SC </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 SC · </div>
   <div class="concert-band"><a href="../bands/synesthetic-4.html">Synesthetic 4</a></div>
   <div class='concert-musiker'>Peter Rom</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 SC </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 SC · </div>
   <div class="concert-band"><a href="../bands/synesthetic-4.html">Synesthetic 4</a></div>
   <div class='concert-musiker'>Manu Mayr</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 SC </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 SC · </div>
   <div class="concert-band"><a href="../bands/synesthetic-4.html">Synesthetic 4</a></div>
   <div class='concert-musiker'>Andreas Lettner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 Wirthmiller </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 Wirthmiller · </div>
   <div class="concert-band"><a href="../bands/hofmaninger-schwarz.html">Hofmaninger/Schwarz</a></div>
   <div class='concert-musiker'>Lisa Hofmaninger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2018 · Festival 18 Wirthmiller </div>
+  <div class="concert-date">25. Aug 2018 · Festival 18 Wirthmiller · </div>
   <div class="concert-band"><a href="../bands/hofmaninger-schwarz.html">Hofmaninger/Schwarz</a></div>
   <div class='concert-musiker'>Judith Schwarz</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2018 · Festival 18 Kinderkonzert </div>
+  <div class="concert-date">26. Aug 2018 · Festival 18 Kinderkonzert · </div>
   <div class="concert-band"><a href="../bands/pepe-speedy.html">Pepe & Speedy</a></div>
   <div class='concert-musiker'>Christoph Pepe Auer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2018 · Festival 18 Kinderkonzert </div>
+  <div class="concert-date">26. Aug 2018 · Festival 18 Kinderkonzert · </div>
   <div class="concert-band"><a href="../bands/pepe-speedy.html">Pepe & Speedy</a></div>
   <div class='concert-musiker'>Manfred Temmel</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">26. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/erik-friedlander-s-throw-a-glass-artemisia.html">Erik Friedlander’s Throw a Glass: Artemisia</a></div>
   <div class='concert-musiker'>Erik Friedlander</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">26. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/erik-friedlander-s-throw-a-glass-artemisia.html">Erik Friedlander’s Throw a Glass: Artemisia</a></div>
   <div class='concert-musiker'>Mark Helias</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">26. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/erik-friedlander-s-throw-a-glass-artemisia.html">Erik Friedlander’s Throw a Glass: Artemisia</a></div>
   <div class='concert-musiker'>Uri Caine</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">26. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/erik-friedlander-s-throw-a-glass-artemisia.html">Erik Friedlander’s Throw a Glass: Artemisia</a></div>
   <div class='concert-musiker'>Ches Smith</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">26. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/jaimie-branch-fly-or-die.html">Jaimie Branch "Fly or die"</a></div>
   <div class='concert-musiker'>Jaimie Branch</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">26. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/jaimie-branch-fly-or-die.html">Jaimie Branch "Fly or die"</a></div>
   <div class='concert-musiker'>Jason Ajemian</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">26. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/jaimie-branch-fly-or-die.html">Jaimie Branch "Fly or die"</a></div>
   <div class='concert-musiker'>Lester St Louis</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">26. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/jaimie-branch-fly-or-die.html">Jaimie Branch "Fly or die"</a></div>
   <div class='concert-musiker'>Chad Taylor</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">26. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/kuhn-fu-pre-album-release-show.html">Kuhn Fu "Pre Album release Show"</a></div>
   <div class='concert-musiker'>Ziv Taubenfeld</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">26. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/kuhn-fu-pre-album-release-show.html">Kuhn Fu "Pre Album release Show"</a></div>
   <div class='concert-musiker'>Esat Ekincioglu</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">26. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/kuhn-fu-pre-album-release-show.html">Kuhn Fu "Pre Album release Show"</a></div>
   <div class='concert-musiker'>Christian Kühn</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">26. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/kuhn-fu-pre-album-release-show.html">Kuhn Fu "Pre Album release Show"</a></div>
   <div class='concert-musiker'>George Hadow</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">26. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/leila-martial-baa-box.html">Leila Martial "Baa Box"</a></div>
   <div class='concert-musiker'>Leila Martial</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">26. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/leila-martial-baa-box.html">Leila Martial "Baa Box"</a></div>
   <div class='concert-musiker'>Pierre Tereygeol</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">26. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/leila-martial-baa-box.html">Leila Martial "Baa Box"</a></div>
   <div class='concert-musiker'>Eric Perez</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">26. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/tomas-fujiwara-triple-double.html">Tomas Fujiwara: Triple Double</a></div>
   <div class='concert-musiker'>Tomas Fujiwara</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">26. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/tomas-fujiwara-triple-double.html">Tomas Fujiwara: Triple Double</a></div>
   <div class='concert-musiker'>Gerald Cleaver</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">26. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/tomas-fujiwara-triple-double.html">Tomas Fujiwara: Triple Double</a></div>
   <div class='concert-musiker'>Mary Halvorson</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">26. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/tomas-fujiwara-triple-double.html">Tomas Fujiwara: Triple Double</a></div>
   <div class='concert-musiker'>Brandon Seabrook</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">26. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/tomas-fujiwara-triple-double.html">Tomas Fujiwara: Triple Double</a></div>
   <div class='concert-musiker'>Taylor Ho Bynum</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2018 · Festival 18 MS </div>
+  <div class="concert-date">26. Aug 2018 · Festival 18 MS · </div>
   <div class="concert-band"><a href="../bands/tomas-fujiwara-triple-double.html">Tomas Fujiwara: Triple Double</a></div>
   <div class='concert-musiker'>Ralph Alessi</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2018 · Festival 18 Nexus+ </div>
+  <div class="concert-date">26. Aug 2018 · Festival 18 Nexus+ · </div>
   <div class="concert-band"><a href="../bands/late-night-show-kokoroko.html">Late Night Show: Kokoroko</a></div>
   <div class='concert-musiker'>Sheila Maurice-Grey</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2018 · Festival 18 Nexus+ </div>
+  <div class="concert-date">26. Aug 2018 · Festival 18 Nexus+ · </div>
   <div class="concert-band"><a href="../bands/late-night-show-kokoroko.html">Late Night Show: Kokoroko</a></div>
   <div class='concert-musiker'>theo Kinoshi</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2018 · Festival 18 Nexus+ </div>
+  <div class="concert-date">26. Aug 2018 · Festival 18 Nexus+ · </div>
   <div class="concert-band"><a href="../bands/late-night-show-kokoroko.html">Late Night Show: Kokoroko</a></div>
   <div class='concert-musiker'>Richie Seivwright</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2018 · Festival 18 Nexus+ </div>
+  <div class="concert-date">26. Aug 2018 · Festival 18 Nexus+ · </div>
   <div class="concert-band"><a href="../bands/late-night-show-kokoroko.html">Late Night Show: Kokoroko</a></div>
   <div class='concert-musiker'>Oscar Jerome</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2018 · Festival 18 Nexus+ </div>
+  <div class="concert-date">26. Aug 2018 · Festival 18 Nexus+ · </div>
   <div class="concert-band"><a href="../bands/late-night-show-kokoroko.html">Late Night Show: Kokoroko</a></div>
   <div class='concert-musiker'>Onome Ighamr</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2018 · Festival 18 Nexus+ </div>
+  <div class="concert-date">26. Aug 2018 · Festival 18 Nexus+ · </div>
   <div class="concert-band"><a href="../bands/late-night-show-spiritual-unity.html">Late Night Show: Spiritual Unity</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2018 · Festival 18 Schloss Ritzen </div>
+  <div class="concert-date">26. Aug 2018 · Festival 18 Schloss Ritzen · </div>
   <div class="concert-band"><a href="../bands/paier-valcic-quartet-cinema-scenes.html">Paier Valcic Quartet: Cinema Scenes</a></div>
   <div class='concert-musiker'>Klaus Paier</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2018 · Festival 18 Schloss Ritzen </div>
+  <div class="concert-date">26. Aug 2018 · Festival 18 Schloss Ritzen · </div>
   <div class="concert-band"><a href="../bands/paier-valcic-quartet-cinema-scenes.html">Paier Valcic Quartet: Cinema Scenes</a></div>
   <div class='concert-musiker'>Asja Valcic</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2018 · Festival 18 Schloss Ritzen </div>
+  <div class="concert-date">26. Aug 2018 · Festival 18 Schloss Ritzen · </div>
   <div class="concert-band"><a href="../bands/paier-valcic-quartet-cinema-scenes.html">Paier Valcic Quartet: Cinema Scenes</a></div>
   <div class='concert-musiker'>Stefan Gferrer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2018 · Festival 18 Schloss Ritzen </div>
+  <div class="concert-date">26. Aug 2018 · Festival 18 Schloss Ritzen · </div>
   <div class="concert-band"><a href="../bands/paier-valcic-quartet-cinema-scenes.html">Paier Valcic Quartet: Cinema Scenes</a></div>
   <div class='concert-musiker'>Roman Werni</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2018 · Festival 18 Stöckl Alm </div>
+  <div class="concert-date">26. Aug 2018 · Festival 18 Stöckl Alm · </div>
   <div class="concert-band"><a href="../bands/die-strottern-waundsd-woasd.html">Die Strottern: Waundsd Woasd</a></div>
   <div class='concert-musiker'>Klemens Lendl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2018 · Festival 18 Stöckl Alm </div>
+  <div class="concert-date">26. Aug 2018 · Festival 18 Stöckl Alm · </div>
   <div class="concert-band"><a href="../bands/die-strottern-waundsd-woasd.html">Die Strottern: Waundsd Woasd</a></div>
   <div class='concert-musiker'>David Müller</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2018 · Festival 18 Voderkühbühel </div>
+  <div class="concert-date">26. Aug 2018 · Festival 18 Voderkühbühel · </div>
   <div class="concert-band"><a href="../bands/dobrek-bistro.html">Dobrek Bistro</a></div>
   <div class='concert-musiker'>Krzysztof Dobrek</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2018 · Festival 18 Voderkühbühel </div>
+  <div class="concert-date">26. Aug 2018 · Festival 18 Voderkühbühel · </div>
   <div class="concert-band"><a href="../bands/dobrek-bistro.html">Dobrek Bistro</a></div>
   <div class='concert-musiker'>Aliosha Biz</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2018 · Festival 18 Voderkühbühel </div>
+  <div class="concert-date">26. Aug 2018 · Festival 18 Voderkühbühel · </div>
   <div class="concert-band"><a href="../bands/dobrek-bistro.html">Dobrek Bistro</a></div>
   <div class='concert-musiker'>Sascha Lackner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2018 · Festival 18 Voderkühbühel </div>
+  <div class="concert-date">26. Aug 2018 · Festival 18 Voderkühbühel · </div>
   <div class="concert-band"><a href="../bands/dobrek-bistro.html">Dobrek Bistro</a></div>
   <div class='concert-musiker'>Luis Ribeiro</div>
 </div><div class="concert-entry">
-  <div class="concert-date">1. Sep 2018 · Nexus Café </div>
+  <div class="concert-date">1. Sep 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/salsanight-im-cafe-nexus.html">Salsanight im Cafe Nexus</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">6. Sep 2018 · Nexus Kino </div>
+  <div class="concert-date">6. Sep 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/die-kanadische-reise.html">Die Kanadische Reise</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">7. Sep 2018 · Nexus Café </div>
+  <div class="concert-date">7. Sep 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/musikwohnzimmer-xavier-darcy.html">Musikwohnzimmer: Xavier Darcy</a></div>
   <div class='concert-musiker'>Xavier Darcy</div>
 </div><div class="concert-entry">
-  <div class="concert-date">8. Sep 2018 · Nexus Café </div>
+  <div class="concert-date">8. Sep 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-backwards-charme.html">Lokale Bandrunde: Backwards Charme</a></div>
   <div class='concert-musiker'>Daniel Lang</div>
 </div><div class="concert-entry">
-  <div class="concert-date">8. Sep 2018 · Nexus Café </div>
+  <div class="concert-date">8. Sep 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-backwards-charme.html">Lokale Bandrunde: Backwards Charme</a></div>
   <div class='concert-musiker'>Thomas Hofer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">8. Sep 2018 · Nexus Café </div>
+  <div class="concert-date">8. Sep 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-backwards-charme.html">Lokale Bandrunde: Backwards Charme</a></div>
   <div class='concert-musiker'>Martin Teutsch</div>
 </div><div class="concert-entry">
-  <div class="concert-date">8. Sep 2018 · Nexus Café </div>
+  <div class="concert-date">8. Sep 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-backwards-charme.html">Lokale Bandrunde: Backwards Charme</a></div>
   <div class='concert-musiker'>Thomas Bauer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">12. Sep 2018 · Nexus my Uni </div>
+  <div class="concert-date">12. Sep 2018 · Nexus my Uni · </div>
   <div class="concert-band"><a href="../bands/leben-ohne-zu-arbeiten.html">Leben ohne zu arbeiten ?</a></div>
   <div class='concert-musiker'>Roland Fürst</div>
 </div><div class="concert-entry">
-  <div class="concert-date">13. Sep 2018 · Nexus Kino </div>
+  <div class="concert-date">13. Sep 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/gruener-wird-s-nicht-sagter-der-gaertner-und-flog-davon.html">Grüner wird’s nicht sagter der Gärtner und flog davon</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">14. Sep 2018 · Nexus Ausstellung </div>
+  <div class="concert-date">14. Sep 2018 · Nexus Ausstellung · </div>
   <div class="concert-band"><a href="../bands/vernissage-zu-zwei-haenden.html">Vernissage: Zu zwei Händen</a></div>
   <div class='concert-musiker'>Christoph Feichtinger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">14. Sep 2018 · Nexus Ausstellung </div>
+  <div class="concert-date">14. Sep 2018 · Nexus Ausstellung · </div>
   <div class="concert-band"><a href="../bands/vernissage-zu-zwei-haenden.html">Vernissage: Zu zwei Händen</a></div>
   <div class='concert-musiker'>Franto-Andreas Uhl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Sep 2018 · Nexus Kino </div>
+  <div class="concert-date">20. Sep 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/sauerkrautkoma.html">Sauerkrautkoma</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">21. Sep 2018 · Nexus Kino </div>
+  <div class="concert-date">21. Sep 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/maenner-kino-mission-impossible-fallout.html">Männer Kino: Mission: Impossible Fallout</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">22. Sep 2018 · Nexus </div>
+  <div class="concert-date">22. Sep 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/willi-resetarits-stubenblues.html">Willi Resetarits & Stubenblues</a></div>
   <div class='concert-musiker'>Willi Resetarits</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Sep 2018 · Nexus </div>
+  <div class="concert-date">22. Sep 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/willi-resetarits-stubenblues.html">Willi Resetarits & Stubenblues</a></div>
   <div class='concert-musiker'>Stefan Schubert</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Sep 2018 · Nexus </div>
+  <div class="concert-date">22. Sep 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/willi-resetarits-stubenblues.html">Willi Resetarits & Stubenblues</a></div>
   <div class='concert-musiker'>Klaus  Kircher</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Sep 2018 · Nexus </div>
+  <div class="concert-date">22. Sep 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/willi-resetarits-stubenblues.html">Willi Resetarits & Stubenblues</a></div>
   <div class='concert-musiker'>Peter Angerer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Sep 2018 · Nexus </div>
+  <div class="concert-date">22. Sep 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/willi-resetarits-stubenblues.html">Willi Resetarits & Stubenblues</a></div>
   <div class='concert-musiker'>Christian Wegscheider</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Sep 2018 · Nexus </div>
+  <div class="concert-date">22. Sep 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/willi-resetarits-stubenblues.html">Willi Resetarits & Stubenblues</a></div>
   <div class='concert-musiker'>Chris Haitzmann</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Sep 2018 · Nexus </div>
+  <div class="concert-date">22. Sep 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/willi-resetarits-stubenblues.html">Willi Resetarits & Stubenblues</a></div>
   <div class='concert-musiker'>Herbert Berger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Sep 2018 · Nexus Kino </div>
+  <div class="concert-date">27. Sep 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/vom-ende-einer-geschichte.html">Vom Ende einer Geschichte</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">28. Sep 2018 · Nexus Kabarett </div>
+  <div class="concert-date">28. Sep 2018 · Nexus Kabarett · </div>
   <div class="concert-band"><a href="../bands/jimmy-schlager-band-a-bissl-komisch.html">Jimmy Schlager & Band – A bissl komisch</a></div>
   <div class='concert-musiker'>Jimmy Schlager</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Sep 2018 · Nexus Kabarett </div>
+  <div class="concert-date">28. Sep 2018 · Nexus Kabarett · </div>
   <div class="concert-band"><a href="../bands/jimmy-schlager-band-a-bissl-komisch.html">Jimmy Schlager & Band – A bissl komisch</a></div>
   <div class='concert-musiker'>Chris Heller</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Sep 2018 · Nexus Kabarett </div>
+  <div class="concert-date">28. Sep 2018 · Nexus Kabarett · </div>
   <div class="concert-band"><a href="../bands/jimmy-schlager-band-a-bissl-komisch.html">Jimmy Schlager & Band – A bissl komisch</a></div>
   <div class='concert-musiker'>Christoph Heim</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Sep 2018 · Nexus Kabarett </div>
+  <div class="concert-date">28. Sep 2018 · Nexus Kabarett · </div>
   <div class="concert-band"><a href="../bands/jimmy-schlager-band-a-bissl-komisch.html">Jimmy Schlager & Band – A bissl komisch</a></div>
   <div class='concert-musiker'>Franz Rebensteiner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Sep 2018 · Nexus Kabarett </div>
+  <div class="concert-date">28. Sep 2018 · Nexus Kabarett · </div>
   <div class="concert-band"><a href="../bands/jimmy-schlager-band-a-bissl-komisch.html">Jimmy Schlager & Band – A bissl komisch</a></div>
   <div class='concert-musiker'>Bernd T Rommel</div>
 </div><div class="concert-entry">
-  <div class="concert-date">3. Oct 2018 · Nexus spezial </div>
+  <div class="concert-date">3. Oct 2018 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/magisches-suedengland-von-dover-nach-cornwall.html">Magisches Südengland: Von Dover nach Cornwall</a></div>
   <div class='concert-musiker'>Martin Engelmann</div>
 </div><div class="concert-entry">
-  <div class="concert-date">4. Oct 2018 · Nexus Kino </div>
+  <div class="concert-date">4. Oct 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/die-brillante-mademoiselle-neila.html">Die brillante Mademoiselle Neila</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">4. Oct 2018 · Nexus Kino </div>
+  <div class="concert-date">4. Oct 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/kasperl-auf-schluesselsuche.html">Kasperl auf Schlüsselsuche</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">6. Oct 2018 · Nexus </div>
+  <div class="concert-date">6. Oct 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/honky-tonk-festival-woxx-late-night-show.html">Honky Tonk Festival Woxx Late Night Show</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">6. Oct 2018 · Nexus Café </div>
+  <div class="concert-date">6. Oct 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/honky-tonk-festival-bushfire-orchestra.html">Honky Tonk Festival Bushfire Orchestra</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">10. Oct 2018 · Nexus my Uni </div>
+  <div class="concert-date">10. Oct 2018 · Nexus my Uni · </div>
   <div class="concert-band"><a href="../bands/schneller-ans-ziel-diaettrends-in-der-sporternaehrung.html">Schneller ans Ziel ?: Diättrends in der Sporternährung</a></div>
   <div class='concert-musiker'>Jane Bergthaler</div>
 </div><div class="concert-entry">
-  <div class="concert-date">11. Oct 2018 · Nexus Kino </div>
+  <div class="concert-date">11. Oct 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/gans-im-glueck.html">Gans im Glück</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">11. Oct 2018 · Nexus Kino </div>
+  <div class="concert-date">11. Oct 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/waldheims-walzer.html">Waldheims Walzer</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">11. Oct 2018 · Nexus spezial </div>
+  <div class="concert-date">11. Oct 2018 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/thomas-wizany-die-weltder-farben.html">Thomas Wizany: Die Weltder Farben</a></div>
   <div class='concert-musiker'>Thomas Wizany</div>
 </div><div class="concert-entry">
-  <div class="concert-date">12. Oct 2018 · Nexus Theater </div>
+  <div class="concert-date">12. Oct 2018 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/all-inclusive.html">All Inclusive</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">13. Oct 2018 · Nexus </div>
+  <div class="concert-date">13. Oct 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/musikwohnzimmer-sarah-lesch.html">Musikwohnzimmer: Sarah Lesch</a></div>
   <div class='concert-musiker'>Sarah Lesch</div>
 </div><div class="concert-entry">
-  <div class="concert-date">13. Oct 2018 · Nexus </div>
+  <div class="concert-date">13. Oct 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/musikwohnzimmer-sarah-lesch.html">Musikwohnzimmer: Sarah Lesch</a></div>
   <div class='concert-musiker'>Lukas Meister</div>
 </div><div class="concert-entry">
-  <div class="concert-date">13. Oct 2018 · Nexus </div>
+  <div class="concert-date">13. Oct 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/musikwohnzimmer-sarah-lesch.html">Musikwohnzimmer: Sarah Lesch</a></div>
   <div class='concert-musiker'>Benny Bensen</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Oct 2018 · Nexus Kabarett </div>
+  <div class="concert-date">20. Oct 2018 · Nexus Kabarett · </div>
   <div class="concert-band"><a href="../bands/lisa-eckhart-die-vorteile-des-lasters.html">Lisa Eckhart: Die Vorteile des Lasters</a></div>
   <div class='concert-musiker'>Lisa Eckhart</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Oct 2018 · Nexus Kino </div>
+  <div class="concert-date">25. Oct 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/die-unglaublichen-2.html">Die Unglaublichen 2</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">25. Oct 2018 · Nexus Kino </div>
+  <div class="concert-date">25. Oct 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/maenner-kino-predator-upgrade.html">Männer Kino: Predator – Upgrade</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">26. Oct 2018 · Nexus Café </div>
+  <div class="concert-date">26. Oct 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-beda-mit-palme.html">Lokale Bandrunde: Beda mit Palme</a></div>
   <div class='concert-musiker'>Peter Chalupar</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Oct 2018 · Nexus Café </div>
+  <div class="concert-date">26. Oct 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-beda-mit-palme.html">Lokale Bandrunde: Beda mit Palme</a></div>
   <div class='concert-musiker'>Thomas Nigl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Oct 2018 · Nexus Café </div>
+  <div class="concert-date">26. Oct 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-beda-mit-palme.html">Lokale Bandrunde: Beda mit Palme</a></div>
   <div class='concert-musiker'>Josef Chalupar</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Oct 2018 · Nexus </div>
+  <div class="concert-date">27. Oct 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/80s-clubbing.html">80s Clubbing</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">2. Nov 2018 · Nexus spezial </div>
+  <div class="concert-date">2. Nov 2018 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/wortklauberei-der-impro-poetry-slam.html">Wortklauberei – Der Impro Poetry Slam</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">3. Nov 2018 · Nexus Café </div>
+  <div class="concert-date">3. Nov 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-anton-brunner.html">Lokale Bandrunde: Anton Brunner</a></div>
   <div class='concert-musiker'>Anton Brunner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">3. Nov 2018 · Nexus spezial </div>
+  <div class="concert-date">3. Nov 2018 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/tag-des-kinderbuchs.html">Tag des Kinderbuchs</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">3. Nov 2018 · Nexus Theater </div>
+  <div class="concert-date">3. Nov 2018 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/pippi-langstrumpf-feiert-geburtstag.html">Pippi Langstrumpf feiert Geburtstag</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">7. Nov 2018 · Nexus spezial </div>
+  <div class="concert-date">7. Nov 2018 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/maerchenwanderung-das-fliegende-teufelchen.html">Märchenwanderung: Das fliegende Teufelchen</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">7. Nov 2018 · Nexus spezial </div>
+  <div class="concert-date">7. Nov 2018 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/sehnsucht-wildnis-quer-durch-kanada-alaska.html">Sehnsucht Wildnis: Quer durch Kanada & Alaska</a></div>
   <div class='concert-musiker'>Mario Goldstein</div>
 </div><div class="concert-entry">
-  <div class="concert-date">8. Nov 2018 · Nexus Kino </div>
+  <div class="concert-date">8. Nov 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/das-prinzip-montessori-die-lust-am-selber-lernen.html">Das Prinzip Montessori: Die Lust am selber Lernen</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">8. Nov 2018 · Nexus Kino </div>
+  <div class="concert-date">8. Nov 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/kasperl-und-das-gi-ga-gespenst.html">Kasperl und das Gi Ga Gespenst</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">10. Nov 2018 · Nexus </div>
+  <div class="concert-date">10. Nov 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/rockfest-parasol-caravan.html">RockFest: Parasol Caravan</a></div>
   <div class='concert-musiker'>Alexander Kriechbaum</div>
 </div><div class="concert-entry">
-  <div class="concert-date">10. Nov 2018 · Nexus </div>
+  <div class="concert-date">10. Nov 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/rockfest-parasol-caravan.html">RockFest: Parasol Caravan</a></div>
   <div class='concert-musiker'>Bertram Kolar</div>
 </div><div class="concert-entry">
-  <div class="concert-date">10. Nov 2018 · Nexus </div>
+  <div class="concert-date">10. Nov 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/rockfest-parasol-caravan.html">RockFest: Parasol Caravan</a></div>
   <div class='concert-musiker'>Richard Reikersdorfer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">10. Nov 2018 · Nexus </div>
+  <div class="concert-date">10. Nov 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/rockfest-parasol-caravan.html">RockFest: Parasol Caravan</a></div>
   <div class='concert-musiker'>Vincent Böhm</div>
 </div><div class="concert-entry">
-  <div class="concert-date">10. Nov 2018 · Nexus </div>
+  <div class="concert-date">10. Nov 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/rockfest-torso.html">RockFest: Torso</a></div>
   <div class='concert-musiker'>Bernhard Gager</div>
 </div><div class="concert-entry">
-  <div class="concert-date">10. Nov 2018 · Nexus </div>
+  <div class="concert-date">10. Nov 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/rockfest-torso.html">RockFest: Torso</a></div>
   <div class='concert-musiker'>Michael Jandrisevits</div>
 </div><div class="concert-entry">
-  <div class="concert-date">10. Nov 2018 · Nexus </div>
+  <div class="concert-date">10. Nov 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/rockfest-torso.html">RockFest: Torso</a></div>
   <div class='concert-musiker'>Thomas Pint</div>
 </div><div class="concert-entry">
-  <div class="concert-date">10. Nov 2018 · Nexus </div>
+  <div class="concert-date">10. Nov 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/rockfest-torso.html">RockFest: Torso</a></div>
   <div class='concert-musiker'>Dominik Heizmann</div>
 </div><div class="concert-entry">
-  <div class="concert-date">10. Nov 2018 · Nexus </div>
+  <div class="concert-date">10. Nov 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/rockfest-velvet-smoke.html">RockFest: Velvet Smoke</a></div>
   <div class='concert-musiker'>Daniel Sodemann</div>
 </div><div class="concert-entry">
-  <div class="concert-date">10. Nov 2018 · Nexus </div>
+  <div class="concert-date">10. Nov 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/rockfest-velvet-smoke.html">RockFest: Velvet Smoke</a></div>
   <div class='concert-musiker'>Daniel Klupta</div>
 </div><div class="concert-entry">
-  <div class="concert-date">10. Nov 2018 · Nexus </div>
+  <div class="concert-date">10. Nov 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/rockfest-velvet-smoke.html">RockFest: Velvet Smoke</a></div>
   <div class='concert-musiker'>Gregorios Milios</div>
 </div><div class="concert-entry">
-  <div class="concert-date">10. Nov 2018 · Nexus </div>
+  <div class="concert-date">10. Nov 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/rockfest-velvet-smoke.html">RockFest: Velvet Smoke</a></div>
   <div class='concert-musiker'>Gonzalo Urgel</div>
 </div><div class="concert-entry">
-  <div class="concert-date">10. Nov 2018 · Nexus </div>
+  <div class="concert-date">10. Nov 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/rockfest-velvet-smoke.html">RockFest: Velvet Smoke</a></div>
   <div class='concert-musiker'>Thomas Gantner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">10. Nov 2018 · Nexus </div>
+  <div class="concert-date">10. Nov 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/rockfest-velvet-smoke.html">RockFest: Velvet Smoke</a></div>
   <div class='concert-musiker'>Sinan Yarar</div>
 </div><div class="concert-entry">
-  <div class="concert-date">13. Nov 2018 · Nexus spezial </div>
+  <div class="concert-date">13. Nov 2018 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/3-pinzgauer-querbeettag.html">3. Pinzgauer Querbeettag</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">14. Nov 2018 · Nexus my Uni </div>
+  <div class="concert-date">14. Nov 2018 · Nexus my Uni · </div>
   <div class="concert-band"><a href="../bands/alternative-fakten-esoterik-und-rechtsextremismus.html">Alternative Fakten: Esoterik und Rechtsextremismus</a></div>
   <div class='concert-musiker'>Erich Eder</div>
 </div><div class="concert-entry">
-  <div class="concert-date">15. Nov 2018 · Nexus Kino </div>
+  <div class="concert-date">15. Nov 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/christopher-robin.html">Christopher Robin</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">15. Nov 2018 · Nexus Kino </div>
+  <div class="concert-date">15. Nov 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/kindeswohl.html">Kindeswohl</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">16. Nov 2018 · Nexus Ausstellung </div>
+  <div class="concert-date">16. Nov 2018 · Nexus Ausstellung · </div>
   <div class="concert-band"><a href="../bands/vernissage-manfred-erjautz-space-of-moments.html">Vernissage: Manfred Erjautz "Space of Moments"</a></div>
   <div class='concert-musiker'>Manfred Erjautz</div>
 </div><div class="concert-entry">
-  <div class="concert-date">17. Nov 2018 · Nexus Kabarett </div>
+  <div class="concert-date">17. Nov 2018 · Nexus Kabarett · </div>
   <div class="concert-band"><a href="../bands/christoph-fritz-das-juengste-gericht.html">Christoph Fritz – Das jüngste Gericht</a></div>
   <div class='concert-musiker'>Christoph Fritz</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Nov 2018 · Nexus Kino </div>
+  <div class="concert-date">20. Nov 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/klimafilmtage-thule-tuvalu.html">Klimafilmtage: Thule Tuvalu</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">21. Nov 2018 · Nexus Kino </div>
+  <div class="concert-date">21. Nov 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/klimafilmtage-the-true-cost-der-preis-der-mode.html">Klimafilmtage: The true Cost – Der Preis der Mode</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">22. Nov 2018 · Nexus Kino </div>
+  <div class="concert-date">22. Nov 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/klimafilmtage-zeit-fuer-utopien-wir-machen-es-anders.html">Klimafilmtage: Zeit für Utopien – Wir machen es Anders</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">22. Nov 2018 · Nexus Kino </div>
+  <div class="concert-date">22. Nov 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/smallfoot-ein-eisigartiges-abenteuer.html">Smallfoot – Ein eisigartiges Abenteuer</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">23. Nov 2018 · Nexus Café </div>
+  <div class="concert-date">23. Nov 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/musikwohnzimmer-haley-heynderickx.html">Musikwohnzimmer; Haley Heynderickx</a></div>
   <div class='concert-musiker'>Haley Heynderyckx</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Nov 2018 · Nexus </div>
+  <div class="concert-date">24. Nov 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/zeit-los.html">Zeit:los</a></div>
   <div class='concert-musiker'>Hans Fuchs</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Nov 2018 · Nexus </div>
+  <div class="concert-date">24. Nov 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/zeit-los.html">Zeit:los</a></div>
   <div class='concert-musiker'>Tom Jelinek</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Nov 2018 · Nexus </div>
+  <div class="concert-date">24. Nov 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/zeit-los.html">Zeit:los</a></div>
   <div class='concert-musiker'>Peter Medek</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Nov 2018 · Nexus </div>
+  <div class="concert-date">24. Nov 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/zeit-los.html">Zeit:los</a></div>
   <div class='concert-musiker'>Charly Rabanser</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Nov 2018 · Nexus Theater </div>
+  <div class="concert-date">27. Nov 2018 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/heimatabend.html">Heimatabend</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">29. Nov 2018 · Nexus Kino </div>
+  <div class="concert-date">29. Nov 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/tanz-ins-leben.html">Tanz ins Leben</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">29. Nov 2018 · Nexus Kino </div>
+  <div class="concert-date">29. Nov 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/wildhexe.html">Wildhexe</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">30. Nov 2018 · Nexus Kino </div>
+  <div class="concert-date">30. Nov 2018 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/maennerkino-the-equalizer-2.html">Männerkino: The Equalizer 2</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">1. Dec 2018 · Nexus </div>
+  <div class="concert-date">1. Dec 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/die-querschlaeger-bonnie-clyde.html">Die Querschläger "Bonnie & Clyde"</a></div>
   <div class='concert-musiker'>Fritz Messner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">1. Dec 2018 · Nexus </div>
+  <div class="concert-date">1. Dec 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/die-querschlaeger-bonnie-clyde.html">Die Querschläger "Bonnie & Clyde"</a></div>
   <div class='concert-musiker'>Reinhard Simbürger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">1. Dec 2018 · Nexus </div>
+  <div class="concert-date">1. Dec 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/die-querschlaeger-bonnie-clyde.html">Die Querschläger "Bonnie & Clyde"</a></div>
   <div class='concert-musiker'>Cornelius Neulinger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">1. Dec 2018 · Nexus </div>
+  <div class="concert-date">1. Dec 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/die-querschlaeger-bonnie-clyde.html">Die Querschläger "Bonnie & Clyde"</a></div>
   <div class='concert-musiker'>Thomas Binderberger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">1. Dec 2018 · Nexus </div>
+  <div class="concert-date">1. Dec 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/die-querschlaeger-bonnie-clyde.html">Die Querschläger "Bonnie & Clyde"</a></div>
   <div class='concert-musiker'>Mathias Messner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">1. Dec 2018 · Nexus </div>
+  <div class="concert-date">1. Dec 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/die-querschlaeger-bonnie-clyde.html">Die Querschläger "Bonnie & Clyde"</a></div>
   <div class='concert-musiker'>Franz Tannenberger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">1. Dec 2018 · Nexus </div>
+  <div class="concert-date">1. Dec 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/die-querschlaeger-bonnie-clyde.html">Die Querschläger "Bonnie & Clyde"</a></div>
   <div class='concert-musiker'>Fritz Kronthaler</div>
 </div><div class="concert-entry">
-  <div class="concert-date">5. Dec 2018 · Nexus spezial </div>
+  <div class="concert-date">5. Dec 2018 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/japan.html">Japan</a></div>
   <div class='concert-musiker'>Marcus Haid</div>
 </div><div class="concert-entry">
-  <div class="concert-date">6. Dec 2018 · Nexus kino </div>
+  <div class="concert-date">6. Dec 2018 · Nexus kino · </div>
   <div class="concert-band"><a href="../bands/durch-die-wand.html">Durch die Wand</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">7. Dec 2018 · Nexus Café </div>
+  <div class="concert-date">7. Dec 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-martin-rainer.html">Lokale Bandrunde: Martin Rainer</a></div>
   <div class='concert-musiker'>Martin Rainer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">8. Dec 2018 · Nexus Café </div>
+  <div class="concert-date">8. Dec 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/matchball-49.html">Matchball 49</a></div>
   <div class='concert-musiker'>Martin Brunner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">8. Dec 2018 · Nexus Café </div>
+  <div class="concert-date">8. Dec 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/matchball-49.html">Matchball 49</a></div>
   <div class='concert-musiker'>Bernhard Jäger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">8. Dec 2018 · Nexus Café </div>
+  <div class="concert-date">8. Dec 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/matchball-49.html">Matchball 49</a></div>
   <div class='concert-musiker'>Gerald Reis</div>
 </div><div class="concert-entry">
-  <div class="concert-date">8. Dec 2018 · Nexus Café </div>
+  <div class="concert-date">8. Dec 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/matchball-49.html">Matchball 49</a></div>
   <div class='concert-musiker'>Heinz Steiner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">14. Dec 2018 · Nexus Café </div>
+  <div class="concert-date">14. Dec 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/das-nexus-tanz-cafe.html">Das Nexus Tanz Cafe</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">14. Dec 2018 · Nexus Theater </div>
+  <div class="concert-date">14. Dec 2018 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/gschnagga-tjeater-das-gauklermaennchen-von-michael-ende.html">Gschnagga Tjeater: Das Gauklermännchen von Michael Ende</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">15. Dec 2018 · Nexus Café </div>
+  <div class="concert-date">15. Dec 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/musikwohnzimmer-marie-bothmer.html">Musikwohnzimmer: Marie Bothmer</a></div>
   <div class='concert-musiker'>Marie Bothmer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Dec 2018 · Nexus </div>
+  <div class="concert-date">25. Dec 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/nexus-christmas-clubbing.html">Nexus Christmas Clubbing</a></div>
   <div class='concert-musiker'>Kinnerman</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Dec 2018 · Nexus </div>
+  <div class="concert-date">25. Dec 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/nexus-christmas-clubbing.html">Nexus Christmas Clubbing</a></div>
   <div class='concert-musiker'>Club 101</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Dec 2018 · Nexus </div>
+  <div class="concert-date">25. Dec 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/nexus-christmas-clubbing.html">Nexus Christmas Clubbing</a></div>
   <div class='concert-musiker'>Banarilla</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Dec 2018 · Nexus </div>
+  <div class="concert-date">25. Dec 2018 · Nexus · </div>
   <div class="concert-band"><a href="../bands/nexus-christmas-clubbing.html">Nexus Christmas Clubbing</a></div>
   <div class='concert-musiker'>DJ OS Dillinger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">29. Dec 2018 · Nexus Café </div>
+  <div class="concert-date">29. Dec 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/tom-jelinek-friends.html">Tom Jelinek & Friends</a></div>
   <div class='concert-musiker'>Tom Jelinek</div>
 </div><div class="concert-entry">
-  <div class="concert-date">29. Dec 2018 · Nexus Café </div>
+  <div class="concert-date">29. Dec 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/tom-jelinek-friends.html">Tom Jelinek & Friends</a></div>
   <div class='concert-musiker'>Peter Medek</div>
 </div><div class="concert-entry">
-  <div class="concert-date">29. Dec 2018 · Nexus Café </div>
+  <div class="concert-date">29. Dec 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/tom-jelinek-friends.html">Tom Jelinek & Friends</a></div>
   <div class='concert-musiker'>Wolfgang Höllerer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">29. Dec 2018 · Nexus Café </div>
+  <div class="concert-date">29. Dec 2018 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/tom-jelinek-friends.html">Tom Jelinek & Friends</a></div>
   <div class='concert-musiker'>Gustl Fischer</div>
 </div></div>
@@ -2545,16 +2050,16 @@ a:hover { text-decoration: underline; color: var(--link-hover); }
   Jazzfest Wiki · 5936 Musiker · 13034 Konzerte · 1975–2025
   · Daten: Jazzfest Wien Chronik + Discogs API
 </footer>
-<script src="../search-data.js"></script>
 <script>
+// Globale Suche
+const SEARCH_DATA = window.JAZZFEST_SEARCH || [];
 const inp = document.getElementById('search-input');
 const res = document.getElementById('search-results');
-const SD = window.JAZZFEST_SEARCH || [];
 inp.addEventListener('input', function() {
   const q = this.value.toLowerCase().trim();
   res.innerHTML = '';
   if (q.length < 2) { res.style.display='none'; return; }
-  const hits = SD.filter(x => x.n.toLowerCase().includes(q)).slice(0, 12);
+  const hits = SEARCH_DATA.filter(x => x.n.toLowerCase().includes(q)).slice(0, 12);
   if (!hits.length) { res.style.display='none'; return; }
   hits.forEach(h => {
     const a = document.createElement('a');

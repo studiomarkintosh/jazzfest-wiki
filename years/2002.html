@@ -4,1213 +4,718 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>2002 — Jazzfest Wiki</title>
-<style>
-/* Jazzfest Wiki — MediaWiki-inspiriertes Layout + Profil-Images */
-
-:root {
-  --bg: #fff;
-  --bg-content: #f8f9fa;
-  --border: #a2a9b1;
-  --border-light: #eaecf0;
-  --link: #3366cc;
-  --link-hover: #1a3f99;
-  --heading: #000;
-  --text: #202122;
-  --text-muted: #54595d;
-  --infobox-bg: #f8f9fa;
-  --infobox-header: #cee0f2;
-  --nav-bg: #f8f9fa;
-  --nav-border: #a2a9b1;
-  --tag-bg: #eaecf0;
-  --accent: #3366cc;
-  --red: #cc0000;
-}
-
-* { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-  font-family: -apple-system, 'Linux Libertine', Georgia, Times, serif;
-  font-size: 14px;
-  line-height: 1.6;
-  color: var(--text);
-  background: var(--bg-content);
-}
-
-/* HEADER */
-#wiki-header {
-  background: var(--bg);
-  border-bottom: 1px solid var(--border);
-  padding: 8px 16px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-#wiki-header .logo {
-  font-family: 'Linux Libertine', Georgia, serif;
-  font-size: 18px;
-  font-weight: bold;
-  color: var(--heading);
-  text-decoration: none;
-  white-space: nowrap;
-}
-
-#wiki-header .logo span { color: var(--accent); }
-
-#search-wrap { flex: 1; max-width: 400px; position: relative; }
-
-#search-input {
-  width: 100%;
-  padding: 5px 10px;
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  font-size: 13px;
-  outline: none;
-}
-
-#search-input:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 2px rgba(51,102,204,0.15);
-}
-
-#search-results {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-top: none;
-  max-height: 300px;
-  overflow-y: auto;
-  z-index: 200;
-  display: none;
-}
-
-#search-results a {
-  display: block;
-  padding: 6px 10px;
-  text-decoration: none;
-  color: var(--text);
-  border-bottom: 1px solid var(--border-light);
-}
-
-#search-results a:hover { background: var(--bg-content); }
-#search-results .sr-type { font-size: 11px; color: var(--text-muted); margin-left: 6px; }
-
-/* NAV */
-#wiki-nav {
-  background: var(--nav-bg);
-  border-bottom: 1px solid var(--nav-border);
-  padding: 0 16px;
-  display: flex;
-  gap: 0;
-  overflow-x: auto;
-}
-
-#wiki-nav a {
-  display: block;
-  padding: 8px 14px;
-  text-decoration: none;
-  color: var(--text);
-  font-size: 13px;
-  border-bottom: 2px solid transparent;
-  white-space: nowrap;
-}
-
-#wiki-nav a:hover, #wiki-nav a.active {
-  color: var(--accent);
-  border-bottom-color: var(--accent);
-}
-
-/* LAYOUT */
-#wiki-body {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px 16px;
-}
-
-.wiki-page {
-  background: var(--bg);
-  border: 1px solid var(--border-light);
-  padding: 20px 24px;
-}
-
-.page-title {
-  font-family: 'Linux Libertine', Georgia, serif;
-  font-size: 28px;
-  font-weight: normal;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 4px;
-  margin-bottom: 16px;
-  color: var(--heading);
-}
-
-/* INFOBOX */
-.infobox {
-  float: right;
-  clear: right;
-  margin: 0 0 16px 24px;
-  background: var(--infobox-bg);
-  border: 1px solid var(--border);
-  font-size: 13px;
-  max-width: 240px;
-  min-width: 200px;
-}
-
-.infobox-title {
-  background: var(--infobox-header);
-  text-align: center;
-  padding: 6px 10px;
-  font-weight: bold;
-  border-bottom: 1px solid var(--border);
-  font-size: 14px;
-}
-
-/* PROFIL-IMAGE */
-.profile-image-wrap {
-  width: 100%;
-  aspect-ratio: 1;
-  overflow: hidden;
-  border-bottom: 1px solid var(--border);
-  position: relative;
-  background: #e8ecf0;
-}
-
-.profile-image-wrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-/* Avatar-Fallback (Initialen) */
-.avatar-fallback {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 52px;
-  font-weight: bold;
-  color: var(--text-muted);
-  background: linear-gradient(135deg, #d0daea 0%, #b8c8de 100%);
-  letter-spacing: -2px;
-  user-select: none;
-}
-
-.infobox table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.infobox td {
-  padding: 4px 8px;
-  vertical-align: top;
-  border-bottom: 1px solid var(--border-light);
-}
-
-.infobox td:first-child {
-  color: var(--text-muted);
-  width: 45%;
-}
-
-/* MUSICIAN-GRID INDEX (mit Bild) */
-.musician-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 10px;
-  margin: 12px 0;
-}
-
-.musician-card {
-  background: var(--bg);
-  border: 1px solid var(--border-light);
-  text-decoration: none;
-  color: var(--text);
-  display: block;
-  overflow: hidden;
-  transition: border-color 0.15s;
-}
-
-.musician-card:hover {
-  border-color: var(--accent);
-  text-decoration: none;
-}
-
-.mc-image-wrap {
-  width: 100%;
-  aspect-ratio: 1;
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(135deg, #d8e4f0 0%, #c0d0e0 100%);
-}
-
-.musician-card .mc-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  position: absolute;
-  top: 0; left: 0;
-  z-index: 1;
-}
-
-.mc-avatar-bg {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 36px;
-  font-weight: bold;
-  color: #7a8fa8;
-  z-index: 0;
-}
-
-.musician-card .mc-avatar {
-  width: 100%;
-  aspect-ratio: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 36px;
-  font-weight: bold;
-  color: #888;
-  background: linear-gradient(135deg, #d8e4f0 0%, #c0d0e0 100%);
-  letter-spacing: -1px;
-}
-
-.musician-card .mc-info {
-  padding: 8px 10px;
-}
-
-.musician-card .mc-name {
-  font-weight: bold;
-  font-size: 13px;
-  line-height: 1.3;
-}
-
-.musician-card .mc-meta {
-  font-size: 11px;
-  color: var(--text-muted);
-  margin-top: 2px;
-}
-
-/* SECTIONS */
-.wiki-section { margin: 20px 0; }
-
-.wiki-section h2 {
-  font-family: 'Linux Libertine', Georgia, serif;
-  font-size: 20px;
-  font-weight: normal;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 2px;
-  margin-bottom: 12px;
-  color: var(--heading);
-}
-
-/* TABLES */
-.wiki-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13px;
-  margin: 8px 0;
-}
-
-.wiki-table th {
-  background: var(--bg-content);
-  border: 1px solid var(--border);
-  padding: 6px 10px;
-  text-align: left;
-  font-weight: bold;
-}
-
-.wiki-table td {
-  border: 1px solid var(--border-light);
-  padding: 5px 10px;
-  vertical-align: top;
-}
-
-.wiki-table tr:hover td { background: #f0f4ff; }
-
-/* TAGS */
-.tag {
-  display: inline-block;
-  background: var(--tag-bg);
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  padding: 1px 7px;
-  font-size: 12px;
-  margin: 2px;
-  color: var(--text);
-  text-decoration: none;
-}
-
-.tag:hover { background: var(--border); }
-.tag.instrument { background: #ddeeff; border-color: #99bbdd; }
-.tag.year { background: #eeffdd; border-color: #99cc77; }
-.tag.mitschnitt { background: #fff0cc; border-color: #ccaa44; }
-
-/* LINKS */
-a { color: var(--link); text-decoration: none; }
-a:hover { text-decoration: underline; color: var(--link-hover); }
-
-/* INDEX-STATS */
-.index-stats {
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-  margin: 16px 0;
-}
-
-.stat-card {
-  background: var(--infobox-bg);
-  border: 1px solid var(--border);
-  padding: 12px 20px;
-  text-align: center;
-  min-width: 120px;
-  flex: 1;
-}
-
-.stat-card .number {
-  font-size: 28px;
-  font-weight: bold;
-  color: var(--accent);
-  display: block;
-}
-
-.stat-card .label { font-size: 12px; color: var(--text-muted); }
-
-/* RELEASES */
-.release-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 10px 0;
-}
-
-.release-card {
-  display: flex;
-  gap: 8px;
-  background: var(--bg-content);
-  border: 1px solid var(--border-light);
-  padding: 8px;
-  max-width: 260px;
-  text-decoration: none;
-  color: var(--text);
-}
-
-.release-card img { width: 56px; height: 56px; object-fit: cover; flex-shrink: 0; }
-.release-card .rc-no-image {
-  width: 56px; height: 56px; flex-shrink: 0;
-  background: #dde4ee;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 22px; color: #888;
-}
-.release-card .rc-title { font-size: 12px; font-weight: bold; line-height: 1.3; }
-.release-card .rc-year { font-size: 11px; color: var(--text-muted); }
-.release-card:hover { border-color: var(--accent); }
-
-/* MITSPIELER */
-.mitspieler-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin: 8px 0;
-}
-
-/* ALPHABET NAV */
-.alpha-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin: 8px 0 16px;
-}
-
-.alpha-nav a {
-  display: block;
-  width: 28px;
-  height: 28px;
-  text-align: center;
-  line-height: 28px;
-  border: 1px solid var(--border);
-  font-size: 13px;
-  color: var(--text);
-  text-decoration: none;
-}
-
-.alpha-nav a:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
-
-/* GRAPH */
-#graph-container {
-  width: 100%;
-  height: 650px;
-  background: #fff;
-  border: 1px solid var(--border);
-  position: relative;
-}
-
-#graph-tooltip {
-  position: absolute;
-  background: rgba(0,0,0,0.85);
-  color: #fff;
-  padding: 8px 12px;
-  border-radius: 4px;
-  font-size: 12px;
-  pointer-events: none;
-  display: none;
-  z-index: 10;
-}
-
-/* YEAR */
-.concert-entry {
-  border-left: 3px solid var(--border);
-  padding: 6px 12px;
-  margin: 4px 0;
-}
-.concert-entry:hover { border-left-color: var(--accent); background: var(--bg-content); }
-.concert-date { font-size: 12px; color: var(--text-muted); }
-.concert-band { font-weight: bold; }
-.concert-musiker { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-
-/* FOOTER */
-#wiki-footer {
-  text-align: center;
-  padding: 20px;
-  color: var(--text-muted);
-  font-size: 12px;
-  border-top: 1px solid var(--border-light);
-  margin-top: 40px;
-}
-
-/* CLEARFIX */
-.clearfix::after { content: ""; display: table; clear: both; }
-
-@media (max-width: 600px) {
-  .infobox { float: none; margin: 0 0 16px; max-width: 100%; }
-  .musician-grid { grid-template-columns: repeat(2, 1fr); }
-  #graph-container { height: 400px; }
-}
-
-</style>
+<link rel="stylesheet" href="../../template/css/wiki.css">
 </head>
 <body>
 <header id="wiki-header">
-  <a class="logo" href="../index.html">Jazz<span>fest</span> Wiki</a>
-  <div id="search-wrap">
+  <a class="logo" href="../../index.html">Jazz<span>fest</span> Wiki</a>
+  <div id="search-wrap" style="position:relative">
     <input id="search-input" type="text" placeholder="Musiker, Band, Jahr …" autocomplete="off">
     <div id="search-results"></div>
   </div>
 </header>
 <nav id="wiki-nav">
-  <a href="../index.html">Hauptseite</a>
-  <a href="../musicians/index.html">Musiker</a>
-  <a href="../bands/index.html">Bands</a>
-  <a href="../years/index.html" class="active">Jahre</a>
-  <a href="../festivals.html">Festivalchronik</a>
-  <a href="../graph.html">Netzwerk</a>
+  <a href="../../index.html" >Hauptseite</a>
+  <a href="../../musicians/index.html" >Musiker</a>
+  <a href="../../bands/index.html" >Bands</a>
+  <a href="../../years/index.html" class="active">Jahre</a>
+  <a href="../../graph.html" >Netzwerk</a>
 </nav>
 <div id="wiki-body">
   <div class="wiki-page clearfix">
     <h1 class="page-title">Jazzfest 2002</h1>
 <div class="wiki-section">
-  <p><strong>173 Konzert-Einträge</strong></p>
+  <p><strong>173 Konzerte</strong></p>
   <div class="year-concerts"><div class="concert-entry">
-  <div class="concert-date">22. Aug 2002 · Festival 02 SC </div>
+  <div class="concert-date">22. Aug 2002 · Festival 02 SC · </div>
   <div class="concert-band"><a href="../bands/dj-samir.html">DJ Samir</a></div>
   <div class='concert-musiker'>DJ Samir</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2002 · Festival 02 SC </div>
+  <div class="concert-date">22. Aug 2002 · Festival 02 SC · </div>
   <div class="concert-band"><a href="../bands/kalle-laar.html">Kalle Laar</a></div>
   <div class='concert-musiker'>Kalle Laar</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2002 · Festival 02 SC </div>
+  <div class="concert-date">22. Aug 2002 · Festival 02 SC · </div>
   <div class="concert-band"><a href="../bands/louis-sclavis.html">Louis Sclavis</a></div>
   <div class='concert-musiker'>Louis Sclavis</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2002 · Festival 02 SC </div>
+  <div class="concert-date">22. Aug 2002 · Festival 02 SC · </div>
   <div class="concert-band"><a href="../bands/louis-sclavis.html">Louis Sclavis</a></div>
   <div class='concert-musiker'>Mederic Collignon</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2002 · Festival 02 SC </div>
+  <div class="concert-date">22. Aug 2002 · Festival 02 SC · </div>
   <div class="concert-band"><a href="../bands/louis-sclavis.html">Louis Sclavis</a></div>
   <div class='concert-musiker'>Vincent Courtois</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2002 · Festival 02 SC </div>
+  <div class="concert-date">22. Aug 2002 · Festival 02 SC · </div>
   <div class="concert-band"><a href="../bands/louis-sclavis.html">Louis Sclavis</a></div>
   <div class='concert-musiker'>Hasse Poulsen</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2002 · Festival 02 SC </div>
+  <div class="concert-date">22. Aug 2002 · Festival 02 SC · </div>
   <div class="concert-band"><a href="../bands/martin-koller-jay-rope.html">Martin Koller & Jay Rope</a></div>
   <div class='concert-musiker'>Martin Koller</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2002 · Festival 02 SC </div>
+  <div class="concert-date">22. Aug 2002 · Festival 02 SC · </div>
   <div class="concert-band"><a href="../bands/martin-koller-jay-rope.html">Martin Koller & Jay Rope</a></div>
   <div class='concert-musiker'>Jay-Rope</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2002 · Festival 02 SC </div>
+  <div class="concert-date">22. Aug 2002 · Festival 02 SC · </div>
   <div class="concert-band"><a href="../bands/move-d.html">Move D.</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2002 · Festival 02 SC </div>
+  <div class="concert-date">22. Aug 2002 · Festival 02 SC · </div>
   <div class="concert-band"><a href="../bands/trio-exklusiv.html">Trio Exklusiv</a></div>
   <div class='concert-musiker'>Richard Klammer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2002 · Festival 02 SC </div>
+  <div class="concert-date">22. Aug 2002 · Festival 02 SC · </div>
   <div class="concert-band"><a href="../bands/trio-exklusiv.html">Trio Exklusiv</a></div>
   <div class='concert-musiker'>Franz Reisecker</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2002 · Festival 02 SC </div>
+  <div class="concert-date">22. Aug 2002 · Festival 02 SC · </div>
   <div class="concert-band"><a href="../bands/trio-exklusiv.html">Trio Exklusiv</a></div>
   <div class='concert-musiker'>Mex Wolfsteiner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2002 · Festival 02 SC </div>
+  <div class="concert-date">22. Aug 2002 · Festival 02 SC · </div>
   <div class="concert-band"><a href="../bands/trio-exklusiv.html">Trio Exklusiv</a></div>
   <div class='concert-musiker'>Martin Zrost</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">23. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/billy-bang.html">Billy Bang</a></div>
   <div class='concert-musiker'>Billy Bang</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">23. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/billy-bang.html">Billy Bang</a></div>
   <div class='concert-musiker'>John Hicks</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">23. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/billy-bang.html">Billy Bang</a></div>
   <div class='concert-musiker'>Curtis Lundy</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">23. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/billy-bang.html">Billy Bang</a></div>
   <div class='concert-musiker'>Frank Lowe</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">23. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/billy-bang.html">Billy Bang</a></div>
   <div class='concert-musiker'>James Zoller</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">23. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/billy-bang.html">Billy Bang</a></div>
   <div class='concert-musiker'>Michael Carvin</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">23. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/jack-dejohnette-foday-musa-suso.html">Jack DeJohnette & Foday Musa Suso</a></div>
   <div class='concert-musiker'>Jack DeJohnette</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">23. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/jack-dejohnette-foday-musa-suso.html">Jack DeJohnette & Foday Musa Suso</a></div>
   <div class='concert-musiker'>Foday Musa Suso</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">23. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/lucas-niggli.html">Lucas Niggli</a></div>
   <div class='concert-musiker'>Lucas Niggli</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">23. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/lucas-niggli.html">Lucas Niggli</a></div>
   <div class='concert-musiker'>Nils Wogram</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">23. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/lucas-niggli.html">Lucas Niggli</a></div>
   <div class='concert-musiker'>Philipp Schaufelberger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">23. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/martin-koller-s-system-distortion.html">Martin Koller’s System distortion</a></div>
   <div class='concert-musiker'>Martin Koller</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">23. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/martin-koller-s-system-distortion.html">Martin Koller’s System distortion</a></div>
   <div class='concert-musiker'>Jojo Mayer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">23. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/martin-koller-s-system-distortion.html">Martin Koller’s System distortion</a></div>
   <div class='concert-musiker'>Jesse Murphy</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">23. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/martin-koller-s-system-distortion.html">Martin Koller’s System distortion</a></div>
   <div class='concert-musiker'>Jay-Rope</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">23. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/wesseltotft-bugge.html">Wesseltotft Bugge</a></div>
   <div class='concert-musiker'>Buggge Wesseltoft</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">23. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/wesseltotft-bugge.html">Wesseltotft Bugge</a></div>
   <div class='concert-musiker'>Ingebrigt Håker Flaten</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">23. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/wesseltotft-bugge.html">Wesseltotft Bugge</a></div>
   <div class='concert-musiker'>Anders Engen</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">23. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/wesseltotft-bugge.html">Wesseltotft Bugge</a></div>
   <div class='concert-musiker'>Jonas Lona</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">23. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/wesseltotft-bugge.html">Wesseltotft Bugge</a></div>
   <div class='concert-musiker'>Rikard Gensollen</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">23. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/wesseltotft-bugge.html">Wesseltotft Bugge</a></div>
   <div class='concert-musiker'>Hakon Kornstad</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">23. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/wesseltotft-bugge.html">Wesseltotft Bugge</a></div>
   <div class='concert-musiker'>Jan Martin</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2002 · Festival 02 SC </div>
+  <div class="concert-date">23. Aug 2002 · Festival 02 SC · </div>
   <div class="concert-band"><a href="../bands/amsterdam-string-trio.html">Amsterdam String Trio</a></div>
   <div class='concert-musiker'>Morice Horsthuis</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2002 · Festival 02 SC </div>
+  <div class="concert-date">23. Aug 2002 · Festival 02 SC · </div>
   <div class="concert-band"><a href="../bands/amsterdam-string-trio.html">Amsterdam String Trio</a></div>
   <div class='concert-musiker'>Ernst Reijseger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2002 · Festival 02 SC </div>
+  <div class="concert-date">23. Aug 2002 · Festival 02 SC · </div>
   <div class="concert-band"><a href="../bands/amsterdam-string-trio.html">Amsterdam String Trio</a></div>
   <div class='concert-musiker'>Ernst Glerum</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2002 · Festival 02 SC </div>
+  <div class="concert-date">23. Aug 2002 · Festival 02 SC · </div>
   <div class="concert-band"><a href="../bands/patrick-pulsinger-presents.html">Patrick Pulsinger presents</a></div>
   <div class='concert-musiker'>Patrick Pulsinger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2002 · Festival 02 SC </div>
+  <div class="concert-date">23. Aug 2002 · Festival 02 SC · </div>
   <div class="concert-band"><a href="../bands/patrick-pulsinger-presents.html">Patrick Pulsinger presents</a></div>
   <div class='concert-musiker'>Werner Dafeldecker</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2002 · Festival 02 SC </div>
+  <div class="concert-date">23. Aug 2002 · Festival 02 SC · </div>
   <div class="concert-band"><a href="../bands/patrick-pulsinger-presents.html">Patrick Pulsinger presents</a></div>
   <div class='concert-musiker'>Franz Novotny</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2002 · Festival 02 SC </div>
+  <div class="concert-date">23. Aug 2002 · Festival 02 SC · </div>
   <div class="concert-band"><a href="../bands/patrick-pulsinger-presents.html">Patrick Pulsinger presents</a></div>
   <div class='concert-musiker'>Paul Skrepek</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2002 · Festival 02 SC </div>
+  <div class="concert-date">23. Aug 2002 · Festival 02 SC · </div>
   <div class="concert-band"><a href="../bands/patrick-pulsinger-presents.html">Patrick Pulsinger presents</a></div>
   <div class='concert-musiker'>Boris Hauf</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2002 · Festival 02 SC </div>
+  <div class="concert-date">23. Aug 2002 · Festival 02 SC · </div>
   <div class="concert-band"><a href="../bands/patrick-pulsinger-presents.html">Patrick Pulsinger presents</a></div>
   <div class='concert-musiker'>Franz Hautzinger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">24. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/erik-truffaz-ladyland-quartet-mounir.html">Erik Truffaz Ladyland Quartet & Mounir</a></div>
   <div class='concert-musiker'>Erik Truffaz</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">24. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/erik-truffaz-ladyland-quartet-mounir.html">Erik Truffaz Ladyland Quartet & Mounir</a></div>
   <div class='concert-musiker'>Manu Codija</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">24. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/erik-truffaz-ladyland-quartet-mounir.html">Erik Truffaz Ladyland Quartet & Mounir</a></div>
   <div class='concert-musiker'>Michel Benita</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">24. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/erik-truffaz-ladyland-quartet-mounir.html">Erik Truffaz Ladyland Quartet & Mounir</a></div>
   <div class='concert-musiker'>Philippe Garcia</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">24. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/erik-truffaz-ladyland-quartet-mounir.html">Erik Truffaz Ladyland Quartet & Mounir</a></div>
   <div class='concert-musiker'>Troudi Mounir</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">24. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/muthspsiel-muthspiel.html">Muthspsiel & Muthspiel</a></div>
   <div class='concert-musiker'>Wolfgang Muthspiel</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">24. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/muthspsiel-muthspiel.html">Muthspsiel & Muthspiel</a></div>
   <div class='concert-musiker'>Christian Muthspiel</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">24. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/rene-lacaille-bob-brozman.html">Rene Lacaille & Bob Brozman</a></div>
   <div class='concert-musiker'>Rene Lacaille</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">24. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/rene-lacaille-bob-brozman.html">Rene Lacaille & Bob Brozman</a></div>
   <div class='concert-musiker'>Bob Brozman</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">24. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/rene-lacaille-bob-brozman.html">Rene Lacaille & Bob Brozman</a></div>
   <div class='concert-musiker'>Bernard Marka</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">24. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/rene-lacaille-bob-brozman.html">Rene Lacaille & Bob Brozman</a></div>
   <div class='concert-musiker'>Joel Gonthier</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">24. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/rene-lacaille-bob-brozman.html">Rene Lacaille & Bob Brozman</a></div>
   <div class='concert-musiker'>Kayamb</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">24. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/sussan-deyhim.html">Sussan Deyhim</a></div>
   <div class='concert-musiker'>Sussan Deyhim</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">24. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/sussan-deyhim.html">Sussan Deyhim</a></div>
   <div class='concert-musiker'>Richard Horowitz</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">24. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/sussan-deyhim.html">Sussan Deyhim</a></div>
   <div class='concert-musiker'>Karsh Kale</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">24. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/sussan-deyhim.html">Sussan Deyhim</a></div>
   <div class='concert-musiker'>Dawn Bukholz</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">24. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/sussan-deyhim.html">Sussan Deyhim</a></div>
   <div class='concert-musiker'>Will Calhoun</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">24. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/the-john-scofield-band.html">The John Scofield Band</a></div>
   <div class='concert-musiker'>John Scofield</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">24. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/the-john-scofield-band.html">The John Scofield Band</a></div>
   <div class='concert-musiker'>Avi Bortnick</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">24. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/the-john-scofield-band.html">The John Scofield Band</a></div>
   <div class='concert-musiker'>Jesse Murphy</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">24. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/the-john-scofield-band.html">The John Scofield Band</a></div>
   <div class='concert-musiker'>Adam Deitch</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">24. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/tim-berne.html">Tim Berne</a></div>
   <div class='concert-musiker'>Tim Berne</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">24. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/tim-berne.html">Tim Berne</a></div>
   <div class='concert-musiker'>Herb Robertson</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">24. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/tim-berne.html">Tim Berne</a></div>
   <div class='concert-musiker'>Marc Ducret</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">24. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/tim-berne.html">Tim Berne</a></div>
   <div class='concert-musiker'>Craig Taborn</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">24. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/tim-berne.html">Tim Berne</a></div>
   <div class='concert-musiker'>Scott Colley</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">24. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/tim-berne.html">Tim Berne</a></div>
   <div class='concert-musiker'>Tom Rainey</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2002 · Festival 02 SC </div>
+  <div class="concert-date">24. Aug 2002 · Festival 02 SC · </div>
   <div class="concert-band"><a href="../bands/mephista.html">Mephista</a></div>
   <div class='concert-musiker'>Sylvie Courvoisier</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2002 · Festival 02 SC </div>
+  <div class="concert-date">24. Aug 2002 · Festival 02 SC · </div>
   <div class="concert-band"><a href="../bands/mephista.html">Mephista</a></div>
   <div class='concert-musiker'>Susie Ibarra</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2002 · Festival 02 SC </div>
+  <div class="concert-date">24. Aug 2002 · Festival 02 SC · </div>
   <div class="concert-band"><a href="../bands/mephista.html">Mephista</a></div>
   <div class='concert-musiker'>Ikue Mori</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2002 · Festival 02 SC </div>
+  <div class="concert-date">24. Aug 2002 · Festival 02 SC · </div>
   <div class="concert-band"><a href="../bands/val-inc.html">Val – Inc</a></div>
   <div class='concert-musiker'>Valerie Jeanty</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">25. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/fast-n-bulbous.html">Fast’n Bulbous</a></div>
   <div class='concert-musiker'>Gary Lucas</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">25. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/fast-n-bulbous.html">Fast’n Bulbous</a></div>
   <div class='concert-musiker'>Jesse Krakow</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">25. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/fast-n-bulbous.html">Fast’n Bulbous</a></div>
   <div class='concert-musiker'>Richard Dworkin</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">25. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/fast-n-bulbous.html">Fast’n Bulbous</a></div>
   <div class='concert-musiker'>Phillip Johnston</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">25. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/fast-n-bulbous.html">Fast’n Bulbous</a></div>
   <div class='concert-musiker'>Rob  Henke</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">25. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/fast-n-bulbous.html">Fast’n Bulbous</a></div>
   <div class='concert-musiker'>Joe Fiedler</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">25. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/fast-n-bulbous.html">Fast’n Bulbous</a></div>
   <div class='concert-musiker'>Dave Sewelson</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">25. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/humair-daniel.html">Humair Daniel</a></div>
   <div class='concert-musiker'>Daniel Humair</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">25. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/humair-daniel.html">Humair Daniel</a></div>
   <div class='concert-musiker'>Marc Ducret</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">25. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/humair-daniel.html">Humair Daniel</a></div>
   <div class='concert-musiker'>Bruno Chevillon</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">25. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/humair-daniel.html">Humair Daniel</a></div>
   <div class='concert-musiker'>Ellery Eskelin</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">25. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/jewels-and-binoculars.html">Jewels and Binoculars</a></div>
   <div class='concert-musiker'>Michael Moore</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">25. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/jewels-and-binoculars.html">Jewels and Binoculars</a></div>
   <div class='concert-musiker'>Lindsey Horner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">25. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/jewels-and-binoculars.html">Jewels and Binoculars</a></div>
   <div class='concert-musiker'>Michael Vatcher</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">25. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/septeto-roberto-juan-rodriguez.html">Septeto Roberto Juan Rodriguez</a></div>
   <div class='concert-musiker'>Brad Jones</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">25. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/septeto-roberto-juan-rodriguez.html">Septeto Roberto Juan Rodriguez</a></div>
   <div class='concert-musiker'>Marcus Rojas</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">25. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/septeto-roberto-juan-rodriguez.html">Septeto Roberto Juan Rodriguez</a></div>
   <div class='concert-musiker'>Mary Wooten</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">25. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/septeto-roberto-juan-rodriguez.html">Septeto Roberto Juan Rodriguez</a></div>
   <div class='concert-musiker'>Meg Okura</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">25. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/septeto-roberto-juan-rodriguez.html">Septeto Roberto Juan Rodriguez</a></div>
   <div class='concert-musiker'>David Krakauer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">25. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/septeto-roberto-juan-rodriguez.html">Septeto Roberto Juan Rodriguez</a></div>
   <div class='concert-musiker'>Ted Reichman</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">25. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/septeto-roberto-juan-rodriguez.html">Septeto Roberto Juan Rodriguez</a></div>
   <div class='concert-musiker'>Roberto Rodriguez</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">25. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/septeto-roberto-juan-rodriguez.html">Septeto Roberto Juan Rodriguez</a></div>
   <div class='concert-musiker'>Susie Ibarra</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">25. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/uri-caine.html">Uri Caine</a></div>
   <div class='concert-musiker'>Uri Caine</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">25. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/uri-caine.html">Uri Caine</a></div>
   <div class='concert-musiker'>Tim Lefebvre</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">25. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/uri-caine.html">Uri Caine</a></div>
   <div class='concert-musiker'>Zach Danziger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2002 · Festival 02 </div>
+  <div class="concert-date">25. Aug 2002 · Festival 02 · </div>
   <div class="concert-band"><a href="../bands/uri-caine.html">Uri Caine</a></div>
   <div class='concert-musiker'>Samon Kawamura</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2002 · Festival 02 SC </div>
+  <div class="concert-date">25. Aug 2002 · Festival 02 SC · </div>
   <div class="concert-band"><a href="../bands/alperin-lechner-kjos-sorensen.html">Alperin / Lechner/ Kjos Sorensen</a></div>
   <div class='concert-musiker'>Misha Alperin</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2002 · Festival 02 SC </div>
+  <div class="concert-date">25. Aug 2002 · Festival 02 SC · </div>
   <div class="concert-band"><a href="../bands/alperin-lechner-kjos-sorensen.html">Alperin / Lechner/ Kjos Sorensen</a></div>
   <div class='concert-musiker'>Anja Lechner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2002 · Festival 02 SC </div>
+  <div class="concert-date">25. Aug 2002 · Festival 02 SC · </div>
   <div class="concert-band"><a href="../bands/alperin-lechner-kjos-sorensen.html">Alperin / Lechner/ Kjos Sorensen</a></div>
   <div class='concert-musiker'>Hans-Kristian Kjos Sorensen</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2002 · Festival 02 SC </div>
+  <div class="concert-date">25. Aug 2002 · Festival 02 SC · </div>
   <div class="concert-band"><a href="../bands/singe-verb.html">Singe + Verb</a></div>
   <div class='concert-musiker'>Beth Coleman</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2002 · Festival 02 SC </div>
+  <div class="concert-date">25. Aug 2002 · Festival 02 SC · </div>
   <div class="concert-band"><a href="../bands/singe-verb.html">Singe + Verb</a></div>
   <div class='concert-musiker'>Verb</div>
 </div><div class="concert-entry">
-  <div class="concert-date">10. Oct 2002 · Nexus Ausstellung </div>
+  <div class="concert-date">10. Oct 2002 · Nexus Ausstellung · </div>
   <div class="concert-band"><a href="../bands/das-noch-und-das-schon.html">Das Noch und das Schon</a></div>
   <div class='concert-musiker'>Jürgen Messensee</div>
 </div><div class="concert-entry">
-  <div class="concert-date">12. Oct 2002 · Nexus spezial </div>
+  <div class="concert-date">12. Oct 2002 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/ceremony-eroeffnung.html">Ceremony – Eröffnung</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">14. Oct 2002 · Nexus </div>
+  <div class="concert-date">14. Oct 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/barbara-gassner.html">Barbara Gassner</a></div>
   <div class='concert-musiker'>Barbara Gassner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">14. Oct 2002 · Nexus </div>
+  <div class="concert-date">14. Oct 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/gerald-preinfalk.html">Gerald Preinfalk</a></div>
   <div class='concert-musiker'>Gerald Preinfalk</div>
 </div><div class="concert-entry">
-  <div class="concert-date">17. Oct 2002 · Nexus </div>
+  <div class="concert-date">17. Oct 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/joanna-lewis-herbert-reisinger.html">Joanna Lewis & Herbert Reisinger</a></div>
   <div class='concert-musiker'>Joanna Lewis</div>
 </div><div class="concert-entry">
-  <div class="concert-date">17. Oct 2002 · Nexus </div>
+  <div class="concert-date">17. Oct 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/joanna-lewis-herbert-reisinger.html">Joanna Lewis & Herbert Reisinger</a></div>
   <div class='concert-musiker'>Reisinger Herbert</div>
 </div><div class="concert-entry">
-  <div class="concert-date">17. Oct 2002 · Nexus </div>
+  <div class="concert-date">17. Oct 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/joanna-lewis-herbert-reisinger.html">Joanna Lewis & Herbert Reisinger</a></div>
   <div class='concert-musiker'>Achim Tang</div>
 </div><div class="concert-entry">
-  <div class="concert-date">17. Oct 2002 · Nexus </div>
+  <div class="concert-date">17. Oct 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/joanna-lewis-herbert-reisinger.html">Joanna Lewis & Herbert Reisinger</a></div>
   <div class='concert-musiker'>Karl Ritter</div>
 </div><div class="concert-entry">
-  <div class="concert-date">17. Oct 2002 · Nexus </div>
+  <div class="concert-date">17. Oct 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/ritter-lechner-coleman-nuages.html">Ritter/Lechner/Coleman "Nuages"</a></div>
   <div class='concert-musiker'>Karl Ritter</div>
 </div><div class="concert-entry">
-  <div class="concert-date">17. Oct 2002 · Nexus </div>
+  <div class="concert-date">17. Oct 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/ritter-lechner-coleman-nuages.html">Ritter/Lechner/Coleman "Nuages"</a></div>
   <div class='concert-musiker'>Otto Lechner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">17. Oct 2002 · Nexus </div>
+  <div class="concert-date">17. Oct 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/ritter-lechner-coleman-nuages.html">Ritter/Lechner/Coleman "Nuages"</a></div>
   <div class='concert-musiker'>Melissa Coleman</div>
 </div><div class="concert-entry">
-  <div class="concert-date">17. Oct 2002 · Nexus </div>
+  <div class="concert-date">17. Oct 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/sel-gapu-mex-verliebt.html">Sel Gapu Mex: "Verliebt"</a></div>
   <div class='concert-musiker'>Karl Ritter</div>
 </div><div class="concert-entry">
-  <div class="concert-date">17. Oct 2002 · Nexus </div>
+  <div class="concert-date">17. Oct 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/sel-gapu-mex-verliebt.html">Sel Gapu Mex: "Verliebt"</a></div>
   <div class='concert-musiker'>Christian Eigner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">17. Oct 2002 · Nexus </div>
+  <div class="concert-date">17. Oct 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/sel-gapu-mex-verliebt.html">Sel Gapu Mex: "Verliebt"</a></div>
   <div class='concert-musiker'>Al Slavik</div>
 </div><div class="concert-entry">
-  <div class="concert-date">17. Oct 2002 · Nexus </div>
+  <div class="concert-date">17. Oct 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/tang-reisinger-kaizar.html">Tang, Reisinger, Kaizar</a></div>
   <div class='concert-musiker'>Achim Tang</div>
 </div><div class="concert-entry">
-  <div class="concert-date">17. Oct 2002 · Nexus </div>
+  <div class="concert-date">17. Oct 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/tang-reisinger-kaizar.html">Tang, Reisinger, Kaizar</a></div>
   <div class='concert-musiker'>Herbert Reisinger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">17. Oct 2002 · Nexus </div>
+  <div class="concert-date">17. Oct 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/tang-reisinger-kaizar.html">Tang, Reisinger, Kaizar</a></div>
   <div class='concert-musiker'>Karl Ritter</div>
 </div><div class="concert-entry">
-  <div class="concert-date">17. Oct 2002 · Nexus </div>
+  <div class="concert-date">17. Oct 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/tang-reisinger-kaizar.html">Tang, Reisinger, Kaizar</a></div>
   <div class='concert-musiker'>Diabate Mamadou</div>
 </div><div class="concert-entry">
-  <div class="concert-date">17. Oct 2002 · Nexus </div>
+  <div class="concert-date">17. Oct 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/windhund-session.html">Windhund Session</a></div>
   <div class='concert-musiker'>Karl Ritter</div>
 </div><div class="concert-entry">
-  <div class="concert-date">17. Oct 2002 · Nexus </div>
+  <div class="concert-date">17. Oct 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/windhund-session.html">Windhund Session</a></div>
   <div class='concert-musiker'>Otto Lechner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">17. Oct 2002 · Nexus </div>
+  <div class="concert-date">17. Oct 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/windhund-session.html">Windhund Session</a></div>
   <div class='concert-musiker'>Achim Tang</div>
 </div><div class="concert-entry">
-  <div class="concert-date">17. Oct 2002 · Nexus </div>
+  <div class="concert-date">17. Oct 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/windhund-session.html">Windhund Session</a></div>
   <div class='concert-musiker'>Melissa Coleman</div>
 </div><div class="concert-entry">
-  <div class="concert-date">17. Oct 2002 · Nexus </div>
+  <div class="concert-date">17. Oct 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/windhund-session.html">Windhund Session</a></div>
   <div class='concert-musiker'>Joanna Lewis</div>
 </div><div class="concert-entry">
-  <div class="concert-date">17. Oct 2002 · Nexus </div>
+  <div class="concert-date">17. Oct 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/windhund-session.html">Windhund Session</a></div>
   <div class='concert-musiker'>Herbert Reisinger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">17. Oct 2002 · Nexus </div>
+  <div class="concert-date">17. Oct 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/windhund-session.html">Windhund Session</a></div>
   <div class='concert-musiker'>Mamadou Diabate</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Oct 2002 · Nexus </div>
+  <div class="concert-date">23. Oct 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/amarcord.html">Amarcord</a></div>
   <div class='concert-musiker'>Sebastian Gürtler</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Oct 2002 · Nexus </div>
+  <div class="concert-date">23. Oct 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/amarcord.html">Amarcord</a></div>
   <div class='concert-musiker'>Michael Williams</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Oct 2002 · Nexus </div>
+  <div class="concert-date">23. Oct 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/amarcord.html">Amarcord</a></div>
   <div class='concert-musiker'>Gerhard Muthspiel</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Oct 2002 · Nexus </div>
+  <div class="concert-date">23. Oct 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/amarcord.html">Amarcord</a></div>
   <div class='concert-musiker'>Tommaso Huber</div>
 </div><div class="concert-entry">
-  <div class="concert-date">2. Nov 2002 · Nexus </div>
+  <div class="concert-date">2. Nov 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/franui.html">Franui</a></div>
   <div class='concert-musiker'>Johannes Eder</div>
 </div><div class="concert-entry">
-  <div class="concert-date">2. Nov 2002 · Nexus </div>
+  <div class="concert-date">2. Nov 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/franui.html">Franui</a></div>
   <div class='concert-musiker'>Romed Hopfgartner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">2. Nov 2002 · Nexus </div>
+  <div class="concert-date">2. Nov 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/franui.html">Franui</a></div>
   <div class='concert-musiker'>Markus Kraler</div>
 </div><div class="concert-entry">
-  <div class="concert-date">2. Nov 2002 · Nexus </div>
+  <div class="concert-date">2. Nov 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/franui.html">Franui</a></div>
   <div class='concert-musiker'>Angelika Rainer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">2. Nov 2002 · Nexus </div>
+  <div class="concert-date">2. Nov 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/franui.html">Franui</a></div>
   <div class='concert-musiker'>Bettina Rainer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">2. Nov 2002 · Nexus </div>
+  <div class="concert-date">2. Nov 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/franui.html">Franui</a></div>
   <div class='concert-musiker'>Markus Rainer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">2. Nov 2002 · Nexus </div>
+  <div class="concert-date">2. Nov 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/franui.html">Franui</a></div>
   <div class='concert-musiker'>Andreas Schett</div>
 </div><div class="concert-entry">
-  <div class="concert-date">2. Nov 2002 · Nexus </div>
+  <div class="concert-date">2. Nov 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/franui.html">Franui</a></div>
   <div class='concert-musiker'>Martin Senfter</div>
 </div><div class="concert-entry">
-  <div class="concert-date">2. Nov 2002 · Nexus </div>
+  <div class="concert-date">2. Nov 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/franui.html">Franui</a></div>
   <div class='concert-musiker'>Karlheiinz Siessl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">8. Nov 2002 · Nexus </div>
+  <div class="concert-date">8. Nov 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/club-nexus.html">Club Nexus</a></div>
   <div class='concert-musiker'>DJ Kollektiv Scheiterhaufen</div>
 </div><div class="concert-entry">
-  <div class="concert-date">8. Nov 2002 · Nexus </div>
+  <div class="concert-date">8. Nov 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/club-nexus.html">Club Nexus</a></div>
   <div class='concert-musiker'>dZihan & Kamien</div>
 </div><div class="concert-entry">
-  <div class="concert-date">9. Nov 2002 · Nexus </div>
+  <div class="concert-date">9. Nov 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/club-nexus.html">Club Nexus</a></div>
   <div class='concert-musiker'>Oran Shee</div>
 </div><div class="concert-entry">
-  <div class="concert-date">9. Nov 2002 · Nexus </div>
+  <div class="concert-date">9. Nov 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/club-nexus.html">Club Nexus</a></div>
   <div class='concert-musiker'>Chillinger Sr</div>
 </div><div class="concert-entry">
-  <div class="concert-date">9. Nov 2002 · Nexus </div>
+  <div class="concert-date">9. Nov 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/club-nexus.html">Club Nexus</a></div>
   <div class='concert-musiker'>DJ Samir</div>
 </div><div class="concert-entry">
-  <div class="concert-date">9. Nov 2002 · Nexus </div>
+  <div class="concert-date">9. Nov 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/club-nexus.html">Club Nexus</a></div>
   <div class='concert-musiker'>Cay Taylen</div>
 </div><div class="concert-entry">
-  <div class="concert-date">9. Nov 2002 · Nexus </div>
+  <div class="concert-date">9. Nov 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/club-nexus.html">Club Nexus</a></div>
   <div class='concert-musiker'>Tazza</div>
 </div><div class="concert-entry">
-  <div class="concert-date">9. Nov 2002 · Nexus </div>
+  <div class="concert-date">9. Nov 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/club-nexus.html">Club Nexus</a></div>
   <div class='concert-musiker'>Quote 35</div>
 </div><div class="concert-entry">
-  <div class="concert-date">14. Nov 2002 · Nexus Theater </div>
+  <div class="concert-date">14. Nov 2002 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/waikiki-beach.html">Waikiki Beach</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">21. Nov 2002 · Nexus Ausstellung </div>
+  <div class="concert-date">21. Nov 2002 · Nexus Ausstellung · </div>
   <div class="concert-band"><a href="../bands/cold-cuts.html">Cold Cuts</a></div>
   <div class='concert-musiker'>Thomas Jocher</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Nov 2002 · Nexus Theater </div>
+  <div class="concert-date">22. Nov 2002 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/die-praesidentinnen.html">Die Präsidentinnen</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">28. Nov 2002 · Nexus lesung </div>
+  <div class="concert-date">28. Nov 2002 · Nexus lesung · </div>
   <div class="concert-band"><a href="../bands/rain-on-my-crazy-baerenfellmuetze.html">Rain on my crazy Bärenfellmütze</a></div>
   <div class='concert-musiker'>Klaus Nüchtern</div>
 </div><div class="concert-entry">
-  <div class="concert-date">29. Nov 2002 · Nexus spezial </div>
+  <div class="concert-date">29. Nov 2002 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/pinz-power-pinzgau-suchtfrei.html">Pinz Power – Pinzgau Suchtfrei</a></div>
   <div class='concert-musiker'>Ingo Vog</div>
 </div><div class="concert-entry">
-  <div class="concert-date">30. Nov 2002 · Nexus Kino </div>
+  <div class="concert-date">30. Nov 2002 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/die-geheimnisvolle-minusch.html">Die geheimnisvolle Minusch</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">30. Nov 2002 · Nexus Kino </div>
+  <div class="concert-date">30. Nov 2002 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/die-geheimnisvolle-minusch.html">Die geheimnisvolle Minusch</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">30. Nov 2002 · Nexus Theater </div>
+  <div class="concert-date">30. Nov 2002 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/wie-alexander-die-welt-erschuf.html">Wie Alexander die Welt erschuf</a></div>
   <div class='concert-musiker'>Alexander Dick</div>
 </div><div class="concert-entry">
-  <div class="concert-date">30. Nov 2002 · Nexus Theater </div>
+  <div class="concert-date">30. Nov 2002 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/wie-alexander-die-welt-erschuf.html">Wie Alexander die Welt erschuf</a></div>
   <div class='concert-musiker'>Wolf Junger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">7. Dec 2002 · Nexus Kino </div>
+  <div class="concert-date">7. Dec 2002 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/drei-haselnuesse-fuer-aschenbroedel.html">Drei Haselnüsse für Aschenbrödel</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">14. Dec 2002 · Nexus Kino </div>
+  <div class="concert-date">14. Dec 2002 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/heidi.html">Heidi</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">21. Dec 2002 · Nexus Kino </div>
+  <div class="concert-date">21. Dec 2002 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/die-farben-des-paradieses.html">Die Farben des Paradieses</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">27. Dec 2002 · Nexus </div>
+  <div class="concert-date">27. Dec 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/club-nexus.html">Club Nexus</a></div>
   <div class='concert-musiker'>DJ Sors</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Dec 2002 · Nexus </div>
+  <div class="concert-date">27. Dec 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/club-nexus.html">Club Nexus</a></div>
   <div class='concert-musiker'>Aegyd</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Dec 2002 · Nexus </div>
+  <div class="concert-date">27. Dec 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/club-nexus.html">Club Nexus</a></div>
   <div class='concert-musiker'>Rainer Klang</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Dec 2002 · Nexus </div>
+  <div class="concert-date">27. Dec 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/club-nexus.html">Club Nexus</a></div>
   <div class='concert-musiker'>Michael Holzgruber</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Dec 2002 · Nexus </div>
+  <div class="concert-date">27. Dec 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/club-nexus.html">Club Nexus</a></div>
   <div class='concert-musiker'>Princess Him Live</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Dec 2002 · Nexus </div>
+  <div class="concert-date">28. Dec 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/club-nexus.html">Club Nexus</a></div>
   <div class='concert-musiker'>DJ Odd</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Dec 2002 · Nexus </div>
+  <div class="concert-date">28. Dec 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/club-nexus.html">Club Nexus</a></div>
   <div class='concert-musiker'>Dr. AJ Azrael</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Dec 2002 · Nexus </div>
+  <div class="concert-date">28. Dec 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/club-nexus.html">Club Nexus</a></div>
   <div class='concert-musiker'>Jürgen Drimal</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Dec 2002 · Nexus </div>
+  <div class="concert-date">28. Dec 2002 · Nexus · </div>
   <div class="concert-band"><a href="../bands/club-nexus.html">Club Nexus</a></div>
   <div class='concert-musiker'>Princess Him Live</div>
 </div></div>
@@ -1221,16 +726,16 @@ a:hover { text-decoration: underline; color: var(--link-hover); }
   Jazzfest Wiki · 5936 Musiker · 13034 Konzerte · 1975–2025
   · Daten: Jazzfest Wien Chronik + Discogs API
 </footer>
-<script src="../search-data.js"></script>
 <script>
+// Globale Suche
+const SEARCH_DATA = window.JAZZFEST_SEARCH || [];
 const inp = document.getElementById('search-input');
 const res = document.getElementById('search-results');
-const SD = window.JAZZFEST_SEARCH || [];
 inp.addEventListener('input', function() {
   const q = this.value.toLowerCase().trim();
   res.innerHTML = '';
   if (q.length < 2) { res.style.display='none'; return; }
-  const hits = SD.filter(x => x.n.toLowerCase().includes(q)).slice(0, 12);
+  const hits = SEARCH_DATA.filter(x => x.n.toLowerCase().includes(q)).slice(0, 12);
   if (!hits.length) { res.style.display='none'; return; }
   hits.forEach(h => {
     const a = document.createElement('a');

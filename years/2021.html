@@ -4,1501 +4,1006 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>2021 — Jazzfest Wiki</title>
-<style>
-/* Jazzfest Wiki — MediaWiki-inspiriertes Layout + Profil-Images */
-
-:root {
-  --bg: #fff;
-  --bg-content: #f8f9fa;
-  --border: #a2a9b1;
-  --border-light: #eaecf0;
-  --link: #3366cc;
-  --link-hover: #1a3f99;
-  --heading: #000;
-  --text: #202122;
-  --text-muted: #54595d;
-  --infobox-bg: #f8f9fa;
-  --infobox-header: #cee0f2;
-  --nav-bg: #f8f9fa;
-  --nav-border: #a2a9b1;
-  --tag-bg: #eaecf0;
-  --accent: #3366cc;
-  --red: #cc0000;
-}
-
-* { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-  font-family: -apple-system, 'Linux Libertine', Georgia, Times, serif;
-  font-size: 14px;
-  line-height: 1.6;
-  color: var(--text);
-  background: var(--bg-content);
-}
-
-/* HEADER */
-#wiki-header {
-  background: var(--bg);
-  border-bottom: 1px solid var(--border);
-  padding: 8px 16px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-#wiki-header .logo {
-  font-family: 'Linux Libertine', Georgia, serif;
-  font-size: 18px;
-  font-weight: bold;
-  color: var(--heading);
-  text-decoration: none;
-  white-space: nowrap;
-}
-
-#wiki-header .logo span { color: var(--accent); }
-
-#search-wrap { flex: 1; max-width: 400px; position: relative; }
-
-#search-input {
-  width: 100%;
-  padding: 5px 10px;
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  font-size: 13px;
-  outline: none;
-}
-
-#search-input:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 2px rgba(51,102,204,0.15);
-}
-
-#search-results {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-top: none;
-  max-height: 300px;
-  overflow-y: auto;
-  z-index: 200;
-  display: none;
-}
-
-#search-results a {
-  display: block;
-  padding: 6px 10px;
-  text-decoration: none;
-  color: var(--text);
-  border-bottom: 1px solid var(--border-light);
-}
-
-#search-results a:hover { background: var(--bg-content); }
-#search-results .sr-type { font-size: 11px; color: var(--text-muted); margin-left: 6px; }
-
-/* NAV */
-#wiki-nav {
-  background: var(--nav-bg);
-  border-bottom: 1px solid var(--nav-border);
-  padding: 0 16px;
-  display: flex;
-  gap: 0;
-  overflow-x: auto;
-}
-
-#wiki-nav a {
-  display: block;
-  padding: 8px 14px;
-  text-decoration: none;
-  color: var(--text);
-  font-size: 13px;
-  border-bottom: 2px solid transparent;
-  white-space: nowrap;
-}
-
-#wiki-nav a:hover, #wiki-nav a.active {
-  color: var(--accent);
-  border-bottom-color: var(--accent);
-}
-
-/* LAYOUT */
-#wiki-body {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px 16px;
-}
-
-.wiki-page {
-  background: var(--bg);
-  border: 1px solid var(--border-light);
-  padding: 20px 24px;
-}
-
-.page-title {
-  font-family: 'Linux Libertine', Georgia, serif;
-  font-size: 28px;
-  font-weight: normal;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 4px;
-  margin-bottom: 16px;
-  color: var(--heading);
-}
-
-/* INFOBOX */
-.infobox {
-  float: right;
-  clear: right;
-  margin: 0 0 16px 24px;
-  background: var(--infobox-bg);
-  border: 1px solid var(--border);
-  font-size: 13px;
-  max-width: 240px;
-  min-width: 200px;
-}
-
-.infobox-title {
-  background: var(--infobox-header);
-  text-align: center;
-  padding: 6px 10px;
-  font-weight: bold;
-  border-bottom: 1px solid var(--border);
-  font-size: 14px;
-}
-
-/* PROFIL-IMAGE */
-.profile-image-wrap {
-  width: 100%;
-  aspect-ratio: 1;
-  overflow: hidden;
-  border-bottom: 1px solid var(--border);
-  position: relative;
-  background: #e8ecf0;
-}
-
-.profile-image-wrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-/* Avatar-Fallback (Initialen) */
-.avatar-fallback {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 52px;
-  font-weight: bold;
-  color: var(--text-muted);
-  background: linear-gradient(135deg, #d0daea 0%, #b8c8de 100%);
-  letter-spacing: -2px;
-  user-select: none;
-}
-
-.infobox table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.infobox td {
-  padding: 4px 8px;
-  vertical-align: top;
-  border-bottom: 1px solid var(--border-light);
-}
-
-.infobox td:first-child {
-  color: var(--text-muted);
-  width: 45%;
-}
-
-/* MUSICIAN-GRID INDEX (mit Bild) */
-.musician-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 10px;
-  margin: 12px 0;
-}
-
-.musician-card {
-  background: var(--bg);
-  border: 1px solid var(--border-light);
-  text-decoration: none;
-  color: var(--text);
-  display: block;
-  overflow: hidden;
-  transition: border-color 0.15s;
-}
-
-.musician-card:hover {
-  border-color: var(--accent);
-  text-decoration: none;
-}
-
-.mc-image-wrap {
-  width: 100%;
-  aspect-ratio: 1;
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(135deg, #d8e4f0 0%, #c0d0e0 100%);
-}
-
-.musician-card .mc-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  position: absolute;
-  top: 0; left: 0;
-  z-index: 1;
-}
-
-.mc-avatar-bg {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 36px;
-  font-weight: bold;
-  color: #7a8fa8;
-  z-index: 0;
-}
-
-.musician-card .mc-avatar {
-  width: 100%;
-  aspect-ratio: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 36px;
-  font-weight: bold;
-  color: #888;
-  background: linear-gradient(135deg, #d8e4f0 0%, #c0d0e0 100%);
-  letter-spacing: -1px;
-}
-
-.musician-card .mc-info {
-  padding: 8px 10px;
-}
-
-.musician-card .mc-name {
-  font-weight: bold;
-  font-size: 13px;
-  line-height: 1.3;
-}
-
-.musician-card .mc-meta {
-  font-size: 11px;
-  color: var(--text-muted);
-  margin-top: 2px;
-}
-
-/* SECTIONS */
-.wiki-section { margin: 20px 0; }
-
-.wiki-section h2 {
-  font-family: 'Linux Libertine', Georgia, serif;
-  font-size: 20px;
-  font-weight: normal;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 2px;
-  margin-bottom: 12px;
-  color: var(--heading);
-}
-
-/* TABLES */
-.wiki-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13px;
-  margin: 8px 0;
-}
-
-.wiki-table th {
-  background: var(--bg-content);
-  border: 1px solid var(--border);
-  padding: 6px 10px;
-  text-align: left;
-  font-weight: bold;
-}
-
-.wiki-table td {
-  border: 1px solid var(--border-light);
-  padding: 5px 10px;
-  vertical-align: top;
-}
-
-.wiki-table tr:hover td { background: #f0f4ff; }
-
-/* TAGS */
-.tag {
-  display: inline-block;
-  background: var(--tag-bg);
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  padding: 1px 7px;
-  font-size: 12px;
-  margin: 2px;
-  color: var(--text);
-  text-decoration: none;
-}
-
-.tag:hover { background: var(--border); }
-.tag.instrument { background: #ddeeff; border-color: #99bbdd; }
-.tag.year { background: #eeffdd; border-color: #99cc77; }
-.tag.mitschnitt { background: #fff0cc; border-color: #ccaa44; }
-
-/* LINKS */
-a { color: var(--link); text-decoration: none; }
-a:hover { text-decoration: underline; color: var(--link-hover); }
-
-/* INDEX-STATS */
-.index-stats {
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-  margin: 16px 0;
-}
-
-.stat-card {
-  background: var(--infobox-bg);
-  border: 1px solid var(--border);
-  padding: 12px 20px;
-  text-align: center;
-  min-width: 120px;
-  flex: 1;
-}
-
-.stat-card .number {
-  font-size: 28px;
-  font-weight: bold;
-  color: var(--accent);
-  display: block;
-}
-
-.stat-card .label { font-size: 12px; color: var(--text-muted); }
-
-/* RELEASES */
-.release-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 10px 0;
-}
-
-.release-card {
-  display: flex;
-  gap: 8px;
-  background: var(--bg-content);
-  border: 1px solid var(--border-light);
-  padding: 8px;
-  max-width: 260px;
-  text-decoration: none;
-  color: var(--text);
-}
-
-.release-card img { width: 56px; height: 56px; object-fit: cover; flex-shrink: 0; }
-.release-card .rc-no-image {
-  width: 56px; height: 56px; flex-shrink: 0;
-  background: #dde4ee;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 22px; color: #888;
-}
-.release-card .rc-title { font-size: 12px; font-weight: bold; line-height: 1.3; }
-.release-card .rc-year { font-size: 11px; color: var(--text-muted); }
-.release-card:hover { border-color: var(--accent); }
-
-/* MITSPIELER */
-.mitspieler-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin: 8px 0;
-}
-
-/* ALPHABET NAV */
-.alpha-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin: 8px 0 16px;
-}
-
-.alpha-nav a {
-  display: block;
-  width: 28px;
-  height: 28px;
-  text-align: center;
-  line-height: 28px;
-  border: 1px solid var(--border);
-  font-size: 13px;
-  color: var(--text);
-  text-decoration: none;
-}
-
-.alpha-nav a:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
-
-/* GRAPH */
-#graph-container {
-  width: 100%;
-  height: 650px;
-  background: #fff;
-  border: 1px solid var(--border);
-  position: relative;
-}
-
-#graph-tooltip {
-  position: absolute;
-  background: rgba(0,0,0,0.85);
-  color: #fff;
-  padding: 8px 12px;
-  border-radius: 4px;
-  font-size: 12px;
-  pointer-events: none;
-  display: none;
-  z-index: 10;
-}
-
-/* YEAR */
-.concert-entry {
-  border-left: 3px solid var(--border);
-  padding: 6px 12px;
-  margin: 4px 0;
-}
-.concert-entry:hover { border-left-color: var(--accent); background: var(--bg-content); }
-.concert-date { font-size: 12px; color: var(--text-muted); }
-.concert-band { font-weight: bold; }
-.concert-musiker { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-
-/* FOOTER */
-#wiki-footer {
-  text-align: center;
-  padding: 20px;
-  color: var(--text-muted);
-  font-size: 12px;
-  border-top: 1px solid var(--border-light);
-  margin-top: 40px;
-}
-
-/* CLEARFIX */
-.clearfix::after { content: ""; display: table; clear: both; }
-
-@media (max-width: 600px) {
-  .infobox { float: none; margin: 0 0 16px; max-width: 100%; }
-  .musician-grid { grid-template-columns: repeat(2, 1fr); }
-  #graph-container { height: 400px; }
-}
-
-</style>
+<link rel="stylesheet" href="../../template/css/wiki.css">
 </head>
 <body>
 <header id="wiki-header">
-  <a class="logo" href="../index.html">Jazz<span>fest</span> Wiki</a>
-  <div id="search-wrap">
+  <a class="logo" href="../../index.html">Jazz<span>fest</span> Wiki</a>
+  <div id="search-wrap" style="position:relative">
     <input id="search-input" type="text" placeholder="Musiker, Band, Jahr …" autocomplete="off">
     <div id="search-results"></div>
   </div>
 </header>
 <nav id="wiki-nav">
-  <a href="../index.html">Hauptseite</a>
-  <a href="../musicians/index.html">Musiker</a>
-  <a href="../bands/index.html">Bands</a>
-  <a href="../years/index.html" class="active">Jahre</a>
-  <a href="../festivals.html">Festivalchronik</a>
-  <a href="../graph.html">Netzwerk</a>
+  <a href="../../index.html" >Hauptseite</a>
+  <a href="../../musicians/index.html" >Musiker</a>
+  <a href="../../bands/index.html" >Bands</a>
+  <a href="../../years/index.html" class="active">Jahre</a>
+  <a href="../../graph.html" >Netzwerk</a>
 </nav>
 <div id="wiki-body">
   <div class="wiki-page clearfix">
     <h1 class="page-title">Jazzfest 2021</h1>
 <div class="wiki-section">
-  <p><strong>245 Konzert-Einträge</strong></p>
+  <p><strong>245 Konzerte</strong></p>
   <div class="year-concerts"><div class="concert-entry">
-  <div class="concert-date">16. Aug 2021 · Festival 2021 Tonspurbühne Asitz</div>
+  <div class="concert-date">16. Aug 2021 · Festival 2021 · Tonspurbühne Asitz</div>
   <div class="concert-band"><a href="../bands/sain-mus.html">Sain Mus +</a></div>
   <div class='concert-musiker'>Clemens Sainitzer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">16. Aug 2021 · Festival 2021 Tonspurbühne Asitz</div>
+  <div class="concert-date">16. Aug 2021 · Festival 2021 · Tonspurbühne Asitz</div>
   <div class="concert-band"><a href="../bands/sain-mus.html">Sain Mus +</a></div>
   <div class='concert-musiker'>Philipp Erasmus</div>
 </div><div class="concert-entry">
-  <div class="concert-date">16. Aug 2021 · Festival 2021 Tonspurbühne Asitz</div>
+  <div class="concert-date">16. Aug 2021 · Festival 2021 · Tonspurbühne Asitz</div>
   <div class="concert-band"><a href="../bands/sain-mus.html">Sain Mus +</a></div>
   <div class='concert-musiker'>Daniel Romsdorfer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">16. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">16. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/richard-koch-quartett.html">Richard Koch Quartett</a></div>
   <div class='concert-musiker'>Richard Koch</div>
 </div><div class="concert-entry">
-  <div class="concert-date">16. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">16. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/richard-koch-quartett.html">Richard Koch Quartett</a></div>
   <div class='concert-musiker'>Lukas Kranzelbinder</div>
 </div><div class="concert-entry">
-  <div class="concert-date">16. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">16. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/richard-koch-quartett.html">Richard Koch Quartett</a></div>
   <div class='concert-musiker'>Michael Hornek</div>
 </div><div class="concert-entry">
-  <div class="concert-date">16. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">16. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/richard-koch-quartett.html">Richard Koch Quartett</a></div>
   <div class='concert-musiker'>Lukas König</div>
 </div><div class="concert-entry">
-  <div class="concert-date">17. Aug 2021 · Festival 2021 Berggasthof Biberg</div>
+  <div class="concert-date">17. Aug 2021 · Festival 2021 · Berggasthof Biberg</div>
   <div class="concert-band"><a href="../bands/birds-against-hurricanes.html">Birds against Hurricanes</a></div>
   <div class='concert-musiker'>Viola Hammer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">17. Aug 2021 · Festival 2021 Berggasthof Biberg</div>
+  <div class="concert-date">17. Aug 2021 · Festival 2021 · Berggasthof Biberg</div>
   <div class="concert-band"><a href="../bands/birds-against-hurricanes.html">Birds against Hurricanes</a></div>
   <div class='concert-musiker'>Paul Schuberth</div>
 </div><div class="concert-entry">
-  <div class="concert-date">17. Aug 2021 · Festival 2021 Berggasthof Biberg</div>
+  <div class="concert-date">17. Aug 2021 · Festival 2021 · Berggasthof Biberg</div>
   <div class="concert-band"><a href="../bands/birds-against-hurricanes.html">Birds against Hurricanes</a></div>
   <div class='concert-musiker'>Alex Pinter</div>
 </div><div class="concert-entry">
-  <div class="concert-date">17. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">17. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/david-helbock.html">David Helbock</a></div>
   <div class='concert-musiker'>David Helbock</div>
 </div><div class="concert-entry">
-  <div class="concert-date">17. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">17. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/david-helbock.html">David Helbock</a></div>
   <div class='concert-musiker'>Arne Jansen</div>
 </div><div class="concert-entry">
-  <div class="concert-date">17. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">17. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/david-helbock.html">David Helbock</a></div>
   <div class='concert-musiker'>Lorenz Raab</div>
 </div><div class="concert-entry">
-  <div class="concert-date">18. Aug 2021 · Festival 2021 Berggasthof Huggenberg</div>
+  <div class="concert-date">18. Aug 2021 · Festival 2021 · Berggasthof Huggenberg</div>
   <div class="concert-band"><a href="../bands/ahl-6.html">AHL 6</a></div>
   <div class='concert-musiker'>Thomas Liesinger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">18. Aug 2021 · Festival 2021 Berggasthof Huggenberg</div>
+  <div class="concert-date">18. Aug 2021 · Festival 2021 · Berggasthof Huggenberg</div>
   <div class="concert-band"><a href="../bands/ahl-6.html">AHL 6</a></div>
   <div class='concert-musiker'>Robert Schröck</div>
 </div><div class="concert-entry">
-  <div class="concert-date">18. Aug 2021 · Festival 2021 Berggasthof Huggenberg</div>
+  <div class="concert-date">18. Aug 2021 · Festival 2021 · Berggasthof Huggenberg</div>
   <div class="concert-band"><a href="../bands/ahl-6.html">AHL 6</a></div>
   <div class='concert-musiker'>Leonhard Skorupa</div>
 </div><div class="concert-entry">
-  <div class="concert-date">18. Aug 2021 · Festival 2021 Berggasthof Huggenberg</div>
+  <div class="concert-date">18. Aug 2021 · Festival 2021 · Berggasthof Huggenberg</div>
   <div class="concert-band"><a href="../bands/ahl-6.html">AHL 6</a></div>
   <div class='concert-musiker'>Markus Schneider</div>
 </div><div class="concert-entry">
-  <div class="concert-date">18. Aug 2021 · Festival 2021 Berggasthof Huggenberg</div>
+  <div class="concert-date">18. Aug 2021 · Festival 2021 · Berggasthof Huggenberg</div>
   <div class="concert-band"><a href="../bands/ahl-6.html">AHL 6</a></div>
   <div class='concert-musiker'>Thomas Pöcksteiner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">18. Aug 2021 · Festival 2021 Berggasthof Huggenberg</div>
+  <div class="concert-date">18. Aug 2021 · Festival 2021 · Berggasthof Huggenberg</div>
   <div class="concert-band"><a href="../bands/ahl-6.html">AHL 6</a></div>
   <div class='concert-musiker'>Lukas Aichinger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">18. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">18. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/reisinger-wolfgang.html">Reisinger Wolfgang</a></div>
   <div class='concert-musiker'>Wolfgang Reisinger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">18. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">18. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/reisinger-wolfgang.html">Reisinger Wolfgang</a></div>
   <div class='concert-musiker'>Christian Weber</div>
 </div><div class="concert-entry">
-  <div class="concert-date">18. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">18. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/reisinger-wolfgang.html">Reisinger Wolfgang</a></div>
   <div class='concert-musiker'>Mario Rom</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Aug 2021 · Festival 2021 Lettlkaser Hütte</div>
+  <div class="concert-date">19. Aug 2021 · Festival 2021 · Lettlkaser Hütte</div>
   <div class="concert-band"><a href="../bands/we-hike-jazz-wanderung.html">We hike Jazz – Wanderung</a></div>
   <div class='concert-musiker'>Mario  Rom</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Aug 2021 · Festival 2021 Lettlkaser Hütte</div>
+  <div class="concert-date">19. Aug 2021 · Festival 2021 · Lettlkaser Hütte</div>
   <div class="concert-band"><a href="../bands/we-hike-jazz-wanderung.html">We hike Jazz – Wanderung</a></div>
   <div class='concert-musiker'>Lukas Kranzelbinder</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Aug 2021 · Festival 2021 Lettlkaser Hütte</div>
+  <div class="concert-date">19. Aug 2021 · Festival 2021 · Lettlkaser Hütte</div>
   <div class="concert-band"><a href="../bands/we-hike-jazz-wanderung.html">We hike Jazz – Wanderung</a></div>
   <div class='concert-musiker'>Herbert Pirker</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">19. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/alex-miksch-band.html">Alex Miksch Band</a></div>
   <div class='concert-musiker'>Alex Miksch</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">19. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/alex-miksch-band.html">Alex Miksch Band</a></div>
   <div class='concert-musiker'>Anna Anderluh</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">19. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/alex-miksch-band.html">Alex Miksch Band</a></div>
   <div class='concert-musiker'>Jelena Poprzan</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">19. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/alex-miksch-band.html">Alex Miksch Band</a></div>
   <div class='concert-musiker'>Philipp Moosbrugger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">19. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/alex-miksch-band.html">Alex Miksch Band</a></div>
   <div class='concert-musiker'>Andreas Hellweger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Aug 2021 · Festival 2021 Buchbinderei Fuchs</div>
+  <div class="concert-date">19. Aug 2021 · Festival 2021 · Buchbinderei Fuchs</div>
   <div class="concert-band"><a href="../bands/reiner-weber-mit-fuchs.html">Reiner Weber mit Fuchs</a></div>
   <div class='concert-musiker'>Christian Reiner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Aug 2021 · Festival 2021 Buchbinderei Fuchs</div>
+  <div class="concert-date">19. Aug 2021 · Festival 2021 · Buchbinderei Fuchs</div>
   <div class="concert-band"><a href="../bands/reiner-weber-mit-fuchs.html">Reiner Weber mit Fuchs</a></div>
   <div class='concert-musiker'>Christian Weber</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Aug 2021 · Festival 2021 Buchbinderei Fuchs</div>
+  <div class="concert-date">19. Aug 2021 · Festival 2021 · Buchbinderei Fuchs</div>
   <div class="concert-band"><a href="../bands/reiner-weber-mit-fuchs.html">Reiner Weber mit Fuchs</a></div>
   <div class='concert-musiker'>Christian Fuchs</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Aug 2021 · Festival 2021 Buchbinderei Fuchs</div>
+  <div class="concert-date">19. Aug 2021 · Festival 2021 · Buchbinderei Fuchs</div>
   <div class="concert-band"><a href="../bands/reiner-weber.html">Reiner Weber</a></div>
   <div class='concert-musiker'>Christian Reiner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Aug 2021 · Festival 2021 Buchbinderei Fuchs</div>
+  <div class="concert-date">19. Aug 2021 · Festival 2021 · Buchbinderei Fuchs</div>
   <div class="concert-band"><a href="../bands/reiner-weber.html">Reiner Weber</a></div>
   <div class='concert-musiker'>Christian Weber</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">19. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/il-civetto.html">Il Civetto</a></div>
   <div class='concert-musiker'>Lars Löffler-Oppermann</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">19. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/il-civetto.html">Il Civetto</a></div>
   <div class='concert-musiker'>Robert Kondorosi</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">19. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/il-civetto.html">Il Civetto</a></div>
   <div class='concert-musiker'>Danny Ahmed</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">19. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/il-civetto.html">Il Civetto</a></div>
   <div class='concert-musiker'>Leon Keiditsch</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">19. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/il-civetto.html">Il Civetto</a></div>
   <div class='concert-musiker'>Leon Bollinger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Aug 2021 · Festival 2021 SC</div>
+  <div class="concert-date">19. Aug 2021 · Festival 2021 · SC</div>
   <div class="concert-band"><a href="../bands/dell-lillinger-westergaard.html">Dell/Lillinger/Westergaard</a></div>
   <div class='concert-musiker'>Christopher Dell</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Aug 2021 · Festival 2021 SC</div>
+  <div class="concert-date">19. Aug 2021 · Festival 2021 · SC</div>
   <div class="concert-band"><a href="../bands/dell-lillinger-westergaard.html">Dell/Lillinger/Westergaard</a></div>
   <div class='concert-musiker'>Christian Lillinger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Aug 2021 · Festival 2021 SC</div>
+  <div class="concert-date">19. Aug 2021 · Festival 2021 · SC</div>
   <div class="concert-band"><a href="../bands/dell-lillinger-westergaard.html">Dell/Lillinger/Westergaard</a></div>
   <div class='concert-musiker'>Jonas Westergaard</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Aug 2021 · Festival 2021 SC</div>
+  <div class="concert-date">19. Aug 2021 · Festival 2021 · SC</div>
   <div class="concert-band"><a href="../bands/madeira-rua-vicente.html">Madeira/Rua/Vicente</a></div>
   <div class='concert-musiker'>Joao Madeira</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Aug 2021 · Festival 2021 SC</div>
+  <div class="concert-date">19. Aug 2021 · Festival 2021 · SC</div>
   <div class="concert-band"><a href="../bands/madeira-rua-vicente.html">Madeira/Rua/Vicente</a></div>
   <div class='concert-musiker'>Luis Vicente</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Aug 2021 · Festival 2021 SC</div>
+  <div class="concert-date">19. Aug 2021 · Festival 2021 · SC</div>
   <div class="concert-band"><a href="../bands/madeira-rua-vicente.html">Madeira/Rua/Vicente</a></div>
   <div class='concert-musiker'>Mario Rua</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 Peter-Wiechenthaler-Hütte</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · Peter-Wiechenthaler-Hütte</div>
   <div class="concert-band"><a href="../bands/edi-nulz.html">Edi Nulz</a></div>
   <div class='concert-musiker'>Siegmar Brecher</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 Peter-Wiechenthaler-Hütte</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · Peter-Wiechenthaler-Hütte</div>
   <div class="concert-band"><a href="../bands/edi-nulz.html">Edi Nulz</a></div>
   <div class='concert-musiker'>Julian Adam Pajzs</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 Peter-Wiechenthaler-Hütte</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · Peter-Wiechenthaler-Hütte</div>
   <div class="concert-band"><a href="../bands/edi-nulz.html">Edi Nulz</a></div>
   <div class='concert-musiker'>Valentin Schuster</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 SC</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · SC</div>
   <div class="concert-band"><a href="../bands/angelika-niscier-alexander-hawkins.html">Angelika Niscier / Alexander Hawkins</a></div>
   <div class='concert-musiker'>Angelika Niscier</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 SC</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · SC</div>
   <div class="concert-band"><a href="../bands/angelika-niscier-alexander-hawkins.html">Angelika Niscier / Alexander Hawkins</a></div>
   <div class='concert-musiker'>Alexander Hawkins</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 SC</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · SC</div>
   <div class="concert-band"><a href="../bands/geogema.html">GeoGeMa</a></div>
   <div class='concert-musiker'>Gerald Preinfalk</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 SC</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · SC</div>
   <div class="concert-band"><a href="../bands/geogema.html">GeoGeMa</a></div>
   <div class='concert-musiker'>Georg  Vogel</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 SC</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · SC</div>
   <div class="concert-band"><a href="../bands/geogema.html">GeoGeMa</a></div>
   <div class='concert-musiker'>Matheus Jardim</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 Gruberhalle</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/moor-mother-koenig-ismaily.html">Moor Mother/Koenig/Ismaily</a></div>
   <div class='concert-musiker'>Moor Mother</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 Gruberhalle</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/moor-mother-koenig-ismaily.html">Moor Mother/Koenig/Ismaily</a></div>
   <div class='concert-musiker'>Lukas König</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 Gruberhalle</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/moor-mother-koenig-ismaily.html">Moor Mother/Koenig/Ismaily</a></div>
   <div class='concert-musiker'>Shahzad Ismaily</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/rumba-de-bodas.html">Rumba de Bodas</a></div>
   <div class='concert-musiker'>Rachel Doe</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/rumba-de-bodas.html">Rumba de Bodas</a></div>
   <div class='concert-musiker'>Mattia Franceschini</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/rumba-de-bodas.html">Rumba de Bodas</a></div>
   <div class='concert-musiker'>Kim Gianesini</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/rumba-de-bodas.html">Rumba de Bodas</a></div>
   <div class='concert-musiker'>Elia Conti</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/rumba-de-bodas.html">Rumba de Bodas</a></div>
   <div class='concert-musiker'>Pietro Posani</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/rumba-de-bodas.html">Rumba de Bodas</a></div>
   <div class='concert-musiker'>Vos Vianello Giacomo</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/rumba-de-bodas.html">Rumba de Bodas</a></div>
   <div class='concert-musiker'>Alessandro Orefice</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/angelika-niscier.html">Angelika Niscier</a></div>
   <div class='concert-musiker'>Angelika Niscier</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/angelika-niscier.html">Angelika Niscier</a></div>
   <div class='concert-musiker'>Matthias Müller</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/angelika-niscier.html">Angelika Niscier</a></div>
   <div class='concert-musiker'>Evi Filippou</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/angelika-niscier.html">Angelika Niscier</a></div>
   <div class='concert-musiker'>Christopher Dell</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/angelika-niscier.html">Angelika Niscier</a></div>
   <div class='concert-musiker'>Reza Askari</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/angelika-niscier.html">Angelika Niscier</a></div>
   <div class='concert-musiker'>Moritz Baumgärtner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/buntspecht.html">Buntspecht</a></div>
   <div class='concert-musiker'>Lukas Klein</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/buntspecht.html">Buntspecht</a></div>
   <div class='concert-musiker'>Florentin Scheicher</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/buntspecht.html">Buntspecht</a></div>
   <div class='concert-musiker'>Roman Geßler</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/buntspecht.html">Buntspecht</a></div>
   <div class='concert-musiker'>Lukas Chytka</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/buntspecht.html">Buntspecht</a></div>
   <div class='concert-musiker'>Jakob Lang</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/buntspecht.html">Buntspecht</a></div>
   <div class='concert-musiker'>Florian Röthel</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/clemens-wenger.html">Clemens Wenger</a></div>
   <div class='concert-musiker'>Clemens Wenger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/clemens-wenger.html">Clemens Wenger</a></div>
   <div class='concert-musiker'>Gianluca Monaco</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/clemens-wenger.html">Clemens Wenger</a></div>
   <div class='concert-musiker'>Alessia Scuderi</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 Buchbinderei Fuchs</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · Buchbinderei Fuchs</div>
   <div class="concert-band"><a href="../bands/impro-session-vogel-lettner.html">Impro Session: Vogel / Lettner</a></div>
   <div class='concert-musiker'>Georg  Vogel</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 Buchbinderei Fuchs</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · Buchbinderei Fuchs</div>
   <div class="concert-band"><a href="../bands/impro-session-vogel-lettner.html">Impro Session: Vogel / Lettner</a></div>
   <div class='concert-musiker'>Andreas Lettner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/taborn-reid-smith.html">Taborn – Reid – Smith</a></div>
   <div class='concert-musiker'>Craig Taborn</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/taborn-reid-smith.html">Taborn – Reid – Smith</a></div>
   <div class='concert-musiker'>Tomeka Reid</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/taborn-reid-smith.html">Taborn – Reid – Smith</a></div>
   <div class='concert-musiker'>Ches Smith</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/club-analog.html">Club Analog</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/club-analog.html">Club Analog</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/fuenf.html">Fünf</a></div>
   <div class='concert-musiker'>Christian Reiner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/fuenf.html">Fünf</a></div>
   <div class='concert-musiker'>Martin Siewert</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/fuenf.html">Fünf</a></div>
   <div class='concert-musiker'>Christian Weber</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/fuenf.html">Fünf</a></div>
   <div class='concert-musiker'>Phillip Zoubek</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/fuenf.html">Fünf</a></div>
   <div class='concert-musiker'>Jim Black</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 Gruberhalle</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/vegeta.html">Vegeta</a></div>
   <div class='concert-musiker'>Martin Zrost</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 Gruberhalle</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/vegeta.html">Vegeta</a></div>
   <div class='concert-musiker'>Helge Hinteregger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 Gruberhalle</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/vegeta.html">Vegeta</a></div>
   <div class='concert-musiker'>Lukas Kranzelbinder</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 Gruberhalle</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/vegeta.html">Vegeta</a></div>
   <div class='concert-musiker'>Lukas König</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/kuhn-vu-feat-tobias-delius-john-dikeman.html">Kuhn Vu feat. Tobias Delius & John Dikeman</a></div>
   <div class='concert-musiker'>Christian Kühn</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/kuhn-vu-feat-tobias-delius-john-dikeman.html">Kuhn Vu feat. Tobias Delius & John Dikeman</a></div>
   <div class='concert-musiker'>Tobias Delius</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/kuhn-vu-feat-tobias-delius-john-dikeman.html">Kuhn Vu feat. Tobias Delius & John Dikeman</a></div>
   <div class='concert-musiker'>John Dikeman</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/kuhn-vu-feat-tobias-delius-john-dikeman.html">Kuhn Vu feat. Tobias Delius & John Dikeman</a></div>
   <div class='concert-musiker'>Ziv Taubenfeld</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/kuhn-vu-feat-tobias-delius-john-dikeman.html">Kuhn Vu feat. Tobias Delius & John Dikeman</a></div>
   <div class='concert-musiker'>Esat Ekincioglu</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/kuhn-vu-feat-tobias-delius-john-dikeman.html">Kuhn Vu feat. Tobias Delius & John Dikeman</a></div>
   <div class='concert-musiker'>George Hadow</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/elektro-guzzi.html">Elektro Guzzi</a></div>
   <div class='concert-musiker'>Bernhard Hammer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/elektro-guzzi.html">Elektro Guzzi</a></div>
   <div class='concert-musiker'>Jakob Schneidewind</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/elektro-guzzi.html">Elektro Guzzi</a></div>
   <div class='concert-musiker'>Bernhard Breuer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/irreversible-entanglements.html">Irreversible Entanglements</a></div>
   <div class='concert-musiker'>Camae Ayewa</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/irreversible-entanglements.html">Irreversible Entanglements</a></div>
   <div class='concert-musiker'>Keir Neuringer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/irreversible-entanglements.html">Irreversible Entanglements</a></div>
   <div class='concert-musiker'>Aquiles Navarro</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/irreversible-entanglements.html">Irreversible Entanglements</a></div>
   <div class='concert-musiker'>Luke Stewart</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/irreversible-entanglements.html">Irreversible Entanglements</a></div>
   <div class='concert-musiker'>Tcheser Holmes</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/irreversible-entanglements.html">Irreversible Entanglements</a></div>
   <div class='concert-musiker'>Lukas König</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">20. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/irreversible-entanglements.html">Irreversible Entanglements</a></div>
   <div class='concert-musiker'>Shahzad Ismaily</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Park</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Park</div>
   <div class="concert-band"><a href="../bands/club-analog.html">Club Analog</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Park</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Park</div>
   <div class="concert-band"><a href="../bands/club-analog.html">Club Analog</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Naturkino Asitz</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Naturkino Asitz</div>
   <div class="concert-band"><a href="../bands/kuljic-kranzelbinder-koch-black.html">Kuljic / Kranzelbinder / Koch / Black</a></div>
   <div class='concert-musiker'>Jelena Kuljic</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Naturkino Asitz</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Naturkino Asitz</div>
   <div class="concert-band"><a href="../bands/kuljic-kranzelbinder-koch-black.html">Kuljic / Kranzelbinder / Koch / Black</a></div>
   <div class='concert-musiker'>Richard Koch</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Naturkino Asitz</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Naturkino Asitz</div>
   <div class="concert-band"><a href="../bands/kuljic-kranzelbinder-koch-black.html">Kuljic / Kranzelbinder / Koch / Black</a></div>
   <div class='concert-musiker'>Lukas Kranzelbinder</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Naturkino Asitz</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Naturkino Asitz</div>
   <div class="concert-band"><a href="../bands/kuljic-kranzelbinder-koch-black.html">Kuljic / Kranzelbinder / Koch / Black</a></div>
   <div class='concert-musiker'>Jim Black</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Kollingwald</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Kollingwald</div>
   <div class="concert-band"><a href="../bands/lavant.html">Lavant</a></div>
   <div class='concert-musiker'>Christian Reiner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Kollingwald</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Kollingwald</div>
   <div class="concert-band"><a href="../bands/lavant.html">Lavant</a></div>
   <div class='concert-musiker'>Susanna Gartmayer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Kollingwald</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Kollingwald</div>
   <div class="concert-band"><a href="../bands/lavant.html">Lavant</a></div>
   <div class='concert-musiker'>Katharina Ernst</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Forsthofalm</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Forsthofalm</div>
   <div class="concert-band"><a href="../bands/trio-lepschi.html">Trio Lepschi</a></div>
   <div class='concert-musiker'>Stefan Slupetzky</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Forsthofalm</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Forsthofalm</div>
   <div class="concert-band"><a href="../bands/trio-lepschi.html">Trio Lepschi</a></div>
   <div class='concert-musiker'>Martin Zrost</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Forsthofalm</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Forsthofalm</div>
   <div class="concert-band"><a href="../bands/trio-lepschi.html">Trio Lepschi</a></div>
   <div class='concert-musiker'>Michael Kunz</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 SC</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · SC</div>
   <div class="concert-band"><a href="../bands/taborn-lillinger-stemeseder.html">Taborn/Lillinger/Stemeseder</a></div>
   <div class='concert-musiker'>Craig Taborn</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 SC</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · SC</div>
   <div class="concert-band"><a href="../bands/taborn-lillinger-stemeseder.html">Taborn/Lillinger/Stemeseder</a></div>
   <div class='concert-musiker'>Elias Stemeseder</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 SC</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · SC</div>
   <div class="concert-band"><a href="../bands/taborn-lillinger-stemeseder.html">Taborn/Lillinger/Stemeseder</a></div>
   <div class='concert-musiker'>Christian Lillinger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/der-nino-aus-wien.html">Der Nino aus Wien</a></div>
   <div class='concert-musiker'>Nino Mandl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/der-nino-aus-wien.html">Der Nino aus Wien</a></div>
   <div class='concert-musiker'>Raphael Sas</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/der-nino-aus-wien.html">Der Nino aus Wien</a></div>
   <div class='concert-musiker'>pauT</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/der-nino-aus-wien.html">Der Nino aus Wien</a></div>
   <div class='concert-musiker'>David Wukitsevits</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 SC</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · SC</div>
   <div class="concert-band"><a href="../bands/punkt-vrt-plastik.html">Punkt vrt Plastik</a></div>
   <div class='concert-musiker'>Kaja Draksler</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 SC</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · SC</div>
   <div class="concert-band"><a href="../bands/punkt-vrt-plastik.html">Punkt vrt Plastik</a></div>
   <div class='concert-musiker'>Petter Eldh</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 SC</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · SC</div>
   <div class="concert-band"><a href="../bands/punkt-vrt-plastik.html">Punkt vrt Plastik</a></div>
   <div class='concert-musiker'>Christian Lillinger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Buchbinderei Fuchs</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Buchbinderei Fuchs</div>
   <div class="concert-band"><a href="../bands/impro-session-ismaily-davis-kotheimer-koenig.html">Impro Session: Ismaily/Davis/Kotheimer/König</a></div>
   <div class='concert-musiker'>Kurt Kotheimer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Buchbinderei Fuchs</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Buchbinderei Fuchs</div>
   <div class="concert-band"><a href="../bands/impro-session-ismaily-davis-kotheimer-koenig.html">Impro Session: Ismaily/Davis/Kotheimer/König</a></div>
   <div class='concert-musiker'>Chris Davis</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Buchbinderei Fuchs</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Buchbinderei Fuchs</div>
   <div class="concert-band"><a href="../bands/impro-session-ismaily-davis-kotheimer-koenig.html">Impro Session: Ismaily/Davis/Kotheimer/König</a></div>
   <div class='concert-musiker'>Shahzad Ismaily</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Buchbinderei Fuchs</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Buchbinderei Fuchs</div>
   <div class="concert-band"><a href="../bands/impro-session-ismaily-davis-kotheimer-koenig.html">Impro Session: Ismaily/Davis/Kotheimer/König</a></div>
   <div class='concert-musiker'>Lukas König</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Gruberhalle</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/dsilton.html">Dsilton</a></div>
   <div class='concert-musiker'>Georg Vogel</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Gruberhalle</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/dsilton.html">Dsilton</a></div>
   <div class='concert-musiker'>David Dornig</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Gruberhalle</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/dsilton.html">Dsilton</a></div>
   <div class='concert-musiker'>Valentin Duit</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/devon-jah-brothers.html">Devon & Jah Brothers</a></div>
   <div class='concert-musiker'>Devon Ebah</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/devon-jah-brothers.html">Devon & Jah Brothers</a></div>
   <div class='concert-musiker'>Enrico Massari</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/devon-jah-brothers.html">Devon & Jah Brothers</a></div>
   <div class='concert-musiker'>Marco Chiarabini</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/devon-jah-brothers.html">Devon & Jah Brothers</a></div>
   <div class='concert-musiker'>Daniele Bartoli</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/devon-jah-brothers.html">Devon & Jah Brothers</a></div>
   <div class='concert-musiker'>Daniele Torri</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/devon-jah-brothers.html">Devon & Jah Brothers</a></div>
   <div class='concert-musiker'>Matteo Patrignani</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/devon-jah-brothers.html">Devon & Jah Brothers</a></div>
   <div class='concert-musiker'>Marcello Grossi</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/devon-jah-brothers.html">Devon & Jah Brothers</a></div>
   <div class='concert-musiker'>Federico Lapa</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/luft.html">Luft</a></div>
   <div class='concert-musiker'>Christian Reiner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/luft.html">Luft</a></div>
   <div class='concert-musiker'>Susanna Gartmayer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/luft.html">Luft</a></div>
   <div class='concert-musiker'>Richard Koch</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/luft.html">Luft</a></div>
   <div class='concert-musiker'>Lotte Anker</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/luft.html">Luft</a></div>
   <div class='concert-musiker'>Mona Matbou Riahi</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/luft.html">Luft</a></div>
   <div class='concert-musiker'>Mathias Muche</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/el-flecha-negra.html">El Flecha Negra</a></div>
   <div class='concert-musiker'>Sebastian Gonzales Luis</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/el-flecha-negra.html">El Flecha Negra</a></div>
   <div class='concert-musiker'>Christian Carrasco Sepulveda</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/el-flecha-negra.html">El Flecha Negra</a></div>
   <div class='concert-musiker'>Christian Ovalle Herbage</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/el-flecha-negra.html">El Flecha Negra</a></div>
   <div class='concert-musiker'>Oscar Mosquera</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/el-flecha-negra.html">El Flecha Negra</a></div>
   <div class='concert-musiker'>Martin Burgos</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/courvoisier-davis.html">Courvoisier / Davis</a></div>
   <div class='concert-musiker'>Sylvie Courvoisier</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/courvoisier-davis.html">Courvoisier / Davis</a></div>
   <div class='concert-musiker'>Chris Davis</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/liun-the-science-fiction-band.html">Liun & The Science Fiction Band</a></div>
   <div class='concert-musiker'>Lucia Cadotsch</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/liun-the-science-fiction-band.html">Liun & The Science Fiction Band</a></div>
   <div class='concert-musiker'>Wanja Slavin</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/liun-the-science-fiction-band.html">Liun & The Science Fiction Band</a></div>
   <div class='concert-musiker'>Andi Fins</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/liun-the-science-fiction-band.html">Liun & The Science Fiction Band</a></div>
   <div class='concert-musiker'>Andi Haberl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/liun-the-science-fiction-band.html">Liun & The Science Fiction Band</a></div>
   <div class='concert-musiker'>Bernhard Meyer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Gruberhalle</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/hang-em-high.html">HANG EM HIGH</a></div>
   <div class='concert-musiker'>Bond</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Gruberhalle</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/hang-em-high.html">HANG EM HIGH</a></div>
   <div class='concert-musiker'>Lucien Dubuis</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Gruberhalle</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/hang-em-high.html">HANG EM HIGH</a></div>
   <div class='concert-musiker'>Alfred Vogel</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/rde-a-raketa.html">Rdeča Raketa</a></div>
   <div class='concert-musiker'>Maja Osojnik</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/rde-a-raketa.html">Rdeča Raketa</a></div>
   <div class='concert-musiker'>Matija Schellander</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/rde-a-raketa.html">Rdeča Raketa</a></div>
   <div class='concert-musiker'>Patrick K.-H.</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/rde-a-raketa.html">Rdeča Raketa</a></div>
   <div class='concert-musiker'>Ivan Marusic Klif</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/the-true-harry-nulz.html">The true Harry Nulz</a></div>
   <div class='concert-musiker'>Nils Fischer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/the-true-harry-nulz.html">The true Harry Nulz</a></div>
   <div class='concert-musiker'>Siegmar Brecher</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/the-true-harry-nulz.html">The true Harry Nulz</a></div>
   <div class='concert-musiker'>Julian Adam Pajzs</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/the-true-harry-nulz.html">The true Harry Nulz</a></div>
   <div class='concert-musiker'>Samuel Huwyler</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/the-true-harry-nulz.html">The true Harry Nulz</a></div>
   <div class='concert-musiker'>Dominik Mahnig</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/the-true-harry-nulz.html">The true Harry Nulz</a></div>
   <div class='concert-musiker'>Valentin Schuster</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/erwin-edwin.html">Erwin & Edwin</a></div>
   <div class='concert-musiker'>Michael Mosbacher</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/erwin-edwin.html">Erwin & Edwin</a></div>
   <div class='concert-musiker'>Georg Huber</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/erwin-edwin.html">Erwin & Edwin</a></div>
   <div class='concert-musiker'>Valentin Reiter</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/erwin-edwin.html">Erwin & Edwin</a></div>
   <div class='concert-musiker'>Simon Gramberger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/ceramic-dog.html">Ceramic Dog</a></div>
   <div class='concert-musiker'>Marc Ribot</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/ceramic-dog.html">Ceramic Dog</a></div>
   <div class='concert-musiker'>Shahzad Ismaily</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">21. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/ceramic-dog.html">Ceramic Dog</a></div>
   <div class='concert-musiker'>Ches Smith</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 Stöcklalm</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · Stöcklalm</div>
   <div class="concert-band"><a href="../bands/alpkan.html">Alpkan</a></div>
   <div class='concert-musiker'>El Castlero</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 Stöcklalm</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · Stöcklalm</div>
   <div class="concert-band"><a href="../bands/alpkan.html">Alpkan</a></div>
   <div class='concert-musiker'>Stereo Gaina</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 Stöcklalm</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · Stöcklalm</div>
   <div class="concert-band"><a href="../bands/alpkan.html">Alpkan</a></div>
   <div class='concert-musiker'>Herr Stockinger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 Stöcklalm</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · Stöcklalm</div>
   <div class="concert-band"><a href="../bands/alpkan.html">Alpkan</a></div>
   <div class='concert-musiker'>Doktor Kastler</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 Stöcklalm</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · Stöcklalm</div>
   <div class="concert-band"><a href="../bands/alpkan.html">Alpkan</a></div>
   <div class='concert-musiker'>Herwig Shegovic Hinnerl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/bienenkino-licht-im-haus.html">Bienenkino: Licht im Haus</a></div>
   <div class='concert-musiker'>Christian Reiner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/bienenkino-licht-im-haus.html">Bienenkino: Licht im Haus</a></div>
   <div class='concert-musiker'>Philipp Zoubek</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/bienenkino-licht-im-haus.html">Bienenkino: Licht im Haus</a></div>
   <div class='concert-musiker'>Beate Wiesinger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/bienenkino-licht-im-haus.html">Bienenkino: Licht im Haus</a></div>
   <div class='concert-musiker'>Astrid Wiesinger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/bienenkino-licht-im-haus.html">Bienenkino: Licht im Haus</a></div>
   <div class='concert-musiker'>Katharina Ernst</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/bienenkino-licht-im-haus.html">Bienenkino: Licht im Haus</a></div>
   <div class='concert-musiker'>Markus Dorninger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/bienenkino-licht-im-haus.html">Bienenkino: Licht im Haus</a></div>
   <div class='concert-musiker'>Matthias Fritz</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 Kollingwald</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · Kollingwald</div>
   <div class="concert-band"><a href="../bands/craig-taborn-solo.html">Craig Taborn solo</a></div>
   <div class='concert-musiker'>Craig Taborn</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 Buchbinderei Fuchs</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · Buchbinderei Fuchs</div>
   <div class="concert-band"><a href="../bands/impro-session-gnigler-riahi-koenig.html">Impro Session: Gnigler / Riahi / König</a></div>
   <div class='concert-musiker'>Jakob Gnigler</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 Buchbinderei Fuchs</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · Buchbinderei Fuchs</div>
   <div class="concert-band"><a href="../bands/impro-session-gnigler-riahi-koenig.html">Impro Session: Gnigler / Riahi / König</a></div>
   <div class='concert-musiker'>Mona Matbou Riahi</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 Buchbinderei Fuchs</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · Buchbinderei Fuchs</div>
   <div class="concert-band"><a href="../bands/impro-session-gnigler-riahi-koenig.html">Impro Session: Gnigler / Riahi / König</a></div>
   <div class='concert-musiker'>Lukas König</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/katharina-ernst.html">Katharina Ernst</a></div>
   <div class='concert-musiker'>Katharina Ernst</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 Gruberhalle</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/melting-pot.html">Melting Pot</a></div>
   <div class='concert-musiker'>Paulina Owczarek</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 Gruberhalle</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/melting-pot.html">Melting Pot</a></div>
   <div class='concert-musiker'>Karoline Wallace</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 Gruberhalle</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/melting-pot.html">Melting Pot</a></div>
   <div class='concert-musiker'>Berlinde Deman</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 Gruberhalle</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/melting-pot.html">Melting Pot</a></div>
   <div class='concert-musiker'>Barbara Maria Neu</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 Gruberhalle</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/melting-pot.html">Melting Pot</a></div>
   <div class='concert-musiker'>Nick Dunston</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/kombojaner.html">KOMBOjaner</a></div>
   <div class='concert-musiker'>Karl Ritter</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/kombojaner.html">KOMBOjaner</a></div>
   <div class='concert-musiker'>Andrej Prozorov</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/kombojaner.html">KOMBOjaner</a></div>
   <div class='concert-musiker'>Erich Buchebner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/kombojaner.html">KOMBOjaner</a></div>
   <div class='concert-musiker'>Philipp Nykrin</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/kombojaner.html">KOMBOjaner</a></div>
   <div class='concert-musiker'>Herbert Pirker</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/kuu.html">Kuu!</a></div>
   <div class='concert-musiker'>Jelena Kuljic</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/kuu.html">Kuu!</a></div>
   <div class='concert-musiker'>Frank Möbus</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/kuu.html">Kuu!</a></div>
   <div class='concert-musiker'>Kalle Kalima</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/kuu.html">Kuu!</a></div>
   <div class='concert-musiker'>Christian Lillinger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/s-ch.html">søch</a></div>
   <div class='concert-musiker'>Anna Maria Defant</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 Nexus+</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · Nexus+</div>
   <div class="concert-band"><a href="../bands/s-ch.html">søch</a></div>
   <div class='concert-musiker'>Bernhard Hadriga</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/kaja-draksler-octet.html">Kaja Draksler Octet</a></div>
   <div class='concert-musiker'>Kaja Draksler</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/kaja-draksler-octet.html">Kaja Draksler Octet</a></div>
   <div class='concert-musiker'>Laura Polence</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/kaja-draksler-octet.html">Kaja Draksler Octet</a></div>
   <div class='concert-musiker'>Fuensanta Mendez</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/kaja-draksler-octet.html">Kaja Draksler Octet</a></div>
   <div class='concert-musiker'>Ada Rave</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/kaja-draksler-octet.html">Kaja Draksler Octet</a></div>
   <div class='concert-musiker'>Ab Baars</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/kaja-draksler-octet.html">Kaja Draksler Octet</a></div>
   <div class='concert-musiker'>George Dumitriu</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/kaja-draksler-octet.html">Kaja Draksler Octet</a></div>
   <div class='concert-musiker'>Lennart Heyndels</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/kaja-draksler-octet.html">Kaja Draksler Octet</a></div>
   <div class='concert-musiker'>Onno Govaert</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/jon-sass-band.html">Jon Sass Band</a></div>
   <div class='concert-musiker'>Jon Sass</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/jon-sass-band.html">Jon Sass Band</a></div>
   <div class='concert-musiker'>Angus Bangus</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/jon-sass-band.html">Jon Sass Band</a></div>
   <div class='concert-musiker'>Rachelle Jeanty</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/jon-sass-band.html">Jon Sass Band</a></div>
   <div class='concert-musiker'>Geri Schueller</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 Stadtpark</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/jon-sass-band.html">Jon Sass Band</a></div>
   <div class='concert-musiker'>Christian Ziegelwanger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 Gruberhalle</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/kry.html">Kry</a></div>
   <div class='concert-musiker'>Mona Matbou Riahi</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 Gruberhalle</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/kry.html">Kry</a></div>
   <div class='concert-musiker'>Philipp Kienberger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 Gruberhalle</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/kry.html">Kry</a></div>
   <div class='concert-musiker'>Alexander Yannilos</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/chuffdrone.html">ChuffDRONE</a></div>
   <div class='concert-musiker'>Lisa Hofmaninger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/chuffdrone.html">ChuffDRONE</a></div>
   <div class='concert-musiker'>Robert Schröck</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/chuffdrone.html">ChuffDRONE</a></div>
   <div class='concert-musiker'>Jul Dillier</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/chuffdrone.html">ChuffDRONE</a></div>
   <div class='concert-musiker'>Judith Ferstl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/chuffdrone.html">ChuffDRONE</a></div>
   <div class='concert-musiker'>Judith Schwarz</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 MS</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · MS</div>
   <div class="concert-band"><a href="../bands/avram-fefer-quartet.html">Avram Fefer Quartet</a></div>
   <div class='concert-musiker'>Avram Fefer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 Stöcklalm</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · Stöcklalm</div>
   <div class="concert-band"><a href="../bands/avram-fefer-quartet.html">Avram Fefer Quartet</a></div>
   <div class='concert-musiker'>Marc Ribot</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 Stöcklalm</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · Stöcklalm</div>
   <div class="concert-band"><a href="../bands/avram-fefer-quartet.html">Avram Fefer Quartet</a></div>
   <div class='concert-musiker'>Nick Dunston</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 Stöcklalm</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · Stöcklalm</div>
   <div class="concert-band"><a href="../bands/avram-fefer-quartet.html">Avram Fefer Quartet</a></div>
   <div class='concert-musiker'>Chad Taylor</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2021 · Festival 2021 Stöcklalm</div>
+  <div class="concert-date">22. Aug 2021 · Festival 2021 · Stöcklalm</div>
   <div class="concert-band"><a href="../bands/ennemoser-tobi.html">Ennemoser Tobi</a></div>
   <div class='concert-musiker'>Tobias Ennemoser</div>
 </div></div>
@@ -1509,16 +1014,16 @@ a:hover { text-decoration: underline; color: var(--link-hover); }
   Jazzfest Wiki · 5936 Musiker · 13034 Konzerte · 1975–2025
   · Daten: Jazzfest Wien Chronik + Discogs API
 </footer>
-<script src="../search-data.js"></script>
 <script>
+// Globale Suche
+const SEARCH_DATA = window.JAZZFEST_SEARCH || [];
 const inp = document.getElementById('search-input');
 const res = document.getElementById('search-results');
-const SD = window.JAZZFEST_SEARCH || [];
 inp.addEventListener('input', function() {
   const q = this.value.toLowerCase().trim();
   res.innerHTML = '';
   if (q.length < 2) { res.style.display='none'; return; }
-  const hits = SD.filter(x => x.n.toLowerCase().includes(q)).slice(0, 12);
+  const hits = SEARCH_DATA.filter(x => x.n.toLowerCase().includes(q)).slice(0, 12);
   if (!hits.length) { res.style.display='none'; return; }
   hits.forEach(h => {
     const a = document.createElement('a');

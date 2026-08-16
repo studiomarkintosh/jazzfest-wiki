@@ -4,2649 +4,2154 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>2008 — Jazzfest Wiki</title>
-<style>
-/* Jazzfest Wiki — MediaWiki-inspiriertes Layout + Profil-Images */
-
-:root {
-  --bg: #fff;
-  --bg-content: #f8f9fa;
-  --border: #a2a9b1;
-  --border-light: #eaecf0;
-  --link: #3366cc;
-  --link-hover: #1a3f99;
-  --heading: #000;
-  --text: #202122;
-  --text-muted: #54595d;
-  --infobox-bg: #f8f9fa;
-  --infobox-header: #cee0f2;
-  --nav-bg: #f8f9fa;
-  --nav-border: #a2a9b1;
-  --tag-bg: #eaecf0;
-  --accent: #3366cc;
-  --red: #cc0000;
-}
-
-* { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-  font-family: -apple-system, 'Linux Libertine', Georgia, Times, serif;
-  font-size: 14px;
-  line-height: 1.6;
-  color: var(--text);
-  background: var(--bg-content);
-}
-
-/* HEADER */
-#wiki-header {
-  background: var(--bg);
-  border-bottom: 1px solid var(--border);
-  padding: 8px 16px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-#wiki-header .logo {
-  font-family: 'Linux Libertine', Georgia, serif;
-  font-size: 18px;
-  font-weight: bold;
-  color: var(--heading);
-  text-decoration: none;
-  white-space: nowrap;
-}
-
-#wiki-header .logo span { color: var(--accent); }
-
-#search-wrap { flex: 1; max-width: 400px; position: relative; }
-
-#search-input {
-  width: 100%;
-  padding: 5px 10px;
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  font-size: 13px;
-  outline: none;
-}
-
-#search-input:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 2px rgba(51,102,204,0.15);
-}
-
-#search-results {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-top: none;
-  max-height: 300px;
-  overflow-y: auto;
-  z-index: 200;
-  display: none;
-}
-
-#search-results a {
-  display: block;
-  padding: 6px 10px;
-  text-decoration: none;
-  color: var(--text);
-  border-bottom: 1px solid var(--border-light);
-}
-
-#search-results a:hover { background: var(--bg-content); }
-#search-results .sr-type { font-size: 11px; color: var(--text-muted); margin-left: 6px; }
-
-/* NAV */
-#wiki-nav {
-  background: var(--nav-bg);
-  border-bottom: 1px solid var(--nav-border);
-  padding: 0 16px;
-  display: flex;
-  gap: 0;
-  overflow-x: auto;
-}
-
-#wiki-nav a {
-  display: block;
-  padding: 8px 14px;
-  text-decoration: none;
-  color: var(--text);
-  font-size: 13px;
-  border-bottom: 2px solid transparent;
-  white-space: nowrap;
-}
-
-#wiki-nav a:hover, #wiki-nav a.active {
-  color: var(--accent);
-  border-bottom-color: var(--accent);
-}
-
-/* LAYOUT */
-#wiki-body {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px 16px;
-}
-
-.wiki-page {
-  background: var(--bg);
-  border: 1px solid var(--border-light);
-  padding: 20px 24px;
-}
-
-.page-title {
-  font-family: 'Linux Libertine', Georgia, serif;
-  font-size: 28px;
-  font-weight: normal;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 4px;
-  margin-bottom: 16px;
-  color: var(--heading);
-}
-
-/* INFOBOX */
-.infobox {
-  float: right;
-  clear: right;
-  margin: 0 0 16px 24px;
-  background: var(--infobox-bg);
-  border: 1px solid var(--border);
-  font-size: 13px;
-  max-width: 240px;
-  min-width: 200px;
-}
-
-.infobox-title {
-  background: var(--infobox-header);
-  text-align: center;
-  padding: 6px 10px;
-  font-weight: bold;
-  border-bottom: 1px solid var(--border);
-  font-size: 14px;
-}
-
-/* PROFIL-IMAGE */
-.profile-image-wrap {
-  width: 100%;
-  aspect-ratio: 1;
-  overflow: hidden;
-  border-bottom: 1px solid var(--border);
-  position: relative;
-  background: #e8ecf0;
-}
-
-.profile-image-wrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-/* Avatar-Fallback (Initialen) */
-.avatar-fallback {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 52px;
-  font-weight: bold;
-  color: var(--text-muted);
-  background: linear-gradient(135deg, #d0daea 0%, #b8c8de 100%);
-  letter-spacing: -2px;
-  user-select: none;
-}
-
-.infobox table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.infobox td {
-  padding: 4px 8px;
-  vertical-align: top;
-  border-bottom: 1px solid var(--border-light);
-}
-
-.infobox td:first-child {
-  color: var(--text-muted);
-  width: 45%;
-}
-
-/* MUSICIAN-GRID INDEX (mit Bild) */
-.musician-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 10px;
-  margin: 12px 0;
-}
-
-.musician-card {
-  background: var(--bg);
-  border: 1px solid var(--border-light);
-  text-decoration: none;
-  color: var(--text);
-  display: block;
-  overflow: hidden;
-  transition: border-color 0.15s;
-}
-
-.musician-card:hover {
-  border-color: var(--accent);
-  text-decoration: none;
-}
-
-.mc-image-wrap {
-  width: 100%;
-  aspect-ratio: 1;
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(135deg, #d8e4f0 0%, #c0d0e0 100%);
-}
-
-.musician-card .mc-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  position: absolute;
-  top: 0; left: 0;
-  z-index: 1;
-}
-
-.mc-avatar-bg {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 36px;
-  font-weight: bold;
-  color: #7a8fa8;
-  z-index: 0;
-}
-
-.musician-card .mc-avatar {
-  width: 100%;
-  aspect-ratio: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 36px;
-  font-weight: bold;
-  color: #888;
-  background: linear-gradient(135deg, #d8e4f0 0%, #c0d0e0 100%);
-  letter-spacing: -1px;
-}
-
-.musician-card .mc-info {
-  padding: 8px 10px;
-}
-
-.musician-card .mc-name {
-  font-weight: bold;
-  font-size: 13px;
-  line-height: 1.3;
-}
-
-.musician-card .mc-meta {
-  font-size: 11px;
-  color: var(--text-muted);
-  margin-top: 2px;
-}
-
-/* SECTIONS */
-.wiki-section { margin: 20px 0; }
-
-.wiki-section h2 {
-  font-family: 'Linux Libertine', Georgia, serif;
-  font-size: 20px;
-  font-weight: normal;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 2px;
-  margin-bottom: 12px;
-  color: var(--heading);
-}
-
-/* TABLES */
-.wiki-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13px;
-  margin: 8px 0;
-}
-
-.wiki-table th {
-  background: var(--bg-content);
-  border: 1px solid var(--border);
-  padding: 6px 10px;
-  text-align: left;
-  font-weight: bold;
-}
-
-.wiki-table td {
-  border: 1px solid var(--border-light);
-  padding: 5px 10px;
-  vertical-align: top;
-}
-
-.wiki-table tr:hover td { background: #f0f4ff; }
-
-/* TAGS */
-.tag {
-  display: inline-block;
-  background: var(--tag-bg);
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  padding: 1px 7px;
-  font-size: 12px;
-  margin: 2px;
-  color: var(--text);
-  text-decoration: none;
-}
-
-.tag:hover { background: var(--border); }
-.tag.instrument { background: #ddeeff; border-color: #99bbdd; }
-.tag.year { background: #eeffdd; border-color: #99cc77; }
-.tag.mitschnitt { background: #fff0cc; border-color: #ccaa44; }
-
-/* LINKS */
-a { color: var(--link); text-decoration: none; }
-a:hover { text-decoration: underline; color: var(--link-hover); }
-
-/* INDEX-STATS */
-.index-stats {
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-  margin: 16px 0;
-}
-
-.stat-card {
-  background: var(--infobox-bg);
-  border: 1px solid var(--border);
-  padding: 12px 20px;
-  text-align: center;
-  min-width: 120px;
-  flex: 1;
-}
-
-.stat-card .number {
-  font-size: 28px;
-  font-weight: bold;
-  color: var(--accent);
-  display: block;
-}
-
-.stat-card .label { font-size: 12px; color: var(--text-muted); }
-
-/* RELEASES */
-.release-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 10px 0;
-}
-
-.release-card {
-  display: flex;
-  gap: 8px;
-  background: var(--bg-content);
-  border: 1px solid var(--border-light);
-  padding: 8px;
-  max-width: 260px;
-  text-decoration: none;
-  color: var(--text);
-}
-
-.release-card img { width: 56px; height: 56px; object-fit: cover; flex-shrink: 0; }
-.release-card .rc-no-image {
-  width: 56px; height: 56px; flex-shrink: 0;
-  background: #dde4ee;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 22px; color: #888;
-}
-.release-card .rc-title { font-size: 12px; font-weight: bold; line-height: 1.3; }
-.release-card .rc-year { font-size: 11px; color: var(--text-muted); }
-.release-card:hover { border-color: var(--accent); }
-
-/* MITSPIELER */
-.mitspieler-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin: 8px 0;
-}
-
-/* ALPHABET NAV */
-.alpha-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin: 8px 0 16px;
-}
-
-.alpha-nav a {
-  display: block;
-  width: 28px;
-  height: 28px;
-  text-align: center;
-  line-height: 28px;
-  border: 1px solid var(--border);
-  font-size: 13px;
-  color: var(--text);
-  text-decoration: none;
-}
-
-.alpha-nav a:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
-
-/* GRAPH */
-#graph-container {
-  width: 100%;
-  height: 650px;
-  background: #fff;
-  border: 1px solid var(--border);
-  position: relative;
-}
-
-#graph-tooltip {
-  position: absolute;
-  background: rgba(0,0,0,0.85);
-  color: #fff;
-  padding: 8px 12px;
-  border-radius: 4px;
-  font-size: 12px;
-  pointer-events: none;
-  display: none;
-  z-index: 10;
-}
-
-/* YEAR */
-.concert-entry {
-  border-left: 3px solid var(--border);
-  padding: 6px 12px;
-  margin: 4px 0;
-}
-.concert-entry:hover { border-left-color: var(--accent); background: var(--bg-content); }
-.concert-date { font-size: 12px; color: var(--text-muted); }
-.concert-band { font-weight: bold; }
-.concert-musiker { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-
-/* FOOTER */
-#wiki-footer {
-  text-align: center;
-  padding: 20px;
-  color: var(--text-muted);
-  font-size: 12px;
-  border-top: 1px solid var(--border-light);
-  margin-top: 40px;
-}
-
-/* CLEARFIX */
-.clearfix::after { content: ""; display: table; clear: both; }
-
-@media (max-width: 600px) {
-  .infobox { float: none; margin: 0 0 16px; max-width: 100%; }
-  .musician-grid { grid-template-columns: repeat(2, 1fr); }
-  #graph-container { height: 400px; }
-}
-
-</style>
+<link rel="stylesheet" href="../../template/css/wiki.css">
 </head>
 <body>
 <header id="wiki-header">
-  <a class="logo" href="../index.html">Jazz<span>fest</span> Wiki</a>
-  <div id="search-wrap">
+  <a class="logo" href="../../index.html">Jazz<span>fest</span> Wiki</a>
+  <div id="search-wrap" style="position:relative">
     <input id="search-input" type="text" placeholder="Musiker, Band, Jahr …" autocomplete="off">
     <div id="search-results"></div>
   </div>
 </header>
 <nav id="wiki-nav">
-  <a href="../index.html">Hauptseite</a>
-  <a href="../musicians/index.html">Musiker</a>
-  <a href="../bands/index.html">Bands</a>
-  <a href="../years/index.html" class="active">Jahre</a>
-  <a href="../festivals.html">Festivalchronik</a>
-  <a href="../graph.html">Netzwerk</a>
+  <a href="../../index.html" >Hauptseite</a>
+  <a href="../../musicians/index.html" >Musiker</a>
+  <a href="../../bands/index.html" >Bands</a>
+  <a href="../../years/index.html" class="active">Jahre</a>
+  <a href="../../graph.html" >Netzwerk</a>
 </nav>
 <div id="wiki-body">
   <div class="wiki-page clearfix">
     <h1 class="page-title">Jazzfest 2008</h1>
 <div class="wiki-section">
-  <p><strong>532 Konzert-Einträge</strong></p>
+  <p><strong>532 Konzerte</strong></p>
   <div class="year-concerts"><div class="concert-entry">
-  <div class="concert-date">9. Jan 2008 · Nexus spezial </div>
+  <div class="concert-date">9. Jan 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/indien-am-fluss-der-goetter.html">Indien – Am Fluss der Götter</a></div>
   <div class='concert-musiker'>Bernhard Brenner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">10. Jan 2008 · Nexus Kino </div>
+  <div class="concert-date">10. Jan 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/der-kleine-koenig-macius.html">Der kleine König Macius</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">10. Jan 2008 · Nexus Kino </div>
+  <div class="concert-date">10. Jan 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/import-export.html">Import – Export</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">11. Jan 2008 · Nexus Ausstellung </div>
+  <div class="concert-date">11. Jan 2008 · Nexus Ausstellung · </div>
   <div class="concert-band"><a href="../bands/lebensunwert-ns-euthanesie-im-land-salzburg.html">Lebensunwert – NS-Euthanesie im Land Salzburg</a></div>
   <div class='concert-musiker'>Mario Steidl Mag.</div>
 </div><div class="concert-entry">
-  <div class="concert-date">12. Jan 2008 · Nexus spezial </div>
+  <div class="concert-date">12. Jan 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/cafe-latino.html">Cafe Latino</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">16. Jan 2008 · Nexus Vaust </div>
+  <div class="concert-date">16. Jan 2008 · Nexus Vaust · </div>
   <div class="concert-band"><a href="../bands/mozart-luster-lustik-oder-10-nummern-mit-gesang.html">Mozart Luster Lustik oder 10 Nummern mit Gesang</a></div>
   <div class='concert-musiker'>Irena Poppovic</div>
 </div><div class="concert-entry">
-  <div class="concert-date">17. Jan 2008 · Nexus Kino </div>
+  <div class="concert-date">17. Jan 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/die-drei-das-geheimnis-ser-geisterinsel.html">Die drei ??? – Das Geheimnis ser Geisterinsel</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">17. Jan 2008 · Nexus Kino </div>
+  <div class="concert-date">17. Jan 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/persepolis.html">Persepolis</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">19. Jan 2008 · Nexus </div>
+  <div class="concert-date">19. Jan 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/marcin-wasilewski-trio.html">Marcin Wasilewski Trio</a></div>
   <div class='concert-musiker'>Marcin Wasilewski</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Jan 2008 · Nexus </div>
+  <div class="concert-date">19. Jan 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/marcin-wasilewski-trio.html">Marcin Wasilewski Trio</a></div>
   <div class='concert-musiker'>Slawomir Kurkiewicz</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Jan 2008 · Nexus </div>
+  <div class="concert-date">19. Jan 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/marcin-wasilewski-trio.html">Marcin Wasilewski Trio</a></div>
   <div class='concert-musiker'>Michal Miskiewicz</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Jan 2008 · Nexus spezial </div>
+  <div class="concert-date">19. Jan 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/salsa-workshop-i.html">Salsa Workshop I</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">19. Jan 2008 · Nexus spezial </div>
+  <div class="concert-date">19. Jan 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/salsa-workshop-ii.html">Salsa Workshop II</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">24. Jan 2008 · Nexus Kino </div>
+  <div class="concert-date">24. Jan 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/free-rainer-dein-fernseher-luegt.html">Free Rainer – Dein Fernseher lügt</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">24. Jan 2008 · Nexus Kino </div>
+  <div class="concert-date">24. Jan 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/madita.html">Madita</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">25. Jan 2008 · Nexus </div>
+  <div class="concert-date">25. Jan 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/die-strottern-ueber-die-liebe.html">Die Strottern – Über die Liebe</a></div>
   <div class='concert-musiker'>Klemens Lendl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Jan 2008 · Nexus </div>
+  <div class="concert-date">25. Jan 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/die-strottern-ueber-die-liebe.html">Die Strottern – Über die Liebe</a></div>
   <div class='concert-musiker'>David Müller</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Jan 2008 · Nexus </div>
+  <div class="concert-date">26. Jan 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/senkrechtstarter.html">Senkrechtstarter</a></div>
   <div class='concert-musiker'>Anna Defant</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Jan 2008 · Nexus </div>
+  <div class="concert-date">26. Jan 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/senkrechtstarter.html">Senkrechtstarter</a></div>
   <div class='concert-musiker'>David Kendler</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Jan 2008 · Nexus </div>
+  <div class="concert-date">26. Jan 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/senkrechtstarter.html">Senkrechtstarter</a></div>
   <div class='concert-musiker'>Manuel  Kendler</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Jan 2008 · Nexus </div>
+  <div class="concert-date">26. Jan 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/senkrechtstarter.html">Senkrechtstarter</a></div>
   <div class='concert-musiker'>Xu Fengxia</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Jan 2008 · Nexus spezial </div>
+  <div class="concert-date">26. Jan 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/salsa-workshop-i.html">Salsa Workshop I</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">26. Jan 2008 · Nexus spezial </div>
+  <div class="concert-date">26. Jan 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/salsa-workshop-ii.html">Salsa Workshop II</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">29. Jan 2008 · Nexus Theater </div>
+  <div class="concert-date">29. Jan 2008 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/gschnagga-theater-hin-und-her.html">Gschnagga Theater: Hin und her</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">31. Jan 2008 · Nexus Kino </div>
+  <div class="concert-date">31. Jan 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/alles-leben-ist-kampf.html">"Alles Leben ist Kampf"</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">31. Jan 2008 · Nexus Kino </div>
+  <div class="concert-date">31. Jan 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/erbkrank.html">"Erbkrank"</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">31. Jan 2008 · Nexus Kino </div>
+  <div class="concert-date">31. Jan 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/surf-s-up-die-koenige-der-wellen.html">Surf’s up – Die Könige der Wellen</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">2. Feb 2008 · Nexus spezial </div>
+  <div class="concert-date">2. Feb 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/cafe-latino.html">Cafe Latino</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">2. Feb 2008 · Nexus Theater </div>
+  <div class="concert-date">2. Feb 2008 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/gschnagga-theater-zirkus-die-dumme-augustine.html">Gschnagga Theater: Zirkus, die dumme Augustine</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">5. Feb 2008 · Nexus Theater </div>
+  <div class="concert-date">5. Feb 2008 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/gschnagga-theater-ariira.html">Gschnagga Theater: Ariira</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">6. Feb 2008 · Nexus spezial </div>
+  <div class="concert-date">6. Feb 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/aegypten-das-vermaechtnis-der-pharaonen.html">Ägypten – Das Vermächtnis der Pharaonen</a></div>
   <div class='concert-musiker'>Josef Niedermeier</div>
 </div><div class="concert-entry">
-  <div class="concert-date">6. Feb 2008 · Nexus spezial </div>
+  <div class="concert-date">6. Feb 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/aegypten-das-vermaechtnis-der-pharaonen.html">Ägypten – Das Vermächtnis der Pharaonen</a></div>
   <div class='concert-musiker'>Katja Dippold</div>
 </div><div class="concert-entry">
-  <div class="concert-date">7. Feb 2008 · Nexus Kino </div>
+  <div class="concert-date">7. Feb 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/adams-aepfel.html">Adams Äpfel</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">7. Feb 2008 · Nexus Kino </div>
+  <div class="concert-date">7. Feb 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/kasperl-und-der-eiskoenig.html">Kasperl und der Eiskönig</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">8. Feb 2008 · Nexus Café </div>
+  <div class="concert-date">8. Feb 2008 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/rock-night-feat-rudi-hartlieb.html">Rock Night feat. Rudi Hartlieb</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">9. Feb 2008 · Nexus Theater </div>
+  <div class="concert-date">9. Feb 2008 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/gschnagga-theater-krokodistraenen.html">Gschnagga Theater: Krokodistränen</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">14. Feb 2008 · Nexus Kino </div>
+  <div class="concert-date">14. Feb 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/beste-zeit.html">Beste Zeit</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">14. Feb 2008 · Nexus Kino </div>
+  <div class="concert-date">14. Feb 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/der-kleine-eisbaer-2.html">Der kleine Eisbär 2</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">15. Feb 2008 · Nexus </div>
+  <div class="concert-date">15. Feb 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/gutbucket.html">Gutbucket</a></div>
   <div class='concert-musiker'>Kenny Thomson</div>
 </div><div class="concert-entry">
-  <div class="concert-date">15. Feb 2008 · Nexus </div>
+  <div class="concert-date">15. Feb 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/gutbucket.html">Gutbucket</a></div>
   <div class='concert-musiker'>Ty Citerman</div>
 </div><div class="concert-entry">
-  <div class="concert-date">15. Feb 2008 · Nexus </div>
+  <div class="concert-date">15. Feb 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/gutbucket.html">Gutbucket</a></div>
   <div class='concert-musiker'>Eric Rockwin</div>
 </div><div class="concert-entry">
-  <div class="concert-date">15. Feb 2008 · Nexus </div>
+  <div class="concert-date">15. Feb 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/gutbucket.html">Gutbucket</a></div>
   <div class='concert-musiker'>Adam Gold</div>
 </div><div class="concert-entry">
-  <div class="concert-date">16. Feb 2008 · Nexus spezial </div>
+  <div class="concert-date">16. Feb 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/cafe-latino.html">Cafe Latino</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">21. Feb 2008 · Nexus Kino </div>
+  <div class="concert-date">21. Feb 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/der-fuchs-und-das-maedchen.html">Der Fuchs und das Mädchen</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">21. Feb 2008 · Nexus Kino </div>
+  <div class="concert-date">21. Feb 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/ein-mutiger-weg.html">Ein mutiger Weg</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">22. Feb 2008 · Nexus Ausstellung </div>
+  <div class="concert-date">22. Feb 2008 · Nexus Ausstellung · </div>
   <div class="concert-band"><a href="../bands/carmelo-di-feo-in-fondo-al-mare.html">Carmelo di Feo: In fondo al Mare</a></div>
   <div class='concert-musiker'>Carmelo Feo di</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Feb 2008 · Nexus Theater </div>
+  <div class="concert-date">23. Feb 2008 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/i-will-survive-von-raoul-biltgen.html">I will survive von Raoul Biltgen</a></div>
   <div class='concert-musiker'>Werner Landgssell</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Feb 2008 · Nexus Vaust </div>
+  <div class="concert-date">26. Feb 2008 · Nexus Vaust · </div>
   <div class="concert-band"><a href="../bands/verteidigung-des-sommers.html">Verteidigung des Sommers</a></div>
   <div class='concert-musiker'>Peter Blaickner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Feb 2008 · Nexus </div>
+  <div class="concert-date">27. Feb 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/edua-amarilla-zadory-recital-mit-raluca-stirbat.html">Edua Amarilla Zadory: Recital mit Raluca Stirbat</a></div>
   <div class='concert-musiker'>Edua Amarilla Zadory</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Feb 2008 · Nexus </div>
+  <div class="concert-date">27. Feb 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/edua-amarilla-zadory-recital-mit-raluca-stirbat.html">Edua Amarilla Zadory: Recital mit Raluca Stirbat</a></div>
   <div class='concert-musiker'>Raluca Stirbat</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Feb 2008 · Nexus Kino </div>
+  <div class="concert-date">28. Feb 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/gefahr-und-begierde-se-jie.html">Gefahr und Begierde – Se, jie</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">28. Feb 2008 · Nexus Kino </div>
+  <div class="concert-date">28. Feb 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/mimzy-meine-freundin-aus-der-zukunft.html">Mimzy – Meine Freundin aus der Zukunft</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">1. Mar 2008 · Nexus spezial </div>
+  <div class="concert-date">1. Mar 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/cafe-latino.html">Cafe Latino</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">5. Mar 2008 · Nexus spezial </div>
+  <div class="concert-date">5. Mar 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/mittelamerika-von-costa-rica-nach-guatemala.html">Mittelamerika – Von Costa Rica nach Guatemala</a></div>
   <div class='concert-musiker'>Pascal Violo</div>
 </div><div class="concert-entry">
-  <div class="concert-date">5. Mar 2008 · Nexus spezial </div>
+  <div class="concert-date">5. Mar 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/mittelamerika-von-costa-rica-nach-guatemala.html">Mittelamerika – Von Costa Rica nach Guatemala</a></div>
   <div class='concert-musiker'>Heidi Violo</div>
 </div><div class="concert-entry">
-  <div class="concert-date">6. Mar 2008 · Nexus Kino </div>
+  <div class="concert-date">6. Mar 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/kasperl-und-der-zauberbrunnen.html">Kasperl und der Zauberbrunnen</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">6. Mar 2008 · Nexus Kino </div>
+  <div class="concert-date">6. Mar 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/zwischen-den-welten.html">Zwischen den Welten</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">6. Mar 2008 · Nexus spezial </div>
+  <div class="concert-date">6. Mar 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/internationaler-frauentag.html">Internationaler Frauentag</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">7. Mar 2008 · Nexus </div>
+  <div class="concert-date">7. Mar 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/jamaaladeen-tacuma-wolfgang-puschnig.html">Jamaaladeen Tacuma & Wolfgang Puschnig</a></div>
   <div class='concert-musiker'>Wolfgang Puschnig</div>
 </div><div class="concert-entry">
-  <div class="concert-date">7. Mar 2008 · Nexus </div>
+  <div class="concert-date">7. Mar 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/jamaaladeen-tacuma-wolfgang-puschnig.html">Jamaaladeen Tacuma & Wolfgang Puschnig</a></div>
   <div class='concert-musiker'>Jamaaladeen Tacuma</div>
 </div><div class="concert-entry">
-  <div class="concert-date">8. Mar 2008 · Nexus </div>
+  <div class="concert-date">8. Mar 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/rubberfresh-7-yearsbadluck.html">Rubberfresh 7 Yearsbadluck</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">8. Mar 2008 · Nexus </div>
+  <div class="concert-date">8. Mar 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/rubberfresh-7-yearsbadluck-dj-rudi-hartlieb.html">Rubberfresh 7 Yearsbadluck DJ Rudi Hartlieb</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">13. Mar 2008 · Nexus Kino </div>
+  <div class="concert-date">13. Mar 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/abbitte-atonement.html">Abbitte – Atonement</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">13. Mar 2008 · Nexus Kino </div>
+  <div class="concert-date">13. Mar 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/kleiner-dodo.html">Kleiner Dodo</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">14. Mar 2008 · Nexus </div>
+  <div class="concert-date">14. Mar 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/lucien-dubuis-trio.html">Lucien Dubuis Trio</a></div>
   <div class='concert-musiker'>Lucien Dubuis</div>
 </div><div class="concert-entry">
-  <div class="concert-date">14. Mar 2008 · Nexus </div>
+  <div class="concert-date">14. Mar 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/lucien-dubuis-trio.html">Lucien Dubuis Trio</a></div>
   <div class='concert-musiker'>Roman Nowka</div>
 </div><div class="concert-entry">
-  <div class="concert-date">14. Mar 2008 · Nexus </div>
+  <div class="concert-date">14. Mar 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/lucien-dubuis-trio.html">Lucien Dubuis Trio</a></div>
   <div class='concert-musiker'>Lionel Friedli</div>
 </div><div class="concert-entry">
-  <div class="concert-date">15. Mar 2008 · Nexus Theater </div>
+  <div class="concert-date">15. Mar 2008 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/grillparzer-im-pornoladen.html">Grillparzer im Pornoladen</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">19. Mar 2008 · Nexus Vaust </div>
+  <div class="concert-date">19. Mar 2008 · Nexus Vaust · </div>
   <div class="concert-band"><a href="../bands/linda-stift-liest-stierhunger.html">Linda Stift liest: Stierhunger</a></div>
   <div class='concert-musiker'>Linda Stift</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Mar 2008 · Nexus Kino </div>
+  <div class="concert-date">20. Mar 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/bee-movie-das-komplott.html">Bee Movie – Das Komplott</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">20. Mar 2008 · Nexus Kino </div>
+  <div class="concert-date">20. Mar 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/my-blueberry-nihgts.html">My Blueberry Nihgts</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">22. Mar 2008 · Nexus spezial </div>
+  <div class="concert-date">22. Mar 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/cafe-latino.html">Cafe Latino</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">27. Mar 2008 · Nexus Kino </div>
+  <div class="concert-date">27. Mar 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/alvin-und-die-chipmunks.html">Alvin und die Chipmunks</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">27. Mar 2008 · Nexus Kino </div>
+  <div class="concert-date">27. Mar 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/elizabeth-das-goldene-koenigreich.html">Elizabeth – Das goldene Königreich</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">28. Mar 2008 · Nexus </div>
+  <div class="concert-date">28. Mar 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/christy-doran-s-new-bag.html">Christy Doran’s New Bag</a></div>
   <div class='concert-musiker'>Christie Doran</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Mar 2008 · Nexus </div>
+  <div class="concert-date">28. Mar 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/christy-doran-s-new-bag.html">Christy Doran’s New Bag</a></div>
   <div class='concert-musiker'>Bruno Amstad</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Mar 2008 · Nexus </div>
+  <div class="concert-date">28. Mar 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/christy-doran-s-new-bag.html">Christy Doran’s New Bag</a></div>
   <div class='concert-musiker'>Hans Peter Pfammatter</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Mar 2008 · Nexus </div>
+  <div class="concert-date">28. Mar 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/christy-doran-s-new-bag.html">Christy Doran’s New Bag</a></div>
   <div class='concert-musiker'>Wolfgang Zwiauer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Mar 2008 · Nexus </div>
+  <div class="concert-date">28. Mar 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/christy-doran-s-new-bag.html">Christy Doran’s New Bag</a></div>
   <div class='concert-musiker'>Fabian Kuratl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">29. Mar 2008 · Nexus </div>
+  <div class="concert-date">29. Mar 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/nitro-spring-camp-riders-party.html">Nitro Spring Camp Riders Party</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">3. Apr 2008 · Nexus Kino </div>
+  <div class="concert-date">3. Apr 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/hafner-s-paradise.html">Hafner’s Paradise</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">3. Apr 2008 · Nexus Kino </div>
+  <div class="concert-date">3. Apr 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/kasperl-und-das-verzauberte-mikrofon.html">Kasperl und das verzauberte Mikrofon</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">4. Apr 2008 · Nexus </div>
+  <div class="concert-date">4. Apr 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/thomas-leeb.html">Thomas Leeb</a></div>
   <div class='concert-musiker'>Thomas Leeb</div>
 </div><div class="concert-entry">
-  <div class="concert-date">4. Apr 2008 · Nexus Ausstellung </div>
+  <div class="concert-date">4. Apr 2008 · Nexus Ausstellung · </div>
   <div class="concert-band"><a href="../bands/bildkombinat-bellevue-liebe-mit-dem-lift-nach-karl-may.html">Bildkombinat Bellevue – Liebe;mit dem Lift nach Karl May</a></div>
   <div class='concert-musiker'>Peter Brauneis</div>
 </div><div class="concert-entry">
-  <div class="concert-date">4. Apr 2008 · Nexus Ausstellung </div>
+  <div class="concert-date">4. Apr 2008 · Nexus Ausstellung · </div>
   <div class="concert-band"><a href="../bands/bildkombinat-bellevue-liebe-mit-dem-lift-nach-karl-may.html">Bildkombinat Bellevue – Liebe;mit dem Lift nach Karl May</a></div>
   <div class='concert-musiker'>Peter Schwaighofer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">4. Apr 2008 · Nexus Ausstellung </div>
+  <div class="concert-date">4. Apr 2008 · Nexus Ausstellung · </div>
   <div class="concert-band"><a href="../bands/bildkombinat-bellevue-liebe-mit-dem-lift-nach-karl-may.html">Bildkombinat Bellevue – Liebe;mit dem Lift nach Karl May</a></div>
   <div class='concert-musiker'>Joe Wagner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">5. Apr 2008 · Nexus Kabarett </div>
+  <div class="concert-date">5. Apr 2008 · Nexus Kabarett · </div>
   <div class="concert-band"><a href="../bands/mozart-quer-geist.html">Mozart: Quer Geist</a></div>
   <div class='concert-musiker'>Christian Wallner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">5. Apr 2008 · Nexus Kabarett </div>
+  <div class="concert-date">5. Apr 2008 · Nexus Kabarett · </div>
   <div class="concert-band"><a href="../bands/mozart-quer-geist.html">Mozart: Quer Geist</a></div>
   <div class='concert-musiker'>Gerald Fratt</div>
 </div><div class="concert-entry">
-  <div class="concert-date">5. Apr 2008 · Nexus Kabarett </div>
+  <div class="concert-date">5. Apr 2008 · Nexus Kabarett · </div>
   <div class="concert-band"><a href="../bands/mozart-quer-geist.html">Mozart: Quer Geist</a></div>
   <div class='concert-musiker'>Gerhard Laber</div>
 </div><div class="concert-entry">
-  <div class="concert-date">8. Apr 2008 · Nexus spezial </div>
+  <div class="concert-date">8. Apr 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/michael-stawaric-liest-terminifera.html">Michael Stawaric liest: Terminifera</a></div>
   <div class='concert-musiker'>Michael Stawaric</div>
 </div><div class="concert-entry">
-  <div class="concert-date">9. Apr 2008 · Nexus spezial </div>
+  <div class="concert-date">9. Apr 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/zeitreise-nach-irland.html">Zeitreise nach Irland</a></div>
   <div class='concert-musiker'>Günter Grüner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">10. Apr 2008 · Nexus Kino </div>
+  <div class="concert-date">10. Apr 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/die-faelscher.html">Die Fälscher</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">10. Apr 2008 · Nexus Kino </div>
+  <div class="concert-date">10. Apr 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/herr-figo-und-das-geheimnis-der-perlenfrabrik.html">Herr Figo und das Geheimnis der Perlenfrabrik</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">11. Apr 2008 · Nexus </div>
+  <div class="concert-date">11. Apr 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/lorenz-raab-xy-band.html">Lorenz Raab: XY Band</a></div>
   <div class='concert-musiker'>Lorenz Raab</div>
 </div><div class="concert-entry">
-  <div class="concert-date">11. Apr 2008 · Nexus </div>
+  <div class="concert-date">11. Apr 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/lorenz-raab-xy-band.html">Lorenz Raab: XY Band</a></div>
   <div class='concert-musiker'>Christoph Dienz</div>
 </div><div class="concert-entry">
-  <div class="concert-date">11. Apr 2008 · Nexus </div>
+  <div class="concert-date">11. Apr 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/lorenz-raab-xy-band.html">Lorenz Raab: XY Band</a></div>
   <div class='concert-musiker'>Matthias Pichler</div>
 </div><div class="concert-entry">
-  <div class="concert-date">11. Apr 2008 · Nexus </div>
+  <div class="concert-date">11. Apr 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/lorenz-raab-xy-band.html">Lorenz Raab: XY Band</a></div>
   <div class='concert-musiker'>Oliver Steger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">11. Apr 2008 · Nexus </div>
+  <div class="concert-date">11. Apr 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/lorenz-raab-xy-band.html">Lorenz Raab: XY Band</a></div>
   <div class='concert-musiker'>Herbert Pirker</div>
 </div><div class="concert-entry">
-  <div class="concert-date">11. Apr 2008 · Nexus </div>
+  <div class="concert-date">11. Apr 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/lorenzraab-xy-band.html">LorenzRaab XY Band</a></div>
   <div class='concert-musiker'>Lorenz Raab</div>
 </div><div class="concert-entry">
-  <div class="concert-date">11. Apr 2008 · Nexus </div>
+  <div class="concert-date">11. Apr 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/lorenzraab-xy-band.html">LorenzRaab XY Band</a></div>
   <div class='concert-musiker'>Christof Dienz</div>
 </div><div class="concert-entry">
-  <div class="concert-date">11. Apr 2008 · Nexus </div>
+  <div class="concert-date">11. Apr 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/lorenzraab-xy-band.html">LorenzRaab XY Band</a></div>
   <div class='concert-musiker'>Matthias Pichler</div>
 </div><div class="concert-entry">
-  <div class="concert-date">11. Apr 2008 · Nexus </div>
+  <div class="concert-date">11. Apr 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/lorenzraab-xy-band.html">LorenzRaab XY Band</a></div>
   <div class='concert-musiker'>Oliver Steger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">11. Apr 2008 · Nexus </div>
+  <div class="concert-date">11. Apr 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/lorenzraab-xy-band.html">LorenzRaab XY Band</a></div>
   <div class='concert-musiker'>Herbert Pirker</div>
 </div><div class="concert-entry">
-  <div class="concert-date">11. Apr 2008 · Nexus spezial </div>
+  <div class="concert-date">11. Apr 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/cafe-latino.html">Cafe Latino</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">12. Apr 2008 · Nexus </div>
+  <div class="concert-date">12. Apr 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/headbangers-ball-feat-bombsquad.html">Headbangers Ball feat. Bombsquad</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">12. Apr 2008 · Nexus </div>
+  <div class="concert-date">12. Apr 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/headbangers-ball-feat-dj-rudi-hartlieb.html">Headbangers Ball feat. DJ Rudi Hartlieb</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">12. Apr 2008 · Nexus </div>
+  <div class="concert-date">12. Apr 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/headbangers-ball-feat-straightage.html">Headbangers Ball feat. Straightage</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">12. Apr 2008 · Nexus </div>
+  <div class="concert-date">12. Apr 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/headbangers-ball-feat-united-blood.html">Headbangers Ball feat. United Blood</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">15. Apr 2008 · Nexus </div>
+  <div class="concert-date">15. Apr 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/dimitre-dinev-wladigeroff-brothers.html">Dimitre Dinev & Wladigeroff Brothers</a></div>
   <div class='concert-musiker'>Dimitre Dinev</div>
 </div><div class="concert-entry">
-  <div class="concert-date">15. Apr 2008 · Nexus </div>
+  <div class="concert-date">15. Apr 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/dimitre-dinev-wladigeroff-brothers.html">Dimitre Dinev & Wladigeroff Brothers</a></div>
   <div class='concert-musiker'>Wladigeroff</div>
 </div><div class="concert-entry">
-  <div class="concert-date">16. Apr 2008 · Nexus Ausstellung </div>
+  <div class="concert-date">16. Apr 2008 · Nexus Ausstellung · </div>
   <div class="concert-band"><a href="../bands/innovation-now-2008-maturaprojekt-hbla.html">Innovation Now 2008 Maturaprojekt HBLA</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">17. Apr 2008 · Nexus Kino </div>
+  <div class="concert-date">17. Apr 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/das-beste-kommt-zum-schluss.html">Das beste kommt zum Schluss</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">17. Apr 2008 · Nexus Kino </div>
+  <div class="concert-date">17. Apr 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/die-rote-zora.html">Die rote Zora</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">18. Apr 2008 · Nexus Theater </div>
+  <div class="concert-date">18. Apr 2008 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/dario-fo-bezahlt-wird-nicht.html">Dario Fo: Bezahlt wird nicht</a></div>
   <div class='concert-musiker'>Theatergruppe Saalfelden</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Apr 2008 · Nexus Theater </div>
+  <div class="concert-date">19. Apr 2008 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/dario-fo-bezahlt-wird-nicht.html">Dario Fo: Bezahlt wird nicht</a></div>
   <div class='concert-musiker'>Theatergruppe Saalfelden</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Apr 2008 · Nexus Theater </div>
+  <div class="concert-date">22. Apr 2008 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/dario-fo-bezahlt-wird-nicht.html">Dario Fo: Bezahlt wird nicht</a></div>
   <div class='concert-musiker'>Theatergruppe Saalfelden</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Apr 2008 · Nexus spezial </div>
+  <div class="concert-date">23. Apr 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/projekt-taneperp.html">Projekt Taneperp</a></div>
   <div class='concert-musiker'>B.M.W. Dance Company</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Apr 2008 · Nexus Theater </div>
+  <div class="concert-date">23. Apr 2008 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/dario-fo-bezahlt-wird-nicht.html">Dario Fo: Bezahlt wird nicht</a></div>
   <div class='concert-musiker'>Theatergruppe Saalfelden</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Apr 2008 · Nexus Kino </div>
+  <div class="concert-date">24. Apr 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/an-ihrer-seite.html">An ihrer Seite</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">24. Apr 2008 · Nexus Kino </div>
+  <div class="concert-date">24. Apr 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/dwk-5-hinter-dem-horizont.html">DWK 5 – Hinter dem Horizont</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">25. Apr 2008 · Nexus </div>
+  <div class="concert-date">25. Apr 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/sitter-maurer-quartet-feat-jack-walrath.html">Sitter / Maurer Quartet feat. Jack Walrath</a></div>
   <div class='concert-musiker'>Christian Maurer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Apr 2008 · Nexus </div>
+  <div class="concert-date">25. Apr 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/sitter-maurer-quartet-feat-jack-walrath.html">Sitter / Maurer Quartet feat. Jack Walrath</a></div>
   <div class='concert-musiker'>Primus Sitter</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Apr 2008 · Nexus </div>
+  <div class="concert-date">25. Apr 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/sitter-maurer-quartet-feat-jack-walrath.html">Sitter / Maurer Quartet feat. Jack Walrath</a></div>
   <div class='concert-musiker'>Marc Abrams</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Apr 2008 · Nexus </div>
+  <div class="concert-date">25. Apr 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/sitter-maurer-quartet-feat-jack-walrath.html">Sitter / Maurer Quartet feat. Jack Walrath</a></div>
   <div class='concert-musiker'>Herbert Pirker</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Apr 2008 · Nexus </div>
+  <div class="concert-date">25. Apr 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/sitter-maurer-quartett-feat-jack-walrath.html">Sitter / Maurer Quartett feat. Jack Walrath</a></div>
   <div class='concert-musiker'>Jack Walrath</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Apr 2008 · Nexus </div>
+  <div class="concert-date">25. Apr 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/sitter-maurer-quartett-feat-jack-walrath.html">Sitter / Maurer Quartett feat. Jack Walrath</a></div>
   <div class='concert-musiker'>Christian Maurer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Apr 2008 · Nexus </div>
+  <div class="concert-date">25. Apr 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/sitter-maurer-quartett-feat-jack-walrath.html">Sitter / Maurer Quartett feat. Jack Walrath</a></div>
   <div class='concert-musiker'>Primus Sitter</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Apr 2008 · Nexus </div>
+  <div class="concert-date">25. Apr 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/sitter-maurer-quartett-feat-jack-walrath.html">Sitter / Maurer Quartett feat. Jack Walrath</a></div>
   <div class='concert-musiker'>Marc Abrams</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Apr 2008 · Nexus </div>
+  <div class="concert-date">25. Apr 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/sitter-maurer-quartett-feat-jack-walrath.html">Sitter / Maurer Quartett feat. Jack Walrath</a></div>
   <div class='concert-musiker'>Herbert Pirker</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Apr 2008 · Nexus spezial </div>
+  <div class="concert-date">25. Apr 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/cafe-latino.html">Cafe Latino</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">26. Apr 2008 · Nexus Vaust </div>
+  <div class="concert-date">26. Apr 2008 · Nexus Vaust · </div>
   <div class="concert-band"><a href="../bands/durch-die-schluchten-des-balkan.html">Durch die Schluchten des Balkan</a></div>
   <div class='concert-musiker'>Bernhard Studer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">29. Apr 2008 · Nexus Theater </div>
+  <div class="concert-date">29. Apr 2008 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/dario-fo-bezahlt-wird-nicht.html">Dario Fo: Bezahlt wird nicht</a></div>
   <div class='concert-musiker'>Theatergruppe Saalfelden</div>
 </div><div class="concert-entry">
-  <div class="concert-date">30. Apr 2008 · Nexus my Uni </div>
+  <div class="concert-date">30. Apr 2008 · Nexus my Uni · </div>
   <div class="concert-band"><a href="../bands/bewegung-ist-lebensqualitaet.html">Bewegung ist Lebensqualität</a></div>
   <div class='concert-musiker'>Erich Müller</div>
 </div><div class="concert-entry">
-  <div class="concert-date">30. Apr 2008 · Nexus Theater </div>
+  <div class="concert-date">30. Apr 2008 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/gschnagga-thater-mama-geht-s-heut-nicht-so-gut.html">Gschnagga Thater: Mama geht’s heut nicht so gut</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">1. May 2008 · Nexus Kino </div>
+  <div class="concert-date">1. May 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/kasperl-und-das-schlossgespenst.html">Kasperl und das Schlossgespenst</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">1. May 2008 · Nexus Kino </div>
+  <div class="concert-date">1. May 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/no-direction-home-bob-dylan.html">No Direction Home: Bob Dylan</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">3. May 2008 · Nexus </div>
+  <div class="concert-date">3. May 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/dafnis-prieto-sextet.html">Dafnis Prieto Sextet</a></div>
   <div class='concert-musiker'>Peter Apfelbaum</div>
 </div><div class="concert-entry">
-  <div class="concert-date">3. May 2008 · Nexus </div>
+  <div class="concert-date">3. May 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/dafnis-prieto-sextet.html">Dafnis Prieto Sextet</a></div>
   <div class='concert-musiker'>Roman Filiu</div>
 </div><div class="concert-entry">
-  <div class="concert-date">3. May 2008 · Nexus </div>
+  <div class="concert-date">3. May 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/dafnis-prieto-sextet.html">Dafnis Prieto Sextet</a></div>
   <div class='concert-musiker'>El Indio</div>
 </div><div class="concert-entry">
-  <div class="concert-date">3. May 2008 · Nexus </div>
+  <div class="concert-date">3. May 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/dafnis-prieto-sextet.html">Dafnis Prieto Sextet</a></div>
   <div class='concert-musiker'>Manuela Valera</div>
 </div><div class="concert-entry">
-  <div class="concert-date">3. May 2008 · Nexus </div>
+  <div class="concert-date">3. May 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/dafnis-prieto-sextet.html">Dafnis Prieto Sextet</a></div>
   <div class='concert-musiker'>Charles Flores</div>
 </div><div class="concert-entry">
-  <div class="concert-date">3. May 2008 · Nexus </div>
+  <div class="concert-date">3. May 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/dafnis-prieto-sextet.html">Dafnis Prieto Sextet</a></div>
   <div class='concert-musiker'>Dafnis Prieto</div>
 </div><div class="concert-entry">
-  <div class="concert-date">3. May 2008 · Nexus </div>
+  <div class="concert-date">3. May 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/dafnis-prieto-sextet.html">Dafnis Prieto Sextet</a></div>
   <div class='concert-musiker'>dafnis Prieto</div>
 </div><div class="concert-entry">
-  <div class="concert-date">3. May 2008 · Nexus </div>
+  <div class="concert-date">3. May 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/dafnis-prieto-sextet.html">Dafnis Prieto Sextet</a></div>
   <div class='concert-musiker'>Peter Apfelbaum</div>
 </div><div class="concert-entry">
-  <div class="concert-date">3. May 2008 · Nexus </div>
+  <div class="concert-date">3. May 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/dafnis-prieto-sextet.html">Dafnis Prieto Sextet</a></div>
   <div class='concert-musiker'>Roman Filiu</div>
 </div><div class="concert-entry">
-  <div class="concert-date">3. May 2008 · Nexus </div>
+  <div class="concert-date">3. May 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/dafnis-prieto-sextet.html">Dafnis Prieto Sextet</a></div>
   <div class='concert-musiker'>El Indio</div>
 </div><div class="concert-entry">
-  <div class="concert-date">3. May 2008 · Nexus </div>
+  <div class="concert-date">3. May 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/dafnis-prieto-sextet.html">Dafnis Prieto Sextet</a></div>
   <div class='concert-musiker'>Manuela Valera</div>
 </div><div class="concert-entry">
-  <div class="concert-date">3. May 2008 · Nexus </div>
+  <div class="concert-date">3. May 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/dafnis-prieto-sextet.html">Dafnis Prieto Sextet</a></div>
   <div class='concert-musiker'>Charles Flores</div>
 </div><div class="concert-entry">
-  <div class="concert-date">3. May 2008 · Nexus </div>
+  <div class="concert-date">3. May 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/dafnis-prieto-sextet.html">Dafnis Prieto Sextet</a></div>
   <div class='concert-musiker'>Dafnis Prieto</div>
 </div><div class="concert-entry">
-  <div class="concert-date">3. May 2008 · Nexus </div>
+  <div class="concert-date">3. May 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/dafnis-prieto-sextet.html">Dafnis Prieto Sextet</a></div>
   <div class='concert-musiker'>Peter Apfelbaum</div>
 </div><div class="concert-entry">
-  <div class="concert-date">3. May 2008 · Nexus </div>
+  <div class="concert-date">3. May 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/dafnis-prieto-sextet.html">Dafnis Prieto Sextet</a></div>
   <div class='concert-musiker'>Roman Filiu</div>
 </div><div class="concert-entry">
-  <div class="concert-date">3. May 2008 · Nexus </div>
+  <div class="concert-date">3. May 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/dafnis-prieto-sextet.html">Dafnis Prieto Sextet</a></div>
   <div class='concert-musiker'>El Indio</div>
 </div><div class="concert-entry">
-  <div class="concert-date">3. May 2008 · Nexus </div>
+  <div class="concert-date">3. May 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/dafnis-prieto-sextet.html">Dafnis Prieto Sextet</a></div>
   <div class='concert-musiker'>Manuela Valera</div>
 </div><div class="concert-entry">
-  <div class="concert-date">3. May 2008 · Nexus </div>
+  <div class="concert-date">3. May 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/dafnis-prieto-sextet.html">Dafnis Prieto Sextet</a></div>
   <div class='concert-musiker'>Charles Flores</div>
 </div><div class="concert-entry">
-  <div class="concert-date">7. May 2008 · Nexus my Uni </div>
+  <div class="concert-date">7. May 2008 · Nexus my Uni · </div>
   <div class="concert-band"><a href="../bands/moral-ohne-religion.html">Moral ohne Religion ?</a></div>
   <div class='concert-musiker'>Edgar Morscher</div>
 </div><div class="concert-entry">
-  <div class="concert-date">8. May 2008 · Nexus Kino </div>
+  <div class="concert-date">8. May 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/asterix-bei-den-olympischen-spielen.html">Asterix bei den Olympischen Spielen</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">8. May 2008 · Nexus Kino </div>
+  <div class="concert-date">8. May 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/saint-jacques-pilgern-auf-franzoesisch.html">Saint Jacques – Pilgern auf Französisch</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">9. May 2008 · Nexus Kabarett </div>
+  <div class="concert-date">9. May 2008 · Nexus Kabarett · </div>
   <div class="concert-band"><a href="../bands/cosa-nostra-thomas-stipsits.html">Cosa Nostra – Thomas Stipsits</a></div>
   <div class='concert-musiker'>Thomas Stipsits</div>
 </div><div class="concert-entry">
-  <div class="concert-date">14. May 2008 · Nexus spezial </div>
+  <div class="concert-date">14. May 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/westafrika.html">Westafrika</a></div>
   <div class='concert-musiker'>Thomas Leitner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">15. May 2008 · Nexus Kino </div>
+  <div class="concert-date">15. May 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/heffalump-ein-neuer-freund-fuer-winnie-puh.html">Heffalump – Ein neuer Freund für Winnie Puh</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">15. May 2008 · Nexus Kino </div>
+  <div class="concert-date">15. May 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/liebesleben.html">Liebesleben</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">16. May 2008 · Nexus Ausstellung </div>
+  <div class="concert-date">16. May 2008 · Nexus Ausstellung · </div>
   <div class="concert-band"><a href="../bands/alfred-hrdlicka-arbeiten-zu-randolectil-pasolini-und-zurbaran.html">Alfred Hrdlicka – Arbeiten zu Randolectil, Pasolini und Zurbaran</a></div>
   <div class='concert-musiker'>Alfred Hrdlicka</div>
 </div><div class="concert-entry">
-  <div class="concert-date">16. May 2008 · Nexus Ausstellung </div>
+  <div class="concert-date">16. May 2008 · Nexus Ausstellung · </div>
   <div class="concert-band"><a href="../bands/bau-kunst-oeffentlicher-raum.html">Bau / Kunst / Öffentlicher Raum</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">17. May 2008 · Nexus spezial </div>
+  <div class="concert-date">17. May 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/cafe-latino.html">Cafe Latino</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">22. May 2008 · Nexus Kino </div>
+  <div class="concert-date">22. May 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/mein-freund-der-wasserdrache.html">Mein Freund der Wasserdrache</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">22. May 2008 · Nexus Kino </div>
+  <div class="concert-date">22. May 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/schmetterling-und-taucherglocke.html">Schmetterling und Taucherglocke</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">23. May 2008 · Nexus </div>
+  <div class="concert-date">23. May 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/julian-urabl.html">Julian Urabl</a></div>
   <div class='concert-musiker'>Julian Urabl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. May 2008 · Nexus </div>
+  <div class="concert-date">23. May 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/julian-urabl.html">Julian Urabl</a></div>
   <div class='concert-musiker'>Paul Santner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. May 2008 · Nexus </div>
+  <div class="concert-date">23. May 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/julian-urabl.html">Julian Urabl</a></div>
   <div class='concert-musiker'>Max Santner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. May 2008 · Nexus Café </div>
+  <div class="concert-date">23. May 2008 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/urabl-julian.html">Urabl Julian</a></div>
   <div class='concert-musiker'>Julian Urabl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. May 2008 · Nexus Café </div>
+  <div class="concert-date">23. May 2008 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/urabl-julian.html">Urabl Julian</a></div>
   <div class='concert-musiker'>Paul Santner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. May 2008 · Nexus Café </div>
+  <div class="concert-date">23. May 2008 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/urabl-julian.html">Urabl Julian</a></div>
   <div class='concert-musiker'>Max Santner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. May 2008 · Nexus </div>
+  <div class="concert-date">24. May 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/rock-night-feat-rudi-hartlieb.html">Rock Night feat. Rudi Hartlieb</a></div>
   <div class='concert-musiker'>Rudi Hartlieb</div>
 </div><div class="concert-entry">
-  <div class="concert-date">29. May 2008 · Nexus Kino </div>
+  <div class="concert-date">29. May 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/als-das-meer-verschwand.html">Als das Meer verschwand</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">29. May 2008 · Nexus Kino </div>
+  <div class="concert-date">29. May 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/horton-hoert-ein-huh.html">Horton hört ein Huh</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">31. May 2008 · Nexus </div>
+  <div class="concert-date">31. May 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/the-tiptons.html">The Tiptons</a></div>
   <div class='concert-musiker'>Amy Denio</div>
 </div><div class="concert-entry">
-  <div class="concert-date">31. May 2008 · Nexus </div>
+  <div class="concert-date">31. May 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/the-tiptons.html">The Tiptons</a></div>
   <div class='concert-musiker'>Jessica Lurie</div>
 </div><div class="concert-entry">
-  <div class="concert-date">31. May 2008 · Nexus </div>
+  <div class="concert-date">31. May 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/the-tiptons.html">The Tiptons</a></div>
   <div class='concert-musiker'>Sue Orfield</div>
 </div><div class="concert-entry">
-  <div class="concert-date">31. May 2008 · Nexus </div>
+  <div class="concert-date">31. May 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/the-tiptons.html">The Tiptons</a></div>
   <div class='concert-musiker'>Tina Richerson</div>
 </div><div class="concert-entry">
-  <div class="concert-date">31. May 2008 · Nexus </div>
+  <div class="concert-date">31. May 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/the-tiptons.html">The Tiptons</a></div>
   <div class='concert-musiker'>Jason Smart</div>
 </div><div class="concert-entry">
-  <div class="concert-date">31. May 2008 · Nexus </div>
+  <div class="concert-date">31. May 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/the-tiptons.html">The Tiptons</a></div>
   <div class='concert-musiker'>Amy Denio</div>
 </div><div class="concert-entry">
-  <div class="concert-date">31. May 2008 · Nexus </div>
+  <div class="concert-date">31. May 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/the-tiptons.html">The Tiptons</a></div>
   <div class='concert-musiker'>Jessica Lurie</div>
 </div><div class="concert-entry">
-  <div class="concert-date">31. May 2008 · Nexus </div>
+  <div class="concert-date">31. May 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/the-tiptons.html">The Tiptons</a></div>
   <div class='concert-musiker'>Sue Orfield</div>
 </div><div class="concert-entry">
-  <div class="concert-date">31. May 2008 · Nexus </div>
+  <div class="concert-date">31. May 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/the-tiptons.html">The Tiptons</a></div>
   <div class='concert-musiker'>Tina Richerson</div>
 </div><div class="concert-entry">
-  <div class="concert-date">31. May 2008 · Nexus </div>
+  <div class="concert-date">31. May 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/the-tiptons.html">The Tiptons</a></div>
   <div class='concert-musiker'>Jason Smart</div>
 </div><div class="concert-entry">
-  <div class="concert-date">31. May 2008 · Nexus </div>
+  <div class="concert-date">31. May 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/the-tiptons.html">The Tiptons</a></div>
   <div class='concert-musiker'>Amy Denio</div>
 </div><div class="concert-entry">
-  <div class="concert-date">31. May 2008 · Nexus </div>
+  <div class="concert-date">31. May 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/the-tiptons.html">The Tiptons</a></div>
   <div class='concert-musiker'>Jessica Lurie</div>
 </div><div class="concert-entry">
-  <div class="concert-date">31. May 2008 · Nexus </div>
+  <div class="concert-date">31. May 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/the-tiptons.html">The Tiptons</a></div>
   <div class='concert-musiker'>Sue Orfield</div>
 </div><div class="concert-entry">
-  <div class="concert-date">31. May 2008 · Nexus </div>
+  <div class="concert-date">31. May 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/the-tiptons.html">The Tiptons</a></div>
   <div class='concert-musiker'>Tina Richerson</div>
 </div><div class="concert-entry">
-  <div class="concert-date">31. May 2008 · Nexus </div>
+  <div class="concert-date">31. May 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/the-tiptons.html">The Tiptons</a></div>
   <div class='concert-musiker'>Jason Smart</div>
 </div><div class="concert-entry">
-  <div class="concert-date">3. Jun 2008 · Nexus spezial </div>
+  <div class="concert-date">3. Jun 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/ueber-kunst-und-das-leben.html">Über Kunst und das Leben</a></div>
   <div class='concert-musiker'>Julian Loidl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">3. Jun 2008 · Nexus spezial </div>
+  <div class="concert-date">3. Jun 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/ueber-kunst-und-das-leben.html">Über Kunst und das Leben</a></div>
   <div class='concert-musiker'>Christoph Lindenbauer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">3. Jun 2008 · Nexus spezial </div>
+  <div class="concert-date">3. Jun 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/ueber-kunst-und-das-leben.html">Über Kunst und das Leben</a></div>
   <div class='concert-musiker'>Anselm Oberhummer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">4. Jun 2008 · Nexus my Uni </div>
+  <div class="concert-date">4. Jun 2008 · Nexus my Uni · </div>
   <div class="concert-band"><a href="../bands/krebsforschung-aktuell.html">Krebsforschung aktuell</a></div>
   <div class='concert-musiker'>Fritz Aberger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">5. Jun 2008 · Nexus Kino </div>
+  <div class="concert-date">5. Jun 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/kasperl-und-die-dracheninsel.html">Kasperl und die Dracheninsel</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">5. Jun 2008 · Nexus Kino </div>
+  <div class="concert-date">5. Jun 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/mamma-roma.html">Mamma Roma</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">6. Jun 2008 · Nexus Theater </div>
+  <div class="concert-date">6. Jun 2008 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/m-o-n-oder-die-angst-vor-dem-ich.html">M.O.N. oder Die Angst vor dem Ich</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">7. Jun 2008 · Nexus </div>
+  <div class="concert-date">7. Jun 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/klassik-und-swing-eisenbahner-stadtkapelle.html">Klassik und Swing Eisenbahner Stadtkapelle</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">11. Jun 2008 · Nexus Kabarett </div>
+  <div class="concert-date">11. Jun 2008 · Nexus Kabarett · </div>
   <div class="concert-band"><a href="../bands/karl-valentin-nur-noch-lange-zeit.html">Karl Valentin – Nur noch lange Zeit</a></div>
   <div class='concert-musiker'>Edi Jäger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">11. Jun 2008 · Nexus Kabarett </div>
+  <div class="concert-date">11. Jun 2008 · Nexus Kabarett · </div>
   <div class="concert-band"><a href="../bands/karl-valentin-nur-noch-lange-zeit.html">Karl Valentin – Nur noch lange Zeit</a></div>
   <div class='concert-musiker'>Anita Köchl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">12. Jun 2008 · Nexus Kino </div>
+  <div class="concert-date">12. Jun 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/into-the-wild.html">Into the Wild</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">12. Jun 2008 · Nexus Kino </div>
+  <div class="concert-date">12. Jun 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/pippi-ausser-rand-und-band.html">Pippi ausser Rand und Band</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">13. Jun 2008 · Nexus </div>
+  <div class="concert-date">13. Jun 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/griechisches-sommerfest-mit-lakis-achwach.html">Griechisches Sommerfest mit Lakis & Achwach</a></div>
   <div class='concert-musiker'>Lakis Jordanopoulos</div>
 </div><div class="concert-entry">
-  <div class="concert-date">13. Jun 2008 · Nexus </div>
+  <div class="concert-date">13. Jun 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/griechisches-sommerfest-mit-lakis-achwach.html">Griechisches Sommerfest mit Lakis & Achwach</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">14. Jun 2008 · Nexus spezial </div>
+  <div class="concert-date">14. Jun 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/cafe-latino.html">Cafe Latino</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">19. Jun 2008 · Nexus Kino </div>
+  <div class="concert-date">19. Jun 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/back-to-africa-zurueck-in-die-heimat.html">Back to Africa – Zurück in die Heimat</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">19. Jun 2008 · Nexus Kino </div>
+  <div class="concert-date">19. Jun 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/bando-und-der-goldene-fussball.html">Bando und der goldene Fussball</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">20. Jun 2008 · Nexus spezial </div>
+  <div class="concert-date">20. Jun 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/der-mensch-ist-keine-flaeche.html">Der Mensch ist keine Fläche</a></div>
   <div class='concert-musiker'>Andreas Meck Arch.</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Jun 2008 · Nexus spezial </div>
+  <div class="concert-date">21. Jun 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/cafe-latino.html">Cafe Latino</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">25. Jun 2008 · Nexus spezial </div>
+  <div class="concert-date">25. Jun 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/gitarren-workshop-brandon-ross.html">Gitarren Workshop: Brandon Ross</a></div>
   <div class='concert-musiker'>Brandon Ross</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Jun 2008 · Nexus Kino </div>
+  <div class="concert-date">26. Jun 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/gilles.html">Gilles</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">26. Jun 2008 · Nexus Kino </div>
+  <div class="concert-date">26. Jun 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/revange.html">Revange</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">1. Jul 2008 · Nexus spezial </div>
+  <div class="concert-date">1. Jul 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/gitarren-workshop-brandon-ross.html">Gitarren Workshop: Brandon Ross</a></div>
   <div class='concert-musiker'>Brandon Ross</div>
 </div><div class="concert-entry">
-  <div class="concert-date">3. Jul 2008 · Nexus Kino </div>
+  <div class="concert-date">3. Jul 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/shine-a-light.html">Shine a Light</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">24. Jul 2008 · Nexus Kino </div>
+  <div class="concert-date">24. Jul 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/kirschblueten-hanami.html">Kirschblüten Hanami</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">25. Jul 2008 · Nexus </div>
+  <div class="concert-date">25. Jul 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/hot-rod-blues-band.html">Hot Rod Blues Band</a></div>
   <div class='concert-musiker'>Alex Willinger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Jul 2008 · Nexus </div>
+  <div class="concert-date">25. Jul 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/hot-rod-blues-band.html">Hot Rod Blues Band</a></div>
   <div class='concert-musiker'>Bernhard Ostermaier</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Jul 2008 · Nexus </div>
+  <div class="concert-date">25. Jul 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/hot-rod-blues-band.html">Hot Rod Blues Band</a></div>
   <div class='concert-musiker'>Marcel Chytra</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Jul 2008 · Nexus spezial </div>
+  <div class="concert-date">26. Jul 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/cafe-latino.html">Cafe Latino</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">31. Jul 2008 · Nexus Kino </div>
+  <div class="concert-date">31. Jul 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/michael-clayton.html">Michael Clayton</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">1. Aug 2008 · Nexus </div>
+  <div class="concert-date">1. Aug 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/con-fusion.html">Con Fusion</a></div>
   <div class='concert-musiker'>Heinz Hasenauer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">1. Aug 2008 · Nexus </div>
+  <div class="concert-date">1. Aug 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/con-fusion.html">Con Fusion</a></div>
   <div class='concert-musiker'>Julian Hutter</div>
 </div><div class="concert-entry">
-  <div class="concert-date">1. Aug 2008 · Nexus </div>
+  <div class="concert-date">1. Aug 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/con-fusion.html">Con Fusion</a></div>
   <div class='concert-musiker'>Johann Öttl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">1. Aug 2008 · Nexus </div>
+  <div class="concert-date">1. Aug 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/con-fusion.html">Con Fusion</a></div>
   <div class='concert-musiker'>Daniel Pucher</div>
 </div><div class="concert-entry">
-  <div class="concert-date">2. Aug 2008 · Nexus Café </div>
+  <div class="concert-date">2. Aug 2008 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/matt-burke-trio-unplugged.html">Matt Burke Trio "Unplugged"</a></div>
   <div class='concert-musiker'>Matt Burke</div>
 </div><div class="concert-entry">
-  <div class="concert-date">2. Aug 2008 · Nexus Café </div>
+  <div class="concert-date">2. Aug 2008 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/matt-burke-trio-unplugged.html">Matt Burke Trio "Unplugged"</a></div>
   <div class='concert-musiker'>Klaus Hasholzer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">2. Aug 2008 · Nexus Café </div>
+  <div class="concert-date">2. Aug 2008 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/matt-burke-trio-unplugged.html">Matt Burke Trio "Unplugged"</a></div>
   <div class='concert-musiker'>Wolfgang Höllerer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">7. Aug 2008 · Nexus Kino </div>
+  <div class="concert-date">7. Aug 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/there-will-be-blood.html">There will be Blood</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">8. Aug 2008 · Nexus Café </div>
+  <div class="concert-date">8. Aug 2008 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/the-brendan-adams-trio-17-eternities.html">The Brendan Adams Trio "17 Eternities"</a></div>
   <div class='concert-musiker'>Brendan Adams</div>
 </div><div class="concert-entry">
-  <div class="concert-date">8. Aug 2008 · Nexus Café </div>
+  <div class="concert-date">8. Aug 2008 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/the-brendan-adams-trio-17-eternities.html">The Brendan Adams Trio "17 Eternities"</a></div>
   <div class='concert-musiker'>Markus DePretto</div>
 </div><div class="concert-entry">
-  <div class="concert-date">8. Aug 2008 · Nexus Café </div>
+  <div class="concert-date">8. Aug 2008 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/the-brendan-adams-trio-17-eternities.html">The Brendan Adams Trio "17 Eternities"</a></div>
   <div class='concert-musiker'>Alfred Vogel</div>
 </div><div class="concert-entry">
-  <div class="concert-date">9. Aug 2008 · Nexus Café </div>
+  <div class="concert-date">9. Aug 2008 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/les-redoutables-klassiker-des-austropop.html">Les Redoutables – Klassiker des Austropop</a></div>
   <div class='concert-musiker'>Conny Gabriel</div>
 </div><div class="concert-entry">
-  <div class="concert-date">9. Aug 2008 · Nexus Café </div>
+  <div class="concert-date">9. Aug 2008 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/les-redoutables-klassiker-des-austropop.html">Les Redoutables – Klassiker des Austropop</a></div>
   <div class='concert-musiker'>Walter Richhart</div>
 </div><div class="concert-entry">
-  <div class="concert-date">9. Aug 2008 · Nexus Café </div>
+  <div class="concert-date">9. Aug 2008 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/les-redoutables-klassiker-des-austropop.html">Les Redoutables – Klassiker des Austropop</a></div>
   <div class='concert-musiker'>Luggi Steiner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">9. Aug 2008 · Nexus Café </div>
+  <div class="concert-date">9. Aug 2008 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/les-redoutables-klassiker-des-austropop.html">Les Redoutables – Klassiker des Austropop</a></div>
   <div class='concert-musiker'>Valentin Klingsbichl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">9. Aug 2008 · Nexus Café </div>
+  <div class="concert-date">9. Aug 2008 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/les-redoutables-klassiker-des-austropop.html">Les Redoutables – Klassiker des Austropop</a></div>
   <div class='concert-musiker'>Rudi Langer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">14. Aug 2008 · Nexus Kino </div>
+  <div class="concert-date">14. Aug 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/no-country-for-old-man.html">No Country for old Man</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">15. Aug 2008 · Nexus Café </div>
+  <div class="concert-date">15. Aug 2008 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/govorcin-govorcin-musik-als-inspiration.html">Govorcin & Govorcin " Musik als Inspiration"</a></div>
   <div class='concert-musiker'>Marco Govorcin</div>
 </div><div class="concert-entry">
-  <div class="concert-date">15. Aug 2008 · Nexus Café </div>
+  <div class="concert-date">15. Aug 2008 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/govorcin-govorcin-musik-als-inspiration.html">Govorcin & Govorcin " Musik als Inspiration"</a></div>
   <div class='concert-musiker'>Sanja Govorcin</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">21. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/lungau-big-band-fest-tony-momrelle.html">Lungau Big Band fest. Tony Momrelle</a></div>
   <div class='concert-musiker'>Tony Momrelle</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">21. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/lungau-big-band-fest-tony-momrelle.html">Lungau Big Band fest. Tony Momrelle</a></div>
   <div class='concert-musiker'>Horst Hofer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">21. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/lungau-big-band-fest-tony-momrelle.html">Lungau Big Band fest. Tony Momrelle</a></div>
   <div class='concert-musiker'>Andreas Pranzl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">21. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/lungau-big-band-fest-tony-momrelle.html">Lungau Big Band fest. Tony Momrelle</a></div>
   <div class='concert-musiker'>Peter Stiegler</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">21. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/lungau-big-band-fest-tony-momrelle.html">Lungau Big Band fest. Tony Momrelle</a></div>
   <div class='concert-musiker'>Gerd Rahstorfer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">21. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/lungau-big-band-fest-tony-momrelle.html">Lungau Big Band fest. Tony Momrelle</a></div>
   <div class='concert-musiker'>Trevor Mires</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">21. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/lungau-big-band-fest-tony-momrelle.html">Lungau Big Band fest. Tony Momrelle</a></div>
   <div class='concert-musiker'>Robert Bachner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">21. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/lungau-big-band-fest-tony-momrelle.html">Lungau Big Band fest. Tony Momrelle</a></div>
   <div class='concert-musiker'>Stefan Konzett</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">21. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/lungau-big-band-fest-tony-momrelle.html">Lungau Big Band fest. Tony Momrelle</a></div>
   <div class='concert-musiker'>Erwin Wendl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">21. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/lungau-big-band-fest-tony-momrelle.html">Lungau Big Band fest. Tony Momrelle</a></div>
   <div class='concert-musiker'>Andreas See</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">21. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/lungau-big-band-fest-tony-momrelle.html">Lungau Big Band fest. Tony Momrelle</a></div>
   <div class='concert-musiker'>Hubert Pertl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">21. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/lungau-big-band-fest-tony-momrelle.html">Lungau Big Band fest. Tony Momrelle</a></div>
   <div class='concert-musiker'>Kurt Gersdorf</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">21. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/lungau-big-band-fest-tony-momrelle.html">Lungau Big Band fest. Tony Momrelle</a></div>
   <div class='concert-musiker'>Herbert Hofer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">21. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/lungau-big-band-fest-tony-momrelle.html">Lungau Big Band fest. Tony Momrelle</a></div>
   <div class='concert-musiker'>Gernot Strebl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">21. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/lungau-big-band-fest-tony-momrelle.html">Lungau Big Band fest. Tony Momrelle</a></div>
   <div class='concert-musiker'>Burkhard Frauenlob</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">21. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/lungau-big-band-fest-tony-momrelle.html">Lungau Big Band fest. Tony Momrelle</a></div>
   <div class='concert-musiker'>Wolfgang Pointner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">21. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/lungau-big-band-fest-tony-momrelle.html">Lungau Big Band fest. Tony Momrelle</a></div>
   <div class='concert-musiker'>Julian Crampton</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">21. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/lungau-big-band-fest-tony-momrelle.html">Lungau Big Band fest. Tony Momrelle</a></div>
   <div class='concert-musiker'>Philipp Kopmajer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">21. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/yukah-feat-insingizi.html">Yukah feat. Insingizi</a></div>
   <div class='concert-musiker'>Burkhard Frauenlob</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">21. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/yukah-feat-insingizi.html">Yukah feat. Insingizi</a></div>
   <div class='concert-musiker'>Blessings Nqo Nkomo</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">21. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/yukah-feat-insingizi.html">Yukah feat. Insingizi</a></div>
   <div class='concert-musiker'>Ramadu Dumisani Moyo</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">21. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/yukah-feat-insingizi.html">Yukah feat. Insingizi</a></div>
   <div class='concert-musiker'>Vusa Mkhaya Ndlovu</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">21. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/yukah-feat-insingizi.html">Yukah feat. Insingizi</a></div>
   <div class='concert-musiker'>Gernot Strebl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">21. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/yukah-feat-insingizi.html">Yukah feat. Insingizi</a></div>
   <div class='concert-musiker'>Klaus Ambrosch</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">21. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/yukah-feat-insingizi.html">Yukah feat. Insingizi</a></div>
   <div class='concert-musiker'>Wolfgang Klingsbigl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">21. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/yukah-feat-insingizi.html">Yukah feat. Insingizi</a></div>
   <div class='concert-musiker'>Mamadou Diabate</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">21. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/yukah-feat-insingizi.html">Yukah feat. Insingizi</a></div>
   <div class='concert-musiker'>Ismael Barrios</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">21. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/yukah-feat-insingizi.html">Yukah feat. Insingizi</a></div>
   <div class='concert-musiker'>Wolfgang Tozzi</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2008 · Festival 08 SC </div>
+  <div class="concert-date">21. Aug 2008 · Festival 08 SC · </div>
   <div class="concert-band"><a href="../bands/jean-pierre-drouet-michael-riessler.html">Jean-Pierre Drouet & Michael Riessler</a></div>
   <div class='concert-musiker'>Jean-Pierre Drouet</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2008 · Festival 08 SC </div>
+  <div class="concert-date">21. Aug 2008 · Festival 08 SC · </div>
   <div class="concert-band"><a href="../bands/jean-pierre-drouet-michael-riessler.html">Jean-Pierre Drouet & Michael Riessler</a></div>
   <div class='concert-musiker'>Michael Riessler</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2008 · Festival 08 SC </div>
+  <div class="concert-date">21. Aug 2008 · Festival 08 SC · </div>
   <div class="concert-band"><a href="../bands/tyft-speed.html">TYFT + Speed</a></div>
   <div class='concert-musiker'>Chris Speed</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2008 · Festival 08 SC </div>
+  <div class="concert-date">21. Aug 2008 · Festival 08 SC · </div>
   <div class="concert-band"><a href="../bands/tyft-speed.html">TYFT + Speed</a></div>
   <div class='concert-musiker'>Andrew D’Angelo</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2008 · Festival 08 SC </div>
+  <div class="concert-date">21. Aug 2008 · Festival 08 SC · </div>
   <div class="concert-band"><a href="../bands/tyft-speed.html">TYFT + Speed</a></div>
   <div class='concert-musiker'>Hilmar Jensson</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2008 · Festival 08 SC </div>
+  <div class="concert-date">21. Aug 2008 · Festival 08 SC · </div>
   <div class="concert-band"><a href="../bands/tyft-speed.html">TYFT + Speed</a></div>
   <div class='concert-musiker'>Jim Black</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">22. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/hakon-kornstad-s-weight-balance.html">Hakon Kornstad’s "Weight & Balance"</a></div>
   <div class='concert-musiker'>Hakon Kornstad</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">22. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/hakon-kornstad-s-weight-balance.html">Hakon Kornstad’s "Weight & Balance"</a></div>
   <div class='concert-musiker'>Jon  Balke</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">22. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/hakon-kornstad-s-weight-balance.html">Hakon Kornstad’s "Weight & Balance"</a></div>
   <div class='concert-musiker'>Ingebrigt Håker Flaten</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">22. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/hakon-kornstad-s-weight-balance.html">Hakon Kornstad’s "Weight & Balance"</a></div>
   <div class='concert-musiker'>Thomas Stronen</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">22. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/heaven-and-feat-alexander-hacke.html">Heaven And feat. Alexander Hacke</a></div>
   <div class='concert-musiker'>Zeitblom</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">22. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/heaven-and-feat-alexander-hacke.html">Heaven And feat. Alexander Hacke</a></div>
   <div class='concert-musiker'>Martin Siewert</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">22. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/heaven-and-feat-alexander-hacke.html">Heaven And feat. Alexander Hacke</a></div>
   <div class='concert-musiker'>Tony Buck</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">22. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/heaven-and-feat-alexander-hacke.html">Heaven And feat. Alexander Hacke</a></div>
   <div class='concert-musiker'>Steve Heather</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">22. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/heaven-and-feat-alexander-hacke.html">Heaven And feat. Alexander Hacke</a></div>
   <div class='concert-musiker'>Alexander Hacke</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">22. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/peter-herbert-s-villa-incognito.html">Peter Herbert’s "Villa Incognito"</a></div>
   <div class='concert-musiker'>Peter Herbert</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">22. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/peter-herbert-s-villa-incognito.html">Peter Herbert’s "Villa Incognito"</a></div>
   <div class='concert-musiker'>Emanuelle Somer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">22. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/peter-herbert-s-villa-incognito.html">Peter Herbert’s "Villa Incognito"</a></div>
   <div class='concert-musiker'>Barbara Paierl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">22. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/peter-herbert-s-villa-incognito.html">Peter Herbert’s "Villa Incognito"</a></div>
   <div class='concert-musiker'>Sophie Hassfurther</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">22. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/peter-herbert-s-villa-incognito.html">Peter Herbert’s "Villa Incognito"</a></div>
   <div class='concert-musiker'>Huw Warren</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">22. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/peter-herbert-s-villa-incognito.html">Peter Herbert’s "Villa Incognito"</a></div>
   <div class='concert-musiker'>David Tronzo</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">22. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/peter-herbert-s-villa-incognito.html">Peter Herbert’s "Villa Incognito"</a></div>
   <div class='concert-musiker'>Paul Skrepek</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">22. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/raz-mesinai-s-badawi-clones-and-false-projects.html">Raz Mesinai’s Badawi "Clones and false Projects"</a></div>
   <div class='concert-musiker'>Raz Mesinai</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">22. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/raz-mesinai-s-badawi-clones-and-false-projects.html">Raz Mesinai’s Badawi "Clones and false Projects"</a></div>
   <div class='concert-musiker'>Eyvind Kang</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">22. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/raz-mesinai-s-badawi-clones-and-false-projects.html">Raz Mesinai’s Badawi "Clones and false Projects"</a></div>
   <div class='concert-musiker'>Okkyung Lee</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">22. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/raz-mesinai-s-badawi-clones-and-false-projects.html">Raz Mesinai’s Badawi "Clones and false Projects"</a></div>
   <div class='concert-musiker'>Shahzad Ismaily</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">22. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/raz-mesinai-s-badawi-clones-and-false-projects.html">Raz Mesinai’s Badawi "Clones and false Projects"</a></div>
   <div class='concert-musiker'>Jim Black</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">22. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/wadada-leo-smith-s-organic-resonance.html">Wadada Leo Smith’s Organic Resonance</a></div>
   <div class='concert-musiker'>Wadada Lei Smith</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">22. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/wadada-leo-smith-s-organic-resonance.html">Wadada Leo Smith’s Organic Resonance</a></div>
   <div class='concert-musiker'>Vijay Iyer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">22. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/wadada-leo-smith-s-organic-resonance.html">Wadada Leo Smith’s Organic Resonance</a></div>
   <div class='concert-musiker'>James Hurt</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">22. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/wadada-leo-smith-s-organic-resonance.html">Wadada Leo Smith’s Organic Resonance</a></div>
   <div class='concert-musiker'>Brandon Ross</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">22. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/wadada-leo-smith-s-organic-resonance.html">Wadada Leo Smith’s Organic Resonance</a></div>
   <div class='concert-musiker'>Skuli Sverisson</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">22. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/wadada-leo-smith-s-organic-resonance.html">Wadada Leo Smith’s Organic Resonance</a></div>
   <div class='concert-musiker'>Pheeroan akLaff</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">22. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/erika-stucky-roots-of-communication.html">Erika Stucky & Roots of Communication</a></div>
   <div class='concert-musiker'>Erika Stucky</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">22. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/erika-stucky-roots-of-communication.html">Erika Stucky & Roots of Communication</a></div>
   <div class='concert-musiker'>Robert Morgenthaler</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">22. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/erika-stucky-roots-of-communication.html">Erika Stucky & Roots of Communication</a></div>
   <div class='concert-musiker'>Jean-Jacque Pedretti</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">22. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/erika-stucky-roots-of-communication.html">Erika Stucky & Roots of Communication</a></div>
   <div class='concert-musiker'>Peter Horisberger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">22. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/the-merry-poppins.html">The Merry Poppins</a></div>
   <div class='concert-musiker'>David Lageder</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">22. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/the-merry-poppins.html">The Merry Poppins</a></div>
   <div class='concert-musiker'>Thomas Aichinger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">22. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/the-merry-poppins.html">The Merry Poppins</a></div>
   <div class='concert-musiker'>Herbert Könighofer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">22. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/the-merry-poppins.html">The Merry Poppins</a></div>
   <div class='concert-musiker'>Mathias Vorauer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">22. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/the-merry-poppins.html">The Merry Poppins</a></div>
   <div class='concert-musiker'>Robert Aichinger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">22. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/the-merry-poppins.html">The Merry Poppins</a></div>
   <div class='concert-musiker'>Markus Marageter</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">22. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/the-merry-poppins.html">The Merry Poppins</a></div>
   <div class='concert-musiker'>Robert Kainar</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2008 · Festival 08 SC </div>
+  <div class="concert-date">22. Aug 2008 · Festival 08 SC · </div>
   <div class="concert-band"><a href="../bands/christian-fennesz-thomas-stronen.html">Christian Fennesz & Thomas Stronen</a></div>
   <div class='concert-musiker'>Christian Fennesz</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2008 · Festival 08 SC </div>
+  <div class="concert-date">22. Aug 2008 · Festival 08 SC · </div>
   <div class="concert-band"><a href="../bands/christian-fennesz-thomas-stronen.html">Christian Fennesz & Thomas Stronen</a></div>
   <div class='concert-musiker'>Thomas Stronen</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2008 · Festival 08 SC </div>
+  <div class="concert-date">22. Aug 2008 · Festival 08 SC · </div>
   <div class="concert-band"><a href="../bands/hakon-kornstad-single-engine.html">Hakon Kornstad Single engine</a></div>
   <div class='concert-musiker'>Hakon Kornstad</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/buffalo-collision.html">Buffalo Collision</a></div>
   <div class='concert-musiker'>Tim Berne</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/buffalo-collision.html">Buffalo Collision</a></div>
   <div class='concert-musiker'>Ethan Iverson</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/buffalo-collision.html">Buffalo Collision</a></div>
   <div class='concert-musiker'>Hank Roberts</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/buffalo-collision.html">Buffalo Collision</a></div>
   <div class='concert-musiker'>Dave King</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/dave-holland-sextet.html">Dave Holland Sextet</a></div>
   <div class='concert-musiker'>Dave Holland</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/dave-holland-sextet.html">Dave Holland Sextet</a></div>
   <div class='concert-musiker'>Robin Eubanks</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/dave-holland-sextet.html">Dave Holland Sextet</a></div>
   <div class='concert-musiker'>Antonio Hart</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/dave-holland-sextet.html">Dave Holland Sextet</a></div>
   <div class='concert-musiker'>Alex Sasha Sipiagin</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/dave-holland-sextet.html">Dave Holland Sextet</a></div>
   <div class='concert-musiker'>Mulgrew Miller</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/dave-holland-sextet.html">Dave Holland Sextet</a></div>
   <div class='concert-musiker'>Eric Harland</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/jerseyband.html">Jerseyband</a></div>
   <div class='concert-musiker'>Brent Madsen</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/jerseyband.html">Jerseyband</a></div>
   <div class='concert-musiker'>Matt Blanchard</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/jerseyband.html">Jerseyband</a></div>
   <div class='concert-musiker'>Ed RosenBerg</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/jerseyband.html">Jerseyband</a></div>
   <div class='concert-musiker'>Alex Hamlin</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/jerseyband.html">Jerseyband</a></div>
   <div class='concert-musiker'>Ryan Ferreira</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/jerseyband.html">Jerseyband</a></div>
   <div class='concert-musiker'>Mike Chiavaro</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/jerseyband.html">Jerseyband</a></div>
   <div class='concert-musiker'>Ted Poor</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/michael-riessler.html">Michael Riessler</a></div>
   <div class='concert-musiker'>Michael Riessler</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/michael-riessler.html">Michael Riessler</a></div>
   <div class='concert-musiker'>Pierre Charial</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/michael-riessler.html">Michael Riessler</a></div>
   <div class='concert-musiker'>Jan Schneider</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/michael-riessler.html">Michael Riessler</a></div>
   <div class='concert-musiker'>Christian Winninghoff</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/michael-riessler.html">Michael Riessler</a></div>
   <div class='concert-musiker'>Ludwig Nuss</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/michael-riessler.html">Michael Riessler</a></div>
   <div class='concert-musiker'>Mattis Cederberg</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/michael-riessler.html">Michael Riessler</a></div>
   <div class='concert-musiker'>Manuel Orza</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/michael-riessler.html">Michael Riessler</a></div>
   <div class='concert-musiker'>Robby Ameen</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/the-black-chamber.html">The black Chamber</a></div>
   <div class='concert-musiker'>Bernhard Breuer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/the-black-chamber.html">The black Chamber</a></div>
   <div class='concert-musiker'>Martin Brandlmayr</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/the-black-chamber.html">The black Chamber</a></div>
   <div class='concert-musiker'>Franz Hautzinger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/the-black-chamber.html">The black Chamber</a></div>
   <div class='concert-musiker'>Arne Kircher</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/the-black-chamber.html">The black Chamber</a></div>
   <div class='concert-musiker'>Martin Siewert</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/the-black-chamber.html">The black Chamber</a></div>
   <div class='concert-musiker'>Matija Schellander</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 Huggenberg </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 Huggenberg · </div>
   <div class="concert-band"><a href="../bands/die-schnapsbrenner.html">Die Schnapsbrenner</a></div>
   <div class='concert-musiker'>Florian Bramböck</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 Huggenberg </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 Huggenberg · </div>
   <div class="concert-band"><a href="../bands/die-schnapsbrenner.html">Die Schnapsbrenner</a></div>
   <div class='concert-musiker'>Klaus Dickbauer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 Huggenberg </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 Huggenberg · </div>
   <div class="concert-band"><a href="../bands/die-schnapsbrenner.html">Die Schnapsbrenner</a></div>
   <div class='concert-musiker'>Christian Wegscheider</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 Huggenberg </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 Huggenberg · </div>
   <div class="concert-band"><a href="../bands/die-schnapsbrenner.html">Die Schnapsbrenner</a></div>
   <div class='concert-musiker'>Herbert Pirker</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/kerekes-band.html">Kerekes Band</a></div>
   <div class='concert-musiker'>Zsombor Feher</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/kerekes-band.html">Kerekes Band</a></div>
   <div class='concert-musiker'>Akos Csarno</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/kerekes-band.html">Kerekes Band</a></div>
   <div class='concert-musiker'>Csaba Namor</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/kerekes-band.html">Kerekes Band</a></div>
   <div class='concert-musiker'>Csaba Konya</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/kerekes-band.html">Kerekes Band</a></div>
   <div class='concert-musiker'>Victor Feher</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/warsaw-village-band.html">Warsaw Village Band</a></div>
   <div class='concert-musiker'>Maja Kleszcz</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/warsaw-village-band.html">Warsaw Village Band</a></div>
   <div class='concert-musiker'>Magdalena Sobczak</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/warsaw-village-band.html">Warsaw Village Band</a></div>
   <div class='concert-musiker'>Sylwia Swiatkowska</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/warsaw-village-band.html">Warsaw Village Band</a></div>
   <div class='concert-musiker'>Wojciech Krzak</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/warsaw-village-band.html">Warsaw Village Band</a></div>
   <div class='concert-musiker'>Piotr Glinski</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 RH </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 RH · </div>
   <div class="concert-band"><a href="../bands/warsaw-village-band.html">Warsaw Village Band</a></div>
   <div class='concert-musiker'>Maciej Szajkowski</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 SC </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 SC · </div>
   <div class="concert-band"><a href="../bands/carsten-daerr-trio.html">Carsten Daerr Trio</a></div>
   <div class='concert-musiker'>Carsten Daerr</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 SC </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 SC · </div>
   <div class="concert-band"><a href="../bands/carsten-daerr-trio.html">Carsten Daerr Trio</a></div>
   <div class='concert-musiker'>Oliver Potratz</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 SC </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 SC · </div>
   <div class="concert-band"><a href="../bands/carsten-daerr-trio.html">Carsten Daerr Trio</a></div>
   <div class='concert-musiker'>Eric Schaefer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 SC </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 SC · </div>
   <div class="concert-band"><a href="../bands/hautzinger-heather-zeitblom.html">Hautzinger – Heather – Zeitblom</a></div>
   <div class='concert-musiker'>Franz Hautzinger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 SC </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 SC · </div>
   <div class="concert-band"><a href="../bands/hautzinger-heather-zeitblom.html">Hautzinger – Heather – Zeitblom</a></div>
   <div class='concert-musiker'>Zeitblom</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 SC </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 SC · </div>
   <div class="concert-band"><a href="../bands/hautzinger-heather-zeitblom.html">Hautzinger – Heather – Zeitblom</a></div>
   <div class='concert-musiker'>Steve Heather</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 Steinalm </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 Steinalm · </div>
   <div class="concert-band"><a href="../bands/the-mildenbirds.html">The Mildenbirds</a></div>
   <div class='concert-musiker'>David Lageder</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 Steinalm </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 Steinalm · </div>
   <div class="concert-band"><a href="../bands/the-mildenbirds.html">The Mildenbirds</a></div>
   <div class='concert-musiker'>Herbert Könighofer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 Steinalm </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 Steinalm · </div>
   <div class="concert-band"><a href="../bands/the-mildenbirds.html">The Mildenbirds</a></div>
   <div class='concert-musiker'>Thomas Aichinger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 Steinalm </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 Steinalm · </div>
   <div class="concert-band"><a href="../bands/the-mildenbirds.html">The Mildenbirds</a></div>
   <div class='concert-musiker'>Mathias Vorauer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2008 · Festival 08 Steinalm </div>
+  <div class="concert-date">23. Aug 2008 · Festival 08 Steinalm · </div>
   <div class="concert-band"><a href="../bands/the-mildenbirds.html">The Mildenbirds</a></div>
   <div class='concert-musiker'>Robert Aichinger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">24. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/craig-taborn-junk-magic.html">Craig Taborn Junk Magic</a></div>
   <div class='concert-musiker'>Craig Taborn</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">24. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/craig-taborn-junk-magic.html">Craig Taborn Junk Magic</a></div>
   <div class='concert-musiker'>Chris Speed</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">24. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/craig-taborn-junk-magic.html">Craig Taborn Junk Magic</a></div>
   <div class='concert-musiker'>Erik Fratzke</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">24. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/craig-taborn-junk-magic.html">Craig Taborn Junk Magic</a></div>
   <div class='concert-musiker'>Mat Maneri</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">24. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/craig-taborn-junk-magic.html">Craig Taborn Junk Magic</a></div>
   <div class='concert-musiker'>David King</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">24. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/don-cherry-s-symphony-for-improvisers.html">Don Cherry’s Symphony for Improvisers</a></div>
   <div class='concert-musiker'>Dave Douglas</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">24. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/don-cherry-s-symphony-for-improvisers.html">Don Cherry’s Symphony for Improvisers</a></div>
   <div class='concert-musiker'>Roy Campbell</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">24. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/don-cherry-s-symphony-for-improvisers.html">Don Cherry’s Symphony for Improvisers</a></div>
   <div class='concert-musiker'>JD Allen</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">24. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/don-cherry-s-symphony-for-improvisers.html">Don Cherry’s Symphony for Improvisers</a></div>
   <div class='concert-musiker'>Mixashawn</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">24. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/don-cherry-s-symphony-for-improvisers.html">Don Cherry’s Symphony for Improvisers</a></div>
   <div class='concert-musiker'>Henry Grimes</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">24. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/don-cherry-s-symphony-for-improvisers.html">Don Cherry’s Symphony for Improvisers</a></div>
   <div class='concert-musiker'>Hillard Green</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">24. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/don-cherry-s-symphony-for-improvisers.html">Don Cherry’s Symphony for Improvisers</a></div>
   <div class='concert-musiker'>Andrew Cyrille</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">24. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/don-cherry-s-symphony-for-improvisers.html">Don Cherry’s Symphony for Improvisers</a></div>
   <div class='concert-musiker'>Hamid Drake</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">24. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/food-feat-christian-fennesz.html">Food feat. Christian Fennesz</a></div>
   <div class='concert-musiker'>Iain Ballamy</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">24. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/food-feat-christian-fennesz.html">Food feat. Christian Fennesz</a></div>
   <div class='concert-musiker'>Thomas Stronen</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">24. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/food-feat-christian-fennesz.html">Food feat. Christian Fennesz</a></div>
   <div class='concert-musiker'>Christian Fennesz</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">24. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/helene-labarriere.html">Helene Labarriere</a></div>
   <div class='concert-musiker'>Helene Labarriere</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">24. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/helene-labarriere.html">Helene Labarriere</a></div>
   <div class='concert-musiker'>Francois Corneloup</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">24. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/helene-labarriere.html">Helene Labarriere</a></div>
   <div class='concert-musiker'>Hasse Poulsen</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">24. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/helene-labarriere.html">Helene Labarriere</a></div>
   <div class='concert-musiker'>Christophe Marguet</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">24. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/slide-family-with-gary-valente.html">Slide Family with Gary Valente</a></div>
   <div class='concert-musiker'>Mauro Ottolini</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">24. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/slide-family-with-gary-valente.html">Slide Family with Gary Valente</a></div>
   <div class='concert-musiker'>Beppe Calamosca</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">24. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/slide-family-with-gary-valente.html">Slide Family with Gary Valente</a></div>
   <div class='concert-musiker'>Rudy Migliardi</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">24. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/slide-family-with-gary-valente.html">Slide Family with Gary Valente</a></div>
   <div class='concert-musiker'>Massimo Zanotti</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">24. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/slide-family-with-gary-valente.html">Slide Family with Gary Valente</a></div>
   <div class='concert-musiker'>Simone Pederzoli</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">24. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/slide-family-with-gary-valente.html">Slide Family with Gary Valente</a></div>
   <div class='concert-musiker'>Marcello Rosa</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">24. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/slide-family-with-gary-valente.html">Slide Family with Gary Valente</a></div>
   <div class='concert-musiker'>Hannes Mock</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">24. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/slide-family-with-gary-valente.html">Slide Family with Gary Valente</a></div>
   <div class='concert-musiker'>Massimo Morganti</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">24. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/slide-family-with-gary-valente.html">Slide Family with Gary Valente</a></div>
   <div class='concert-musiker'>Tony Cattano</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">24. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/slide-family-with-gary-valente.html">Slide Family with Gary Valente</a></div>
   <div class='concert-musiker'>Peter Cazzanelli</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">24. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/slide-family-with-gary-valente.html">Slide Family with Gary Valente</a></div>
   <div class='concert-musiker'>Zeno De Rossi</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">24. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/slide-family-with-gary-valente.html">Slide Family with Gary Valente</a></div>
   <div class='concert-musiker'>Cristian Calcagnile</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2008 · Festival 08 </div>
+  <div class="concert-date">24. Aug 2008 · Festival 08 · </div>
   <div class="concert-band"><a href="../bands/slide-family-with-gary-valente.html">Slide Family with Gary Valente</a></div>
   <div class='concert-musiker'>Gary Valente</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2008 · Festival 08 Alte Schmiede </div>
+  <div class="concert-date">24. Aug 2008 · Festival 08 Alte Schmiede · </div>
   <div class="concert-band"><a href="../bands/stelzhamma.html">Stelzhamma</a></div>
   <div class='concert-musiker'>H-G. Gutternigg</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2008 · Festival 08 Alte Schmiede </div>
+  <div class="concert-date">24. Aug 2008 · Festival 08 Alte Schmiede · </div>
   <div class="concert-band"><a href="../bands/stelzhamma.html">Stelzhamma</a></div>
   <div class='concert-musiker'>Karl Heinz Schmid</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2008 · Festival 08 Alte Schmiede </div>
+  <div class="concert-date">24. Aug 2008 · Festival 08 Alte Schmiede · </div>
   <div class="concert-band"><a href="../bands/stelzhamma.html">Stelzhamma</a></div>
   <div class='concert-musiker'>Günter Wagner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2008 · Festival 08 Alte Schmiede </div>
+  <div class="concert-date">24. Aug 2008 · Festival 08 Alte Schmiede · </div>
   <div class="concert-band"><a href="../bands/stelzhamma.html">Stelzhamma</a></div>
   <div class='concert-musiker'>Ewald Zach</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2008 · Festival 08 Schatzbichl </div>
+  <div class="concert-date">24. Aug 2008 · Festival 08 Schatzbichl · </div>
   <div class="concert-band"><a href="../bands/bmp-funky-jazz.html">BMP Funky Jazz</a></div>
   <div class='concert-musiker'>David Binderberger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2008 · Festival 08 Schatzbichl </div>
+  <div class="concert-date">24. Aug 2008 · Festival 08 Schatzbichl · </div>
   <div class="concert-band"><a href="../bands/bmp-funky-jazz.html">BMP Funky Jazz</a></div>
   <div class='concert-musiker'>Sebastian Zillner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2008 · Festival 08 Schatzbichl </div>
+  <div class="concert-date">24. Aug 2008 · Festival 08 Schatzbichl · </div>
   <div class="concert-band"><a href="../bands/bmp-funky-jazz.html">BMP Funky Jazz</a></div>
   <div class='concert-musiker'>Lukas Pamminger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2008 · Festival 08 Schatzbichl </div>
+  <div class="concert-date">24. Aug 2008 · Festival 08 Schatzbichl · </div>
   <div class="concert-band"><a href="../bands/bmp-funky-jazz.html">BMP Funky Jazz</a></div>
   <div class='concert-musiker'>Mario Mauschitz</div>
 </div><div class="concert-entry">
-  <div class="concert-date">4. Sep 2008 · Nexus Kino </div>
+  <div class="concert-date">4. Sep 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/flags-of-our-fathers.html">Flags of our Fathers</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">4. Sep 2008 · Nexus Kino </div>
+  <div class="concert-date">4. Sep 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/kasperlund-der-gestiefelte-kater.html">Kasperlund der gestiefelte Kater</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">6. Sep 2008 · Nexus spezial </div>
+  <div class="concert-date">6. Sep 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/cafe-latino.html">Cafe Latino</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">11. Sep 2008 · Nexus Kino </div>
+  <div class="concert-date">11. Sep 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/letters-from-iwo-jima.html">Letters from Iwo Jima</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">11. Sep 2008 · Nexus Kino </div>
+  <div class="concert-date">11. Sep 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/rettet-trigger.html">Rettet Trigger</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">17. Sep 2008 · Nexus my Uni </div>
+  <div class="concert-date">17. Sep 2008 · Nexus my Uni · </div>
   <div class="concert-band"><a href="../bands/saalfelden-und-der-pinzgau-im-rahmen-der-salzburger-landesgeschichte-vom-oppium-der-kelten-bis-ins-21-jahrhundert.html">Saalfelden und der Pinzgau im Rahmen der Salzburger Landesgeschichte – vom Oppium der Kelten bis ins 21. Jahrhundert</a></div>
   <div class='concert-musiker'>Heinz Dopsch Dr.</div>
 </div><div class="concert-entry">
-  <div class="concert-date">18. Sep 2008 · Nexus Kino </div>
+  <div class="concert-date">18. Sep 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/sommer.html">Sommer</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">18. Sep 2008 · Nexus Kino </div>
+  <div class="concert-date">18. Sep 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/yella.html">Yella</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">23. Sep 2008 · Nexus Ausstellung </div>
+  <div class="concert-date">23. Sep 2008 · Nexus Ausstellung · </div>
   <div class="concert-band"><a href="../bands/wang-qingsong-phantom-china.html">Wang Qingsong – Phantom China</a></div>
   <div class='concert-musiker'>Wang Qiungsong</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Sep 2008 · Nexus Kino </div>
+  <div class="concert-date">25. Sep 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/hoppet.html">Hoppet</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">25. Sep 2008 · Nexus Kino </div>
+  <div class="concert-date">25. Sep 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/once.html">Once</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">27. Sep 2008 · Nexus spezial </div>
+  <div class="concert-date">27. Sep 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/cafe-latino.html">Cafe Latino</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">30. Sep 2008 · Nexus </div>
+  <div class="concert-date">30. Sep 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/diane-ponzio.html">Diane Ponzio</a></div>
   <div class='concert-musiker'>Diane Ponzio</div>
 </div><div class="concert-entry">
-  <div class="concert-date">30. Sep 2008 · Nexus spezial </div>
+  <div class="concert-date">30. Sep 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/martin-clinics-mit-diane-ponzio.html">Martin Clinics mit Diane Ponzio</a></div>
   <div class='concert-musiker'>Martin Clinics</div>
 </div><div class="concert-entry">
-  <div class="concert-date">1. Oct 2008 · Nexus spezial </div>
+  <div class="concert-date">1. Oct 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/von-peru-nach-bolivien.html">Von Peru nach Bolivien</a></div>
   <div class='concert-musiker'>Martin Engelmann</div>
 </div><div class="concert-entry">
-  <div class="concert-date">2. Oct 2008 · Nexus Kino </div>
+  <div class="concert-date">2. Oct 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/darjeeling-limited.html">Darjeeling limited</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">2. Oct 2008 · Nexus Kino </div>
+  <div class="concert-date">2. Oct 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/kasperl-und-das-kuerbisfest.html">Kasperl und das Kürbisfest</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">3. Oct 2008 · Nexus spezial </div>
+  <div class="concert-date">3. Oct 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/zwischen-ortsbezogenheit-und-architektonischem-ausdruck.html">Zwischen Ortsbezogenheit und Architektonischem Ausdruck</a></div>
   <div class='concert-musiker'>Dieter Wissounig</div>
 </div><div class="concert-entry">
-  <div class="concert-date">4. Oct 2008 · Nexus </div>
+  <div class="concert-date">4. Oct 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/wieselburger-honky-tonk-festival-2008-feat-horny-funk-brothers.html">Wieselburger Honky Tonk Festival 2008 feat. Horny Funk Brothers</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">7. Oct 2008 · Nexus spezial </div>
+  <div class="concert-date">7. Oct 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/kreuzungen-marlene-streeruwitz.html">Kreuzungen – Marlene Streeruwitz</a></div>
   <div class='concert-musiker'>Marlene Streeruwitz</div>
 </div><div class="concert-entry">
-  <div class="concert-date">9. Oct 2008 · Nexus Kino </div>
+  <div class="concert-date">9. Oct 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/dialog-mit-dem-gaertner.html">Dialog mit dem Gärtner</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">9. Oct 2008 · Nexus Kino </div>
+  <div class="concert-date">9. Oct 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/insel-der-abenteuer-nim-s-land.html">Insel der Abenteuer – Nim’s Land</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">10. Oct 2008 · Nexus </div>
+  <div class="concert-date">10. Oct 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/rocknight-feat-steve-fister-band.html">Rocknight feat. Steve Fister Band</a></div>
   <div class='concert-musiker'>Steve  Fister</div>
 </div><div class="concert-entry">
-  <div class="concert-date">10. Oct 2008 · Nexus </div>
+  <div class="concert-date">10. Oct 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/rocknight-feat-wild-t-the-spirit.html">Rocknight feat. Wild T. & the Spirit</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">10. Oct 2008 · Nexus </div>
+  <div class="concert-date">10. Oct 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/steve-fister-band-wild-t-the-spirit.html">Steve Fister Band & Wild T. & the Spirit</a></div>
   <div class='concert-musiker'>Steve Fister</div>
 </div><div class="concert-entry">
-  <div class="concert-date">10. Oct 2008 · Nexus </div>
+  <div class="concert-date">10. Oct 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/steve-fister-band-wild-t-the-spirit.html">Steve Fister Band & Wild T. & the Spirit</a></div>
   <div class='concert-musiker'>Tony Springer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">10. Oct 2008 · Nexus </div>
+  <div class="concert-date">10. Oct 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/steve-fister-band-wild-t-the-spirit.html">Steve Fister Band & Wild T. & the Spirit</a></div>
   <div class='concert-musiker'>Hans in’t Zandt</div>
 </div><div class="concert-entry">
-  <div class="concert-date">10. Oct 2008 · Nexus </div>
+  <div class="concert-date">10. Oct 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/steve-fister-band-wild-t-the-spirit.html">Steve Fister Band & Wild T. & the Spirit</a></div>
   <div class='concert-musiker'>Barend Courbois</div>
 </div><div class="concert-entry">
-  <div class="concert-date">10. Oct 2008 · Nexus </div>
+  <div class="concert-date">10. Oct 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/steve-fister-band-wild-t-the-spirit.html">Steve Fister Band & Wild T. & the Spirit</a></div>
   <div class='concert-musiker'>Guenther Kapelle</div>
 </div><div class="concert-entry">
-  <div class="concert-date">10. Oct 2008 · Nexus </div>
+  <div class="concert-date">10. Oct 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/steve-fister-band-wild-t-the-spirit.html">Steve Fister Band & Wild T. & the Spirit</a></div>
   <div class='concert-musiker'>Chris Lesso</div>
 </div><div class="concert-entry">
-  <div class="concert-date">11. Oct 2008 · Nexus spezial </div>
+  <div class="concert-date">11. Oct 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/blaesersolisten-der-eisenbahner-stadtkapelle-saalfelden.html">Bläsersolisten der Eisenbahner Stadtkapelle Saalfelden</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">11. Oct 2008 · Nexus spezial </div>
+  <div class="concert-date">11. Oct 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/cafe-latino.html">Cafe Latino</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">14. Oct 2008 · Nexus spezial </div>
+  <div class="concert-date">14. Oct 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/mama-geht-s-heut-nicht-so-gut.html">Mama geht’s heut nicht so gut</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">15. Oct 2008 · Nexus my Uni </div>
+  <div class="concert-date">15. Oct 2008 · Nexus my Uni · </div>
   <div class="concert-band"><a href="../bands/einsteins-vermaechtnis.html">Einsteins Vermächtnis</a></div>
   <div class='concert-musiker'>Thomas Bührke Dr.</div>
 </div><div class="concert-entry">
-  <div class="concert-date">16. Oct 2008 · Nexus Kino </div>
+  <div class="concert-date">16. Oct 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/toedliche-entscheidung.html">Tödliche Entscheidung</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">16. Oct 2008 · Nexus Kino </div>
+  <div class="concert-date">16. Oct 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/urmel-voll-in-fahrt.html">Urmel voll in Fahrt</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">17. Oct 2008 · Nexus Kabarett </div>
+  <div class="concert-date">17. Oct 2008 · Nexus Kabarett · </div>
   <div class="concert-band"><a href="../bands/helfried-bitte-melde-dich.html">Helfried, bitte melde dich !</a></div>
   <div class='concert-musiker'>Christian Hölbling</div>
 </div><div class="concert-entry">
-  <div class="concert-date">18. Oct 2008 · Nexus Kino </div>
+  <div class="concert-date">18. Oct 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/petterson-findus-findus-zieht-um.html">Petterson & Findus: Findus zieht um</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">18. Oct 2008 · Nexus Kino </div>
+  <div class="concert-date">18. Oct 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/the-rider.html">The Rider</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">18. Oct 2008 · Nexus spezial </div>
+  <div class="concert-date">18. Oct 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/compania-flamenca-antonio-andrade-vaya-con-dios.html">Compania Flamenca Antonio Andrade "Vaya con Dios"</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">23. Oct 2008 · Nexus Kino </div>
+  <div class="concert-date">23. Oct 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/die-chroniken-von-narnia-prinz-kaspian-von-narnia.html">Die Chroniken von Narnia – Prinz Kaspian von Narnia</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">23. Oct 2008 · Nexus Kino </div>
+  <div class="concert-date">23. Oct 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/happy-go-lucky.html">Happy go Lucky</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">24. Oct 2008 · Nexus </div>
+  <div class="concert-date">24. Oct 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/yosvany-terry-quartett.html">Yosvany Terry Quartett</a></div>
   <div class='concert-musiker'>Yosvany Terry</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Oct 2008 · Nexus </div>
+  <div class="concert-date">24. Oct 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/yosvany-terry-quartett.html">Yosvany Terry Quartett</a></div>
   <div class='concert-musiker'>Osmany Paredes</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Oct 2008 · Nexus </div>
+  <div class="concert-date">24. Oct 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/yosvany-terry-quartett.html">Yosvany Terry Quartett</a></div>
   <div class='concert-musiker'>Joe Sanders</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Oct 2008 · Nexus </div>
+  <div class="concert-date">24. Oct 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/yosvany-terry-quartett.html">Yosvany Terry Quartett</a></div>
   <div class='concert-musiker'>Jonathan Blake</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Oct 2008 · Nexus Vaust </div>
+  <div class="concert-date">25. Oct 2008 · Nexus Vaust · </div>
   <div class="concert-band"><a href="../bands/des-ano-film-noir.html">Des Ano – Film noir</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">28. Oct 2008 · Nexus spezial </div>
+  <div class="concert-date">28. Oct 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/der-krieg-der-woerter-gegen-die-kehlkopfschreie.html">Der Krieg der Wörter gegen die Kehlkopfschreie</a></div>
   <div class='concert-musiker'>Robert Schindel</div>
 </div><div class="concert-entry">
-  <div class="concert-date">30. Oct 2008 · Nexus Kino </div>
+  <div class="concert-date">30. Oct 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/kung-fu-panda.html">Kung fu Panda</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">30. Oct 2008 · Nexus Kino </div>
+  <div class="concert-date">30. Oct 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/you-kill-me.html">You kill me</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">31. Oct 2008 · Nexus spezial </div>
+  <div class="concert-date">31. Oct 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/architektur-landschaft-bauen-in-sensibler-umgebung.html">Architektur – Landschaft: Bauen in sensibler Umgebung</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">5. Nov 2008 · Nexus spezial </div>
+  <div class="concert-date">5. Nov 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/weltbilder-salzkarawane.html">Weltbilder Salzkarawane</a></div>
   <div class='concert-musiker'>Karl Lueger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">6. Nov 2008 · Nexus Kino </div>
+  <div class="concert-date">6. Nov 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/kasperl-und-die-gehemnisvolle-suche.html">Kasperl und die gehemnisvolle Suche</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">6. Nov 2008 · Nexus Kino </div>
+  <div class="concert-date">6. Nov 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/robert-zimmermann-wundert-sich-ueber-die-liebe.html">Robert Zimmermann wundert sich über die Liebe</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">7. Nov 2008 · Nexus </div>
+  <div class="concert-date">7. Nov 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/klavierabend-liszt-chopin.html">Klavierabend – Liszt & Chopin</a></div>
   <div class='concert-musiker'>Borbala Kiss</div>
 </div><div class="concert-entry">
-  <div class="concert-date">8. Nov 2008 · Nexus Kabarett </div>
+  <div class="concert-date">8. Nov 2008 · Nexus Kabarett · </div>
   <div class="concert-band"><a href="../bands/reinhard-nowak-angst.html">Reinhard Nowak – Angst</a></div>
   <div class='concert-musiker'>Reinhard Nowak</div>
 </div><div class="concert-entry">
-  <div class="concert-date">11. Nov 2008 · Nexus spezial </div>
+  <div class="concert-date">11. Nov 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/norbert-niemann-willkommen-neue-traeume.html">Norbert Niemann – Willkommen neue Träume</a></div>
   <div class='concert-musiker'>Norbret Niemann</div>
 </div><div class="concert-entry">
-  <div class="concert-date">12. Nov 2008 · Nexus my Uni </div>
+  <div class="concert-date">12. Nov 2008 · Nexus my Uni · </div>
   <div class="concert-band"><a href="../bands/die-zukunft-des-fernsehens.html">Die Zukunft des Fernsehens</a></div>
   <div class='concert-musiker'>Ingrid Paus-Hasebrink Dr.</div>
 </div><div class="concert-entry">
-  <div class="concert-date">13. Nov 2008 · Nexus Kino </div>
+  <div class="concert-date">13. Nov 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/fleisch-isst-mein-gemuese.html">Fleisch isst mein Gemüse</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">13. Nov 2008 · Nexus Kino </div>
+  <div class="concert-date">13. Nov 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/freche-maedchen.html">Freche Mädchen</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">14. Nov 2008 · Nexus spezial </div>
+  <div class="concert-date">14. Nov 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/cafe-latino.html">Cafe Latino</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">15. Nov 2008 · Nexus </div>
+  <div class="concert-date">15. Nov 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/peter-ratzenbeck.html">Peter Ratzenbeck</a></div>
   <div class='concert-musiker'>Peter Ratzenbeck</div>
 </div><div class="concert-entry">
-  <div class="concert-date">15. Nov 2008 · Nexus </div>
+  <div class="concert-date">15. Nov 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/peter-ratzenbeck-solo-guitar.html">Peter Ratzenbeck – Solo Guitar</a></div>
   <div class='concert-musiker'>Peter Ratzenbeck</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Nov 2008 · Nexus Kino </div>
+  <div class="concert-date">20. Nov 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/der-sohn-von-rambow.html">Der Sohn von Rambow</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">20. Nov 2008 · Nexus Kino </div>
+  <div class="concert-date">20. Nov 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/gomorrha.html">Gomorrha</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">21. Nov 2008 · Nexus Ausstellung </div>
+  <div class="concert-date">21. Nov 2008 · Nexus Ausstellung · </div>
   <div class="concert-band"><a href="../bands/huemer-judith.html">Huemer Judith</a></div>
   <div class='concert-musiker'>Jusith Huemer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Nov 2008 · Nexus </div>
+  <div class="concert-date">22. Nov 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/wolfgang-muthspiel-4tet.html">Wolfgang Muthspiel 4tet</a></div>
   <div class='concert-musiker'>Wolfgang Muthspiel</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Nov 2008 · Nexus </div>
+  <div class="concert-date">22. Nov 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/wolfgang-muthspiel-4tet.html">Wolfgang Muthspiel 4tet</a></div>
   <div class='concert-musiker'>Jean-Paul Brodbeck</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Nov 2008 · Nexus </div>
+  <div class="concert-date">22. Nov 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/wolfgang-muthspiel-4tet.html">Wolfgang Muthspiel 4tet</a></div>
   <div class='concert-musiker'>Andreas Pichler</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Nov 2008 · Nexus </div>
+  <div class="concert-date">22. Nov 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/wolfgang-muthspiel-4tet.html">Wolfgang Muthspiel 4tet</a></div>
   <div class='concert-musiker'>Pichler Matthias</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Nov 2008 · Nexus Vaust </div>
+  <div class="concert-date">25. Nov 2008 · Nexus Vaust · </div>
   <div class="concert-band"><a href="../bands/die-zahl-lesung.html">Die Zahl – Lesung</a></div>
   <div class='concert-musiker'>Daniela Larcher</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Nov 2008 · Nexus spezial </div>
+  <div class="concert-date">26. Nov 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/10-jahre-frauenhaus-pinzgau.html">10 Jahre Frauenhaus Pinzgau</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">27. Nov 2008 · Nexus Kino </div>
+  <div class="concert-date">27. Nov 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/chiko.html">Chiko</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">27. Nov 2008 · Nexus Kino </div>
+  <div class="concert-date">27. Nov 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/wall-e-der-letzte-raeumt-die-erde-auf.html">Wall e – Der letzte räumt die Erde auf</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">28. Nov 2008 · Nexus </div>
+  <div class="concert-date">28. Nov 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/headbanger-s-ball-feat-bong-baby-go-sub.html">Headbanger’s Ball feat.: Bong Baby go Sub</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">28. Nov 2008 · Nexus </div>
+  <div class="concert-date">28. Nov 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/headbanger-s-ball-feat-hartlieb-rudi.html">Headbanger’s Ball feat.: Hartlieb Rudi</a></div>
   <div class='concert-musiker'>Rudi Hartlieb</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Nov 2008 · Nexus </div>
+  <div class="concert-date">28. Nov 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/headbanger-s-ball-feat-prosperity-denied.html">Headbanger’s Ball feat.: Prosperity denied</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">28. Nov 2008 · Nexus </div>
+  <div class="concert-date">28. Nov 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/headbanger-s-ball-feat-shotgun-wedding.html">Headbanger’s Ball feat.: Shotgun Wedding</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">2. Dec 2008 · Nexus spezial </div>
+  <div class="concert-date">2. Dec 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/hinter-blinden-fenstern.html">Hinter blinden Fenstern</a></div>
   <div class='concert-musiker'>Friedrich Ani</div>
 </div><div class="concert-entry">
-  <div class="concert-date">3. Dec 2008 · Nexus spezial </div>
+  <div class="concert-date">3. Dec 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/weltbilder-china.html">Weltbilder China</a></div>
   <div class='concert-musiker'>Bernhard Brenner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">4. Dec 2008 · Nexus Kino </div>
+  <div class="concert-date">4. Dec 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/himmelreichgasse-13-b.html">Himmelreichgasse 13 b</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">4. Dec 2008 · Nexus Kino </div>
+  <div class="concert-date">4. Dec 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/kasperl-und-die-lebkuchenfee.html">Kasperl und die Lebkuchenfee</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">5. Dec 2008 · Nexus </div>
+  <div class="concert-date">5. Dec 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/13th-guinnes-christmas-festival-2008.html">13th Guinnes Christmas Festival 2008</a></div>
   <div class='concert-musiker'>Paddy Keenan</div>
 </div><div class="concert-entry">
-  <div class="concert-date">5. Dec 2008 · Nexus </div>
+  <div class="concert-date">5. Dec 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/13th-guinnes-christmas-festival-2008.html">13th Guinnes Christmas Festival 2008</a></div>
   <div class='concert-musiker'>Alec Finn</div>
 </div><div class="concert-entry">
-  <div class="concert-date">5. Dec 2008 · Nexus </div>
+  <div class="concert-date">5. Dec 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/13th-guinnes-christmas-festival-2008.html">13th Guinnes Christmas Festival 2008</a></div>
   <div class='concert-musiker'>Johnny McDonagh</div>
 </div><div class="concert-entry">
-  <div class="concert-date">5. Dec 2008 · Nexus </div>
+  <div class="concert-date">5. Dec 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/13th-guinnes-christmas-festival-2008.html">13th Guinnes Christmas Festival 2008</a></div>
   <div class='concert-musiker'>Jackie Daly</div>
 </div><div class="concert-entry">
-  <div class="concert-date">5. Dec 2008 · Nexus </div>
+  <div class="concert-date">5. Dec 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/13th-guinnes-christmas-festival-2008.html">13th Guinnes Christmas Festival 2008</a></div>
   <div class='concert-musiker'>John Faulkner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">5. Dec 2008 · Nexus </div>
+  <div class="concert-date">5. Dec 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/13th-guinnes-christmas-festival-2008.html">13th Guinnes Christmas Festival 2008</a></div>
   <div class='concert-musiker'>Sean Ryan</div>
 </div><div class="concert-entry">
-  <div class="concert-date">5. Dec 2008 · Nexus </div>
+  <div class="concert-date">5. Dec 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/13th-guinnes-christmas-festival-2008.html">13th Guinnes Christmas Festival 2008</a></div>
   <div class='concert-musiker'>Eleanor Shanley</div>
 </div><div class="concert-entry">
-  <div class="concert-date">5. Dec 2008 · Nexus </div>
+  <div class="concert-date">5. Dec 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/13th-guinnes-christmas-festival-2008.html">13th Guinnes Christmas Festival 2008</a></div>
   <div class='concert-musiker'>Gerry O Connor</div>
 </div><div class="concert-entry">
-  <div class="concert-date">5. Dec 2008 · Nexus </div>
+  <div class="concert-date">5. Dec 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/13th-guinnes-christmas-festival-2008.html">13th Guinnes Christmas Festival 2008</a></div>
   <div class='concert-musiker'>Fergus Feeley</div>
 </div><div class="concert-entry">
-  <div class="concert-date">6. Dec 2008 · Nexus spezial </div>
+  <div class="concert-date">6. Dec 2008 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/cafe-latino.html">Cafe Latino</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">11. Dec 2008 · Nexus Kino </div>
+  <div class="concert-date">11. Dec 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/max-minsky-und-ich.html">Max Minsky und ich</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">11. Dec 2008 · Nexus Kino </div>
+  <div class="concert-date">11. Dec 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/nordwand.html">Nordwand</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">12. Dec 2008 · Nexus Café </div>
+  <div class="concert-date">12. Dec 2008 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/the-groovin-sounds-of-silence.html">The Groovin Sounds of Silence</a></div>
   <div class='concert-musiker'>Hans Fuchs</div>
 </div><div class="concert-entry">
-  <div class="concert-date">13. Dec 2008 · Nexus </div>
+  <div class="concert-date">13. Dec 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/jamie-saft-trio.html">Jamie Saft Trio</a></div>
   <div class='concert-musiker'>Jamie Saft</div>
 </div><div class="concert-entry">
-  <div class="concert-date">13. Dec 2008 · Nexus </div>
+  <div class="concert-date">13. Dec 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/jamie-saft-trio.html">Jamie Saft Trio</a></div>
   <div class='concert-musiker'>Greg Cohen</div>
 </div><div class="concert-entry">
-  <div class="concert-date">13. Dec 2008 · Nexus </div>
+  <div class="concert-date">13. Dec 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/jamie-saft-trio.html">Jamie Saft Trio</a></div>
   <div class='concert-musiker'>Ben Perowsky</div>
 </div><div class="concert-entry">
-  <div class="concert-date">13. Dec 2008 · Nexus </div>
+  <div class="concert-date">13. Dec 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/jamie-saft-trio-plays-zorn-and-dylan.html">Jamie Saft Trio plays Zorn and Dylan</a></div>
   <div class='concert-musiker'>Jamie Saft</div>
 </div><div class="concert-entry">
-  <div class="concert-date">13. Dec 2008 · Nexus </div>
+  <div class="concert-date">13. Dec 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/jamie-saft-trio-plays-zorn-and-dylan.html">Jamie Saft Trio plays Zorn and Dylan</a></div>
   <div class='concert-musiker'>Greg Cohen</div>
 </div><div class="concert-entry">
-  <div class="concert-date">13. Dec 2008 · Nexus </div>
+  <div class="concert-date">13. Dec 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/jamie-saft-trio-plays-zorn-and-dylan.html">Jamie Saft Trio plays Zorn and Dylan</a></div>
   <div class='concert-musiker'>Ben Perowsky</div>
 </div><div class="concert-entry">
-  <div class="concert-date">13. Dec 2008 · Nexus Café </div>
+  <div class="concert-date">13. Dec 2008 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/the-groovin-sounds-of-silence.html">The Groovin Sounds of Silence</a></div>
   <div class='concert-musiker'>Heli Punzenberger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">13. Dec 2008 · Nexus Kino </div>
+  <div class="concert-date">13. Dec 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/wir-kinder-von-bullerbue.html">Wir Kinder von Bullerbü</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">14. Dec 2008 · Nexus </div>
+  <div class="concert-date">14. Dec 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/adventsingen-des-musikum-saalfelden.html">Adventsingen des Musikum Saalfelden</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">16. Dec 2008 · Nexus Theater </div>
+  <div class="concert-date">16. Dec 2008 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/gschnagga-theater-der-nackte-koenig.html">Gschnagga Theater – Der nackte König</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">17. Dec 2008 · Nexus my Uni </div>
+  <div class="concert-date">17. Dec 2008 · Nexus my Uni · </div>
   <div class="concert-band"><a href="../bands/kultuwissenschaft-heute-bachmanns-boehmen-liegt-am-meer.html">Kultuwissenschaft heute – Bachmanns Böhmen liegt am Meer</a></div>
   <div class='concert-musiker'>Hans Höller Dr.</div>
 </div><div class="concert-entry">
-  <div class="concert-date">17. Dec 2008 · Nexus Theater </div>
+  <div class="concert-date">17. Dec 2008 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/gschnagga-theater-der-nackte-koenig.html">Gschnagga Theater – Der nackte König</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">18. Dec 2008 · Nexus Kino </div>
+  <div class="concert-date">18. Dec 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/bader-meinhof-komplex.html">Bader Meinhof Komplex</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">18. Dec 2008 · Nexus Kino </div>
+  <div class="concert-date">18. Dec 2008 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/knut-und-seine-freunde.html">Knut und seine Freunde</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">18. Dec 2008 · Nexus Theater </div>
+  <div class="concert-date">18. Dec 2008 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/gschnagga-theater-der-nackte-koenig.html">Gschnagga Theater – Der nackte König</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">19. Dec 2008 · Nexus Theater </div>
+  <div class="concert-date">19. Dec 2008 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/gschnagga-theater-der-nackte-koenig.html">Gschnagga Theater – Der nackte König</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">20. Dec 2008 · Nexus </div>
+  <div class="concert-date">20. Dec 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/nitro-jibbing-weekend-ridres-party.html">Nitro Jibbing Weekend – Ridres Party</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">25. Dec 2008 · Nexus </div>
+  <div class="concert-date">25. Dec 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/christmas-clubbing-feat-affine-records-jacob-s-salty-bamboozling-ladder.html">Christmas Clubbing feat.: Affine Records Jacob’s Salty & Bamboozling Ladder</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">25. Dec 2008 · Nexus </div>
+  <div class="concert-date">25. Dec 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/christmas-clubbing-feat-djs-aardvarck-cinnaman.html">Christmas Clubbing feat.: DJS Aardvarck & Cinnaman</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">25. Dec 2008 · Nexus </div>
+  <div class="concert-date">25. Dec 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/christmas-clubbing-feat-dorian-concept-special-live-set.html">Christmas Clubbing feat.: Dorian Concept special Live Set</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">25. Dec 2008 · Nexus </div>
+  <div class="concert-date">25. Dec 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/christmas-clubbing-feat-the-clonious.html">Christmas Clubbing feat.: The Clonious</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">27. Dec 2008 · Nexus </div>
+  <div class="concert-date">27. Dec 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/alpentrio.html">Alpentrio</a></div>
   <div class='concert-musiker'>Tom Jelinek</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Dec 2008 · Nexus </div>
+  <div class="concert-date">27. Dec 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/alpentrio.html">Alpentrio</a></div>
   <div class='concert-musiker'>Günther Jelinek</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Dec 2008 · Nexus </div>
+  <div class="concert-date">27. Dec 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/alpentrio.html">Alpentrio</a></div>
   <div class='concert-musiker'>Erik Voggenberger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Dec 2008 · Nexus </div>
+  <div class="concert-date">27. Dec 2008 · Nexus · </div>
   <div class="concert-band"><a href="../bands/alpentrio.html">Alpentrio</a></div>
   <div class='concert-musiker'>Jürgen Holzinger</div>
 </div></div>
@@ -2657,16 +2162,16 @@ a:hover { text-decoration: underline; color: var(--link-hover); }
   Jazzfest Wiki · 5936 Musiker · 13034 Konzerte · 1975–2025
   · Daten: Jazzfest Wien Chronik + Discogs API
 </footer>
-<script src="../search-data.js"></script>
 <script>
+// Globale Suche
+const SEARCH_DATA = window.JAZZFEST_SEARCH || [];
 const inp = document.getElementById('search-input');
 const res = document.getElementById('search-results');
-const SD = window.JAZZFEST_SEARCH || [];
 inp.addEventListener('input', function() {
   const q = this.value.toLowerCase().trim();
   res.innerHTML = '';
   if (q.length < 2) { res.style.display='none'; return; }
-  const hits = SD.filter(x => x.n.toLowerCase().includes(q)).slice(0, 12);
+  const hits = SEARCH_DATA.filter(x => x.n.toLowerCase().includes(q)).slice(0, 12);
   if (!hits.length) { res.style.display='none'; return; }
   hits.forEach(h => {
     const a = document.createElement('a');

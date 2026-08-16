@@ -4,1673 +4,1178 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>2025 — Jazzfest Wiki</title>
-<style>
-/* Jazzfest Wiki — MediaWiki-inspiriertes Layout + Profil-Images */
-
-:root {
-  --bg: #fff;
-  --bg-content: #f8f9fa;
-  --border: #a2a9b1;
-  --border-light: #eaecf0;
-  --link: #3366cc;
-  --link-hover: #1a3f99;
-  --heading: #000;
-  --text: #202122;
-  --text-muted: #54595d;
-  --infobox-bg: #f8f9fa;
-  --infobox-header: #cee0f2;
-  --nav-bg: #f8f9fa;
-  --nav-border: #a2a9b1;
-  --tag-bg: #eaecf0;
-  --accent: #3366cc;
-  --red: #cc0000;
-}
-
-* { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-  font-family: -apple-system, 'Linux Libertine', Georgia, Times, serif;
-  font-size: 14px;
-  line-height: 1.6;
-  color: var(--text);
-  background: var(--bg-content);
-}
-
-/* HEADER */
-#wiki-header {
-  background: var(--bg);
-  border-bottom: 1px solid var(--border);
-  padding: 8px 16px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-#wiki-header .logo {
-  font-family: 'Linux Libertine', Georgia, serif;
-  font-size: 18px;
-  font-weight: bold;
-  color: var(--heading);
-  text-decoration: none;
-  white-space: nowrap;
-}
-
-#wiki-header .logo span { color: var(--accent); }
-
-#search-wrap { flex: 1; max-width: 400px; position: relative; }
-
-#search-input {
-  width: 100%;
-  padding: 5px 10px;
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  font-size: 13px;
-  outline: none;
-}
-
-#search-input:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 2px rgba(51,102,204,0.15);
-}
-
-#search-results {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-top: none;
-  max-height: 300px;
-  overflow-y: auto;
-  z-index: 200;
-  display: none;
-}
-
-#search-results a {
-  display: block;
-  padding: 6px 10px;
-  text-decoration: none;
-  color: var(--text);
-  border-bottom: 1px solid var(--border-light);
-}
-
-#search-results a:hover { background: var(--bg-content); }
-#search-results .sr-type { font-size: 11px; color: var(--text-muted); margin-left: 6px; }
-
-/* NAV */
-#wiki-nav {
-  background: var(--nav-bg);
-  border-bottom: 1px solid var(--nav-border);
-  padding: 0 16px;
-  display: flex;
-  gap: 0;
-  overflow-x: auto;
-}
-
-#wiki-nav a {
-  display: block;
-  padding: 8px 14px;
-  text-decoration: none;
-  color: var(--text);
-  font-size: 13px;
-  border-bottom: 2px solid transparent;
-  white-space: nowrap;
-}
-
-#wiki-nav a:hover, #wiki-nav a.active {
-  color: var(--accent);
-  border-bottom-color: var(--accent);
-}
-
-/* LAYOUT */
-#wiki-body {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px 16px;
-}
-
-.wiki-page {
-  background: var(--bg);
-  border: 1px solid var(--border-light);
-  padding: 20px 24px;
-}
-
-.page-title {
-  font-family: 'Linux Libertine', Georgia, serif;
-  font-size: 28px;
-  font-weight: normal;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 4px;
-  margin-bottom: 16px;
-  color: var(--heading);
-}
-
-/* INFOBOX */
-.infobox {
-  float: right;
-  clear: right;
-  margin: 0 0 16px 24px;
-  background: var(--infobox-bg);
-  border: 1px solid var(--border);
-  font-size: 13px;
-  max-width: 240px;
-  min-width: 200px;
-}
-
-.infobox-title {
-  background: var(--infobox-header);
-  text-align: center;
-  padding: 6px 10px;
-  font-weight: bold;
-  border-bottom: 1px solid var(--border);
-  font-size: 14px;
-}
-
-/* PROFIL-IMAGE */
-.profile-image-wrap {
-  width: 100%;
-  aspect-ratio: 1;
-  overflow: hidden;
-  border-bottom: 1px solid var(--border);
-  position: relative;
-  background: #e8ecf0;
-}
-
-.profile-image-wrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-/* Avatar-Fallback (Initialen) */
-.avatar-fallback {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 52px;
-  font-weight: bold;
-  color: var(--text-muted);
-  background: linear-gradient(135deg, #d0daea 0%, #b8c8de 100%);
-  letter-spacing: -2px;
-  user-select: none;
-}
-
-.infobox table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.infobox td {
-  padding: 4px 8px;
-  vertical-align: top;
-  border-bottom: 1px solid var(--border-light);
-}
-
-.infobox td:first-child {
-  color: var(--text-muted);
-  width: 45%;
-}
-
-/* MUSICIAN-GRID INDEX (mit Bild) */
-.musician-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 10px;
-  margin: 12px 0;
-}
-
-.musician-card {
-  background: var(--bg);
-  border: 1px solid var(--border-light);
-  text-decoration: none;
-  color: var(--text);
-  display: block;
-  overflow: hidden;
-  transition: border-color 0.15s;
-}
-
-.musician-card:hover {
-  border-color: var(--accent);
-  text-decoration: none;
-}
-
-.mc-image-wrap {
-  width: 100%;
-  aspect-ratio: 1;
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(135deg, #d8e4f0 0%, #c0d0e0 100%);
-}
-
-.musician-card .mc-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  position: absolute;
-  top: 0; left: 0;
-  z-index: 1;
-}
-
-.mc-avatar-bg {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 36px;
-  font-weight: bold;
-  color: #7a8fa8;
-  z-index: 0;
-}
-
-.musician-card .mc-avatar {
-  width: 100%;
-  aspect-ratio: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 36px;
-  font-weight: bold;
-  color: #888;
-  background: linear-gradient(135deg, #d8e4f0 0%, #c0d0e0 100%);
-  letter-spacing: -1px;
-}
-
-.musician-card .mc-info {
-  padding: 8px 10px;
-}
-
-.musician-card .mc-name {
-  font-weight: bold;
-  font-size: 13px;
-  line-height: 1.3;
-}
-
-.musician-card .mc-meta {
-  font-size: 11px;
-  color: var(--text-muted);
-  margin-top: 2px;
-}
-
-/* SECTIONS */
-.wiki-section { margin: 20px 0; }
-
-.wiki-section h2 {
-  font-family: 'Linux Libertine', Georgia, serif;
-  font-size: 20px;
-  font-weight: normal;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 2px;
-  margin-bottom: 12px;
-  color: var(--heading);
-}
-
-/* TABLES */
-.wiki-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13px;
-  margin: 8px 0;
-}
-
-.wiki-table th {
-  background: var(--bg-content);
-  border: 1px solid var(--border);
-  padding: 6px 10px;
-  text-align: left;
-  font-weight: bold;
-}
-
-.wiki-table td {
-  border: 1px solid var(--border-light);
-  padding: 5px 10px;
-  vertical-align: top;
-}
-
-.wiki-table tr:hover td { background: #f0f4ff; }
-
-/* TAGS */
-.tag {
-  display: inline-block;
-  background: var(--tag-bg);
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  padding: 1px 7px;
-  font-size: 12px;
-  margin: 2px;
-  color: var(--text);
-  text-decoration: none;
-}
-
-.tag:hover { background: var(--border); }
-.tag.instrument { background: #ddeeff; border-color: #99bbdd; }
-.tag.year { background: #eeffdd; border-color: #99cc77; }
-.tag.mitschnitt { background: #fff0cc; border-color: #ccaa44; }
-
-/* LINKS */
-a { color: var(--link); text-decoration: none; }
-a:hover { text-decoration: underline; color: var(--link-hover); }
-
-/* INDEX-STATS */
-.index-stats {
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-  margin: 16px 0;
-}
-
-.stat-card {
-  background: var(--infobox-bg);
-  border: 1px solid var(--border);
-  padding: 12px 20px;
-  text-align: center;
-  min-width: 120px;
-  flex: 1;
-}
-
-.stat-card .number {
-  font-size: 28px;
-  font-weight: bold;
-  color: var(--accent);
-  display: block;
-}
-
-.stat-card .label { font-size: 12px; color: var(--text-muted); }
-
-/* RELEASES */
-.release-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 10px 0;
-}
-
-.release-card {
-  display: flex;
-  gap: 8px;
-  background: var(--bg-content);
-  border: 1px solid var(--border-light);
-  padding: 8px;
-  max-width: 260px;
-  text-decoration: none;
-  color: var(--text);
-}
-
-.release-card img { width: 56px; height: 56px; object-fit: cover; flex-shrink: 0; }
-.release-card .rc-no-image {
-  width: 56px; height: 56px; flex-shrink: 0;
-  background: #dde4ee;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 22px; color: #888;
-}
-.release-card .rc-title { font-size: 12px; font-weight: bold; line-height: 1.3; }
-.release-card .rc-year { font-size: 11px; color: var(--text-muted); }
-.release-card:hover { border-color: var(--accent); }
-
-/* MITSPIELER */
-.mitspieler-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin: 8px 0;
-}
-
-/* ALPHABET NAV */
-.alpha-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin: 8px 0 16px;
-}
-
-.alpha-nav a {
-  display: block;
-  width: 28px;
-  height: 28px;
-  text-align: center;
-  line-height: 28px;
-  border: 1px solid var(--border);
-  font-size: 13px;
-  color: var(--text);
-  text-decoration: none;
-}
-
-.alpha-nav a:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
-
-/* GRAPH */
-#graph-container {
-  width: 100%;
-  height: 650px;
-  background: #fff;
-  border: 1px solid var(--border);
-  position: relative;
-}
-
-#graph-tooltip {
-  position: absolute;
-  background: rgba(0,0,0,0.85);
-  color: #fff;
-  padding: 8px 12px;
-  border-radius: 4px;
-  font-size: 12px;
-  pointer-events: none;
-  display: none;
-  z-index: 10;
-}
-
-/* YEAR */
-.concert-entry {
-  border-left: 3px solid var(--border);
-  padding: 6px 12px;
-  margin: 4px 0;
-}
-.concert-entry:hover { border-left-color: var(--accent); background: var(--bg-content); }
-.concert-date { font-size: 12px; color: var(--text-muted); }
-.concert-band { font-weight: bold; }
-.concert-musiker { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-
-/* FOOTER */
-#wiki-footer {
-  text-align: center;
-  padding: 20px;
-  color: var(--text-muted);
-  font-size: 12px;
-  border-top: 1px solid var(--border-light);
-  margin-top: 40px;
-}
-
-/* CLEARFIX */
-.clearfix::after { content: ""; display: table; clear: both; }
-
-@media (max-width: 600px) {
-  .infobox { float: none; margin: 0 0 16px; max-width: 100%; }
-  .musician-grid { grid-template-columns: repeat(2, 1fr); }
-  #graph-container { height: 400px; }
-}
-
-</style>
+<link rel="stylesheet" href="../../template/css/wiki.css">
 </head>
 <body>
 <header id="wiki-header">
-  <a class="logo" href="../index.html">Jazz<span>fest</span> Wiki</a>
-  <div id="search-wrap">
+  <a class="logo" href="../../index.html">Jazz<span>fest</span> Wiki</a>
+  <div id="search-wrap" style="position:relative">
     <input id="search-input" type="text" placeholder="Musiker, Band, Jahr …" autocomplete="off">
     <div id="search-results"></div>
   </div>
 </header>
 <nav id="wiki-nav">
-  <a href="../index.html">Hauptseite</a>
-  <a href="../musicians/index.html">Musiker</a>
-  <a href="../bands/index.html">Bands</a>
-  <a href="../years/index.html" class="active">Jahre</a>
-  <a href="../festivals.html">Festivalchronik</a>
-  <a href="../graph.html">Netzwerk</a>
+  <a href="../../index.html" >Hauptseite</a>
+  <a href="../../musicians/index.html" >Musiker</a>
+  <a href="../../bands/index.html" >Bands</a>
+  <a href="../../years/index.html" class="active">Jahre</a>
+  <a href="../../graph.html" >Netzwerk</a>
 </nav>
 <div id="wiki-body">
   <div class="wiki-page clearfix">
     <h1 class="page-title">Jazzfest 2025</h1>
 <div class="wiki-section">
-  <p><strong>288 Konzert-Einträge</strong></p>
+  <p><strong>288 Konzerte</strong></p>
   <div class="year-concerts"><div class="concert-entry">
-  <div class="concert-date">23. Jan 2025 · Winterfestival 2025 Nexus</div>
+  <div class="concert-date">23. Jan 2025 · Winterfestival 2025 · Nexus</div>
   <div class="concert-band"><a href="../bands/dok-film-shake-stew-jazz-fuer-alle.html">DOK.Film Shake Stew – Jazz für Alle</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">24. Jan 2025 · Winterfestival 2025 Stadtpfarrkirche</div>
+  <div class="concert-date">24. Jan 2025 · Winterfestival 2025 · Stadtpfarrkirche</div>
   <div class="concert-band"><a href="../bands/daniel-erdmann-s-velvet-revolution.html">Daniel Erdmann’s Velvet Revolution</a></div>
   <div class='concert-musiker'>Daniel Erdmann</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Jan 2025 · Winterfestival 2025 Stadtpfarrkirche</div>
+  <div class="concert-date">24. Jan 2025 · Winterfestival 2025 · Stadtpfarrkirche</div>
   <div class="concert-band"><a href="../bands/daniel-erdmann-s-velvet-revolution.html">Daniel Erdmann’s Velvet Revolution</a></div>
   <div class='concert-musiker'>Théo Ceccaldi</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Jan 2025 · Winterfestival 2025 Stadtpfarrkirche</div>
+  <div class="concert-date">24. Jan 2025 · Winterfestival 2025 · Stadtpfarrkirche</div>
   <div class="concert-band"><a href="../bands/daniel-erdmann-s-velvet-revolution.html">Daniel Erdmann’s Velvet Revolution</a></div>
   <div class='concert-musiker'>Jim Hart</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Jan 2025 · Winterfestival 2025 Nexus</div>
+  <div class="concert-date">24. Jan 2025 · Winterfestival 2025 · Nexus</div>
   <div class="concert-band"><a href="../bands/ahl6-what-happened-to-eternity.html">AHL6 „What Happened to Eternity“</a> 🎙</div>
   <div class='concert-musiker'>Thomas Liesinger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Jan 2025 · Winterfestival 2025 Nexus</div>
+  <div class="concert-date">24. Jan 2025 · Winterfestival 2025 · Nexus</div>
   <div class="concert-band"><a href="../bands/ahl6-what-happened-to-eternity.html">AHL6 „What Happened to Eternity“</a> 🎙</div>
   <div class='concert-musiker'>Robert Schröck</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Jan 2025 · Winterfestival 2025 Nexus</div>
+  <div class="concert-date">24. Jan 2025 · Winterfestival 2025 · Nexus</div>
   <div class="concert-band"><a href="../bands/ahl6-what-happened-to-eternity.html">AHL6 „What Happened to Eternity“</a> 🎙</div>
   <div class='concert-musiker'>Leonhard Skorupa</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Jan 2025 · Winterfestival 2025 Nexus</div>
+  <div class="concert-date">24. Jan 2025 · Winterfestival 2025 · Nexus</div>
   <div class="concert-band"><a href="../bands/ahl6-what-happened-to-eternity.html">AHL6 „What Happened to Eternity“</a> 🎙</div>
   <div class='concert-musiker'>Markus W. Schneider</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Jan 2025 · Winterfestival 2025 Nexus</div>
+  <div class="concert-date">24. Jan 2025 · Winterfestival 2025 · Nexus</div>
   <div class="concert-band"><a href="../bands/ahl6-what-happened-to-eternity.html">AHL6 „What Happened to Eternity“</a> 🎙</div>
   <div class='concert-musiker'>Tobias Pöcksteiner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Jan 2025 · Winterfestival 2025 Nexus</div>
+  <div class="concert-date">24. Jan 2025 · Winterfestival 2025 · Nexus</div>
   <div class="concert-band"><a href="../bands/ahl6-what-happened-to-eternity.html">AHL6 „What Happened to Eternity“</a> 🎙</div>
   <div class='concert-musiker'>Lukas Aichinger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Jan 2025 · Winterfestival 2025 Nexus</div>
+  <div class="concert-date">24. Jan 2025 · Winterfestival 2025 · Nexus</div>
   <div class="concert-band"><a href="../bands/gard-nilssen-acoustic-unity-with-emmeluth-m-ster-hegdal.html">Gard Nilssen Acoustic Unity with Emmeluth, Møster & Hegdal</a> 🎙</div>
   <div class='concert-musiker'>Gard Nilssen</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Jan 2025 · Winterfestival 2025 Nexus</div>
+  <div class="concert-date">24. Jan 2025 · Winterfestival 2025 · Nexus</div>
   <div class="concert-band"><a href="../bands/gard-nilssen-acoustic-unity-with-emmeluth-m-ster-hegdal.html">Gard Nilssen Acoustic Unity with Emmeluth, Møster & Hegdal</a> 🎙</div>
   <div class='concert-musiker'>Petter Eldh</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Jan 2025 · Winterfestival 2025 Nexus</div>
+  <div class="concert-date">24. Jan 2025 · Winterfestival 2025 · Nexus</div>
   <div class="concert-band"><a href="../bands/gard-nilssen-acoustic-unity-with-emmeluth-m-ster-hegdal.html">Gard Nilssen Acoustic Unity with Emmeluth, Møster & Hegdal</a> 🎙</div>
   <div class='concert-musiker'>Andre Roligheten</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Jan 2025 · Winterfestival 2025 Nexus</div>
+  <div class="concert-date">24. Jan 2025 · Winterfestival 2025 · Nexus</div>
   <div class="concert-band"><a href="../bands/gard-nilssen-acoustic-unity-with-emmeluth-m-ster-hegdal.html">Gard Nilssen Acoustic Unity with Emmeluth, Møster & Hegdal</a> 🎙</div>
   <div class='concert-musiker'>Signe Emmeluth</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Jan 2025 · Winterfestival 2025 Nexus</div>
+  <div class="concert-date">24. Jan 2025 · Winterfestival 2025 · Nexus</div>
   <div class="concert-band"><a href="../bands/gard-nilssen-acoustic-unity-with-emmeluth-m-ster-hegdal.html">Gard Nilssen Acoustic Unity with Emmeluth, Møster & Hegdal</a> 🎙</div>
   <div class='concert-musiker'>Kjetil Moster</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Jan 2025 · Winterfestival 2025 Nexus</div>
+  <div class="concert-date">24. Jan 2025 · Winterfestival 2025 · Nexus</div>
   <div class="concert-band"><a href="../bands/gard-nilssen-acoustic-unity-with-emmeluth-m-ster-hegdal.html">Gard Nilssen Acoustic Unity with Emmeluth, Møster & Hegdal</a> 🎙</div>
   <div class='concert-musiker'>Eirik Hegdal</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Jan 2025 · Winterfestival 2025 Nexus</div>
+  <div class="concert-date">25. Jan 2025 · Winterfestival 2025 · Nexus</div>
   <div class="concert-band"><a href="../bands/enemy.html">Enemy</a> 🎙</div>
   <div class='concert-musiker'>Kit Downes</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Jan 2025 · Winterfestival 2025 Nexus</div>
+  <div class="concert-date">25. Jan 2025 · Winterfestival 2025 · Nexus</div>
   <div class="concert-band"><a href="../bands/enemy.html">Enemy</a> 🎙</div>
   <div class='concert-musiker'>Petter Eldh</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Jan 2025 · Winterfestival 2025 Nexus</div>
+  <div class="concert-date">25. Jan 2025 · Winterfestival 2025 · Nexus</div>
   <div class="concert-band"><a href="../bands/enemy.html">Enemy</a> 🎙</div>
   <div class='concert-musiker'>Antoine Pierre</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Jan 2025 · Winterfestival 2025 Nexus</div>
+  <div class="concert-date">25. Jan 2025 · Winterfestival 2025 · Nexus</div>
   <div class="concert-band"><a href="../bands/laura-jurd-s-never-again.html">Laura Jurd’s “Never again”</a> 🎙</div>
   <div class='concert-musiker'>Laura Jurd</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Jan 2025 · Winterfestival 2025 Nexus</div>
+  <div class="concert-date">25. Jan 2025 · Winterfestival 2025 · Nexus</div>
   <div class="concert-band"><a href="../bands/laura-jurd-s-never-again.html">Laura Jurd’s “Never again”</a> 🎙</div>
   <div class='concert-musiker'>James Kitchman</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Jan 2025 · Winterfestival 2025 Nexus</div>
+  <div class="concert-date">25. Jan 2025 · Winterfestival 2025 · Nexus</div>
   <div class="concert-band"><a href="../bands/laura-jurd-s-never-again.html">Laura Jurd’s “Never again”</a> 🎙</div>
   <div class='concert-musiker'>Tom Herbert</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Jan 2025 · Winterfestival 2025 Nexus</div>
+  <div class="concert-date">25. Jan 2025 · Winterfestival 2025 · Nexus</div>
   <div class="concert-band"><a href="../bands/laura-jurd-s-never-again.html">Laura Jurd’s “Never again”</a> 🎙</div>
   <div class='concert-musiker'>Corrie Dick</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Jan 2025 · Winterfestival 2025 Nexus</div>
+  <div class="concert-date">25. Jan 2025 · Winterfestival 2025 · Nexus</div>
   <div class="concert-band"><a href="../bands/sun-mi-hong-quintet.html">Sun Mi Hong Quintet</a> 🎙</div>
   <div class='concert-musiker'>Sun MI Hong</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Jan 2025 · Winterfestival 2025 Nexus</div>
+  <div class="concert-date">25. Jan 2025 · Winterfestival 2025 · Nexus</div>
   <div class="concert-band"><a href="../bands/sun-mi-hong-quintet.html">Sun Mi Hong Quintet</a> 🎙</div>
   <div class='concert-musiker'>Youngwoo Lee</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Jan 2025 · Winterfestival 2025 Nexus</div>
+  <div class="concert-date">25. Jan 2025 · Winterfestival 2025 · Nexus</div>
   <div class="concert-band"><a href="../bands/sun-mi-hong-quintet.html">Sun Mi Hong Quintet</a> 🎙</div>
   <div class='concert-musiker'>Alessandro Fongaro</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Jan 2025 · Winterfestival 2025 Nexus</div>
+  <div class="concert-date">25. Jan 2025 · Winterfestival 2025 · Nexus</div>
   <div class="concert-band"><a href="../bands/sun-mi-hong-quintet.html">Sun Mi Hong Quintet</a> 🎙</div>
   <div class='concert-musiker'>Nicolo Ricci</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Jan 2025 · Winterfestival 2025 Nexus</div>
+  <div class="concert-date">25. Jan 2025 · Winterfestival 2025 · Nexus</div>
   <div class="concert-band"><a href="../bands/sun-mi-hong-quintet.html">Sun Mi Hong Quintet</a> 🎙</div>
   <div class='concert-musiker'>Alistair Payne</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Jan 2025 · Winterfestival 2025 AsitzBräu</div>
+  <div class="concert-date">25. Jan 2025 · Winterfestival 2025 · AsitzBräu</div>
   <div class="concert-band"><a href="../bands/the-hot-rods.html">The Hot Rods</a></div>
   <div class='concert-musiker'>Will White</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Jan 2025 · Winterfestival 2025 AsitzBräu</div>
+  <div class="concert-date">25. Jan 2025 · Winterfestival 2025 · AsitzBräu</div>
   <div class="concert-band"><a href="../bands/the-hot-rods.html">The Hot Rods</a></div>
   <div class='concert-musiker'>Bernhard Ostermaier</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Jan 2025 · Winterfestival 2025 AsitzBräu</div>
+  <div class="concert-date">25. Jan 2025 · Winterfestival 2025 · AsitzBräu</div>
   <div class="concert-band"><a href="../bands/the-hot-rods.html">The Hot Rods</a></div>
   <div class='concert-musiker'>Sal Chytra</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Jan 2025 · Winterfestival 2025 Bergbau- und Gotikmuseum Leogang</div>
+  <div class="concert-date">26. Jan 2025 · Winterfestival 2025 · Bergbau- und Gotikmuseum Leogang</div>
   <div class="concert-band"><a href="../bands/laura-jurd-invites-petter-eldh.html">Laura Jurd invites Petter Eldh</a></div>
   <div class='concert-musiker'>Laura Jurd</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Jan 2025 · Winterfestival 2025 Bergbau- und Gotikmuseum Leogang</div>
+  <div class="concert-date">26. Jan 2025 · Winterfestival 2025 · Bergbau- und Gotikmuseum Leogang</div>
   <div class="concert-band"><a href="../bands/laura-jurd-invites-petter-eldh.html">Laura Jurd invites Petter Eldh</a></div>
   <div class='concert-musiker'>Petter Eldh</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Jan 2025 · Winterfestival 2025 Bergbau- und Gotikmuseum Leogang</div>
+  <div class="concert-date">26. Jan 2025 · Winterfestival 2025 · Bergbau- und Gotikmuseum Leogang</div>
   <div class="concert-band"><a href="../bands/duo-valcic-preuschl.html">Duo Valcic Preuschl</a></div>
   <div class='concert-musiker'>Asja Valcic</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Jan 2025 · Winterfestival 2025 Bergbau- und Gotikmuseum Leogang</div>
+  <div class="concert-date">26. Jan 2025 · Winterfestival 2025 · Bergbau- und Gotikmuseum Leogang</div>
   <div class="concert-band"><a href="../bands/duo-valcic-preuschl.html">Duo Valcic Preuschl</a></div>
   <div class='concert-musiker'>Raphael Preuschl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2025 · Festival 2025 Naturkino Asitz</div>
+  <div class="concert-date">21. Aug 2025 · Festival 2025 · Naturkino Asitz</div>
   <div class="concert-band"><a href="../bands/we-hike-jazz-wanderung.html">We hike Jazz – Wanderung</a></div>
   <div class='concert-musiker'>Lukas Kranzelbinder</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2025 · Festival 2025 Naturkino Asitz</div>
+  <div class="concert-date">21. Aug 2025 · Festival 2025 · Naturkino Asitz</div>
   <div class="concert-band"><a href="../bands/we-hike-jazz-wanderung.html">We hike Jazz – Wanderung</a></div>
   <div class='concert-musiker'>Anna Tsombanis</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2025 · Festival 2025 Naturkino Asitz</div>
+  <div class="concert-date">21. Aug 2025 · Festival 2025 · Naturkino Asitz</div>
   <div class="concert-band"><a href="../bands/we-hike-jazz-wanderung.html">We hike Jazz – Wanderung</a></div>
   <div class='concert-musiker'>Pedro Melo Alves</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2025 · Festival 2025 Buchbinderei Fuchs</div>
+  <div class="concert-date">21. Aug 2025 · Festival 2025 · Buchbinderei Fuchs</div>
   <div class="concert-band"><a href="../bands/orte-des-gedenkens.html">Orte Des Gedenkens</a></div>
   <div class='concert-musiker'>Robert Landfermann</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2025 · Festival 2025 Buchbinderei Fuchs</div>
+  <div class="concert-date">21. Aug 2025 · Festival 2025 · Buchbinderei Fuchs</div>
   <div class="concert-band"><a href="../bands/orte-des-gedenkens.html">Orte Des Gedenkens</a></div>
   <div class='concert-musiker'>Lukas König</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">21. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/sir-waldo-weathers-henry-carpaneto-trio.html">Sir Waldo Weathers & Henry Carpaneto Trio</a></div>
   <div class='concert-musiker'>Waldo Weathers</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">21. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/sir-waldo-weathers-henry-carpaneto-trio.html">Sir Waldo Weathers & Henry Carpaneto Trio</a></div>
   <div class='concert-musiker'>Henry Corpaneto</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">21. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/sir-waldo-weathers-henry-carpaneto-trio.html">Sir Waldo Weathers & Henry Carpaneto Trio</a></div>
   <div class='concert-musiker'>Albero Colombo</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">21. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/sir-waldo-weathers-henry-carpaneto-trio.html">Sir Waldo Weathers & Henry Carpaneto Trio</a></div>
   <div class='concert-musiker'>Lorenzo Bergamino</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2025 · Festival 2025 Buchbinderei Fuchs</div>
+  <div class="concert-date">21. Aug 2025 · Festival 2025 · Buchbinderei Fuchs</div>
   <div class="concert-band"><a href="../bands/impro-session-teis-semey-invites-kirke-karja.html">Impro Session: Teis Semey Invites Kirke Karja</a></div>
   <div class='concert-musiker'>Teis Semey</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2025 · Festival 2025 Buchbinderei Fuchs</div>
+  <div class="concert-date">21. Aug 2025 · Festival 2025 · Buchbinderei Fuchs</div>
   <div class="concert-band"><a href="../bands/impro-session-teis-semey-invites-kirke-karja.html">Impro Session: Teis Semey Invites Kirke Karja</a></div>
   <div class='concert-musiker'>Kirke Karja</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">21. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/vieux-farka-tour.html">Vieux Farka Touré</a></div>
   <div class='concert-musiker'>Viex Farka Touré</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">21. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/vieux-farka-tour.html">Vieux Farka Touré</a></div>
   <div class='concert-musiker'>Adama Kone</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">21. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/vieux-farka-tour.html">Vieux Farka Touré</a></div>
   <div class='concert-musiker'>Marshall Henry</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">21. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/vieux-farka-tour.html">Vieux Farka Touré</a></div>
   <div class='concert-musiker'>Ousmane Dagno</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2025 · Festival 2025 SC</div>
+  <div class="concert-date">21. Aug 2025 · Festival 2025 · SC</div>
   <div class="concert-band"><a href="../bands/max-andrzejewski-ensemble-resonanz-summen.html">Max Andrzejewski & Ensemble Resonanz „Summen“</a></div>
   <div class='concert-musiker'>Max Andrzejewski</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2025 · Festival 2025 SC</div>
+  <div class="concert-date">21. Aug 2025 · Festival 2025 · SC</div>
   <div class="concert-band"><a href="../bands/max-andrzejewski-ensemble-resonanz-summen.html">Max Andrzejewski & Ensemble Resonanz „Summen“</a></div>
   <div class='concert-musiker'>Barbara Bultmann</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2025 · Festival 2025 SC</div>
+  <div class="concert-date">21. Aug 2025 · Festival 2025 · SC</div>
   <div class="concert-band"><a href="../bands/max-andrzejewski-ensemble-resonanz-summen.html">Max Andrzejewski & Ensemble Resonanz „Summen“</a></div>
   <div class='concert-musiker'>Swantje Tessmann</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2025 · Festival 2025 SC</div>
+  <div class="concert-date">21. Aug 2025 · Festival 2025 · SC</div>
   <div class="concert-band"><a href="../bands/max-andrzejewski-ensemble-resonanz-summen.html">Max Andrzejewski & Ensemble Resonanz „Summen“</a></div>
   <div class='concert-musiker'>Neasa Ni Bhriain</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2025 · Festival 2025 SC</div>
+  <div class="concert-date">21. Aug 2025 · Festival 2025 · SC</div>
   <div class="concert-band"><a href="../bands/max-andrzejewski-ensemble-resonanz-summen.html">Max Andrzejewski & Ensemble Resonanz „Summen“</a></div>
   <div class='concert-musiker'>Lea Tessmann</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2025 · Festival 2025 Gruberhalle</div>
+  <div class="concert-date">21. Aug 2025 · Festival 2025 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/chez-fria-die-kunst-dem-fuge.html">Chez Fria – Die Kunst dem Fuge</a></div>
   <div class='concert-musiker'>Lorenz Widauer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2025 · Festival 2025 Gruberhalle</div>
+  <div class="concert-date">21. Aug 2025 · Festival 2025 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/chez-fria-die-kunst-dem-fuge.html">Chez Fria – Die Kunst dem Fuge</a></div>
   <div class='concert-musiker'>Felix Gutschi</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2025 · Festival 2025 Gruberhalle</div>
+  <div class="concert-date">21. Aug 2025 · Festival 2025 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/chez-fria-die-kunst-dem-fuge.html">Chez Fria – Die Kunst dem Fuge</a></div>
   <div class='concert-musiker'>Ferdinand Rauchmann</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2025 · Festival 2025 Gruberhalle</div>
+  <div class="concert-date">21. Aug 2025 · Festival 2025 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/chez-fria-die-kunst-dem-fuge.html">Chez Fria – Die Kunst dem Fuge</a></div>
   <div class='concert-musiker'>Maximilian Rehrl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2025 · Festival 2025 Gruberhalle</div>
+  <div class="concert-date">21. Aug 2025 · Festival 2025 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/chez-fria-die-kunst-dem-fuge.html">Chez Fria – Die Kunst dem Fuge</a></div>
   <div class='concert-musiker'>Paul Widauer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2025 · Festival 2025 SC</div>
+  <div class="concert-date">21. Aug 2025 · Festival 2025 · SC</div>
   <div class="concert-band"><a href="../bands/eyes-to-the-sun.html">Eyes to the Sun</a></div>
   <div class='concert-musiker'>Leo  Genovese</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2025 · Festival 2025 SC</div>
+  <div class="concert-date">21. Aug 2025 · Festival 2025 · SC</div>
   <div class="concert-band"><a href="../bands/eyes-to-the-sun.html">Eyes to the Sun</a></div>
   <div class='concert-musiker'>Camila Nebbia</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Aug 2025 · Festival 2025 SC</div>
+  <div class="concert-date">21. Aug 2025 · Festival 2025 · SC</div>
   <div class="concert-band"><a href="../bands/eyes-to-the-sun.html">Eyes to the Sun</a></div>
   <div class='concert-musiker'>Alfred Vogel</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Buchbinderei Fuchs</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Buchbinderei Fuchs</div>
   <div class="concert-band"><a href="../bands/orte-des-gedenkens.html">Orte Des Gedenkens</a></div>
   <div class='concert-musiker'>Ruth Goller</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Buchbinderei Fuchs</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Buchbinderei Fuchs</div>
   <div class="concert-band"><a href="../bands/orte-des-gedenkens.html">Orte Des Gedenkens</a></div>
   <div class='concert-musiker'>Max Andrzejewski</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Einsiedelei</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Einsiedelei</div>
   <div class="concert-band"><a href="../bands/laura-jurd-invites-jon-irabagon.html">Laura Jurd Invites Jon Irabagon</a></div>
   <div class='concert-musiker'>Laura Jurd</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Einsiedelei</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Einsiedelei</div>
   <div class="concert-band"><a href="../bands/laura-jurd-invites-jon-irabagon.html">Laura Jurd Invites Jon Irabagon</a></div>
   <div class='concert-musiker'>Jon Irabagon</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Mama Thresl</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Mama Thresl</div>
   <div class="concert-band"><a href="../bands/jazz-brunch-mit-mojo-incorporation.html">Jazz Brunch mit MOJO INCORPORATION</a></div>
   <div class='concert-musiker'>Tamina Mayrwöger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Mama Thresl</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Mama Thresl</div>
   <div class="concert-band"><a href="../bands/jazz-brunch-mit-mojo-incorporation.html">Jazz Brunch mit MOJO INCORPORATION</a></div>
   <div class='concert-musiker'>Christoph Dedl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Mama Thresl</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Mama Thresl</div>
   <div class="concert-band"><a href="../bands/jazz-brunch-mit-mojo-incorporation.html">Jazz Brunch mit MOJO INCORPORATION</a></div>
   <div class='concert-musiker'>Benjamin Mayr</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Mama Thresl</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Mama Thresl</div>
   <div class="concert-band"><a href="../bands/jazz-brunch-mit-mojo-incorporation.html">Jazz Brunch mit MOJO INCORPORATION</a></div>
   <div class='concert-musiker'>Jakob Mayr</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Mama Thresl</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Mama Thresl</div>
   <div class="concert-band"><a href="../bands/jazz-brunch-mit-mojo-incorporation.html">Jazz Brunch mit MOJO INCORPORATION</a></div>
   <div class='concert-musiker'>Fabian Sparlinek</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Mama Thresl</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Mama Thresl</div>
   <div class="concert-band"><a href="../bands/jazz-brunch-mit-mojo-incorporation.html">Jazz Brunch mit MOJO INCORPORATION</a></div>
   <div class='concert-musiker'>Edin Sudar</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Mama Thresl</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Mama Thresl</div>
   <div class="concert-band"><a href="../bands/jazz-brunch-mit-mojo-incorporation.html">Jazz Brunch mit MOJO INCORPORATION</a></div>
   <div class='concert-musiker'>Lukas Schönböck</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Mama Thresl</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Mama Thresl</div>
   <div class="concert-band"><a href="../bands/jazz-brunch-mit-mojo-incorporation.html">Jazz Brunch mit MOJO INCORPORATION</a></div>
   <div class='concert-musiker'>Rainer Gutternigg</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 SC</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · SC</div>
   <div class="concert-band"><a href="../bands/pedro-melo-alves-hiit.html">Pedro Melo Alves „HIIT“</a></div>
   <div class='concert-musiker'>Simone Quatrana</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 SC</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · SC</div>
   <div class="concert-band"><a href="../bands/pedro-melo-alves-hiit.html">Pedro Melo Alves „HIIT“</a></div>
   <div class='concert-musiker'>Andrea Grossi</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 SC</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · SC</div>
   <div class="concert-band"><a href="../bands/pedro-melo-alves-hiit.html">Pedro Melo Alves „HIIT“</a></div>
   <div class='concert-musiker'>Pedro Melo Alves</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 SC</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · SC</div>
   <div class="concert-band"><a href="../bands/kasho-chualan-lukas-koenig.html">Kasho Chualan / Lukas König</a></div>
   <div class='concert-musiker'>Kaso Chualan</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 SC</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · SC</div>
   <div class="concert-band"><a href="../bands/kasho-chualan-lukas-koenig.html">Kasho Chualan / Lukas König</a></div>
   <div class='concert-musiker'>Lukas König</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Buchbinderei Fuchs</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Buchbinderei Fuchs</div>
   <div class="concert-band"><a href="../bands/melting-pot.html">Melting Pot</a></div>
   <div class='concert-musiker'>Sofia Salvo</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Buchbinderei Fuchs</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Buchbinderei Fuchs</div>
   <div class="concert-band"><a href="../bands/melting-pot.html">Melting Pot</a></div>
   <div class='concert-musiker'>Kasia Kopela</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Buchbinderei Fuchs</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Buchbinderei Fuchs</div>
   <div class="concert-band"><a href="../bands/melting-pot.html">Melting Pot</a></div>
   <div class='concert-musiker'>Alex Koo</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Buchbinderei Fuchs</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Buchbinderei Fuchs</div>
   <div class="concert-band"><a href="../bands/melting-pot.html">Melting Pot</a></div>
   <div class='concert-musiker'>Henrik Sandstad Dalen</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Buchbinderei Fuchs</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Buchbinderei Fuchs</div>
   <div class="concert-band"><a href="../bands/melting-pot.html">Melting Pot</a></div>
   <div class='concert-musiker'>Judith Schwarz</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Gruberhalle</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/teis-semey-raw-fish.html">Teis Semey "Raw Fish"</a></div>
   <div class='concert-musiker'>Teis Semey</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Gruberhalle</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/teis-semey-raw-fish.html">Teis Semey "Raw Fish"</a></div>
   <div class='concert-musiker'>Amelie Dahl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Gruberhalle</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/teis-semey-raw-fish.html">Teis Semey "Raw Fish"</a></div>
   <div class='concert-musiker'>Jose Soares</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Gruberhalle</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/teis-semey-raw-fish.html">Teis Semey "Raw Fish"</a></div>
   <div class='concert-musiker'>Adam  O’Farrill</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Gruberhalle</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/teis-semey-raw-fish.html">Teis Semey "Raw Fish"</a></div>
   <div class='concert-musiker'>Giovanni Iacovella</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Gruberhalle</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/teis-semey-raw-fish.html">Teis Semey "Raw Fish"</a></div>
   <div class='concert-musiker'>Jim Black</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Nexus Film</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Nexus Film</div>
   <div class="concert-band"><a href="../bands/oesterreich-bild-am-sonntag-orf.html">Österreich Bild am Sonntag ORF</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/chanson-trottoir.html">Chanson Trottoir</a></div>
   <div class='concert-musiker'>Quique</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/chanson-trottoir.html">Chanson Trottoir</a></div>
   <div class='concert-musiker'>Momo</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/chanson-trottoir.html">Chanson Trottoir</a></div>
   <div class='concert-musiker'>Gido</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/chanson-trottoir.html">Chanson Trottoir</a></div>
   <div class='concert-musiker'>Christian</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/chanson-trottoir.html">Chanson Trottoir</a></div>
   <div class='concert-musiker'>Till</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/skorupa-5-sonic-feast.html">Skorupa 5 "Sonic Feast"</a></div>
   <div class='concert-musiker'>Leonhard Skorupa</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/skorupa-5-sonic-feast.html">Skorupa 5 "Sonic Feast"</a></div>
   <div class='concert-musiker'>Silke Eberhard</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/skorupa-5-sonic-feast.html">Skorupa 5 "Sonic Feast"</a></div>
   <div class='concert-musiker'>Kirke Karja</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/skorupa-5-sonic-feast.html">Skorupa 5 "Sonic Feast"</a></div>
   <div class='concert-musiker'>Robert Landfermann</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/skorupa-5-sonic-feast.html">Skorupa 5 "Sonic Feast"</a></div>
   <div class='concert-musiker'>Leif Berger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/banda-senderos.html">Banda Senderos</a></div>
   <div class='concert-musiker'>Sebastian Campos-Schwermann</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/banda-senderos.html">Banda Senderos</a></div>
   <div class='concert-musiker'>Daniel Brown</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/banda-senderos.html">Banda Senderos</a></div>
   <div class='concert-musiker'>Jens Kolpatzik</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/banda-senderos.html">Banda Senderos</a></div>
   <div class='concert-musiker'>Dominik Ohlmann</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/banda-senderos.html">Banda Senderos</a></div>
   <div class='concert-musiker'>Johannes Hatogh</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/banda-senderos.html">Banda Senderos</a></div>
   <div class='concert-musiker'>David Fiege</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/banda-senderos.html">Banda Senderos</a></div>
   <div class='concert-musiker'>Pascal Wenske</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/banda-senderos.html">Banda Senderos</a></div>
   <div class='concert-musiker'>Julian Kühn</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/ejn-award-verleihung.html">EJN Award Verleihung</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/weird-of-mouth.html">Weird of Mouth</a></div>
   <div class='concert-musiker'>Mette Rasmussen</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/weird-of-mouth.html">Weird of Mouth</a></div>
   <div class='concert-musiker'>Craig Taborn</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/weird-of-mouth.html">Weird of Mouth</a></div>
   <div class='concert-musiker'>Ches Smith</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Gruberhalle</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/crutches.html">Crutches</a></div>
   <div class='concert-musiker'>Valentin Schuster</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Gruberhalle</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/crutches.html">Crutches</a></div>
   <div class='concert-musiker'>Olga Reznichenko</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Gruberhalle</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/crutches.html">Crutches</a></div>
   <div class='concert-musiker'>Jan Frisch</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Gruberhalle</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/crutches.html">Crutches</a></div>
   <div class='concert-musiker'>Laure Boer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/patricia-brennan-breaking-stretch.html">Patricia Brennan "Breaking Stretch"</a></div>
   <div class='concert-musiker'>Jon Irabagon</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/patricia-brennan-breaking-stretch.html">Patricia Brennan "Breaking Stretch"</a></div>
   <div class='concert-musiker'>Mark Shim</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/patricia-brennan-breaking-stretch.html">Patricia Brennan "Breaking Stretch"</a></div>
   <div class='concert-musiker'>Adam O’Farrill</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/patricia-brennan-breaking-stretch.html">Patricia Brennan "Breaking Stretch"</a></div>
   <div class='concert-musiker'>Kim Cass</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/patricia-brennan-breaking-stretch.html">Patricia Brennan "Breaking Stretch"</a></div>
   <div class='concert-musiker'>Dan Weiss</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/patricia-brennan-breaking-stretch.html">Patricia Brennan "Breaking Stretch"</a></div>
   <div class='concert-musiker'>Keisel Jimenez</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/patricia-brennan-breaking-stretch.html">Patricia Brennan "Breaking Stretch"</a></div>
   <div class='concert-musiker'>Patricia Brennan</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Nexus+</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Nexus+</div>
   <div class="concert-band"><a href="../bands/lexsoul-dancemachine.html">Lexsoul Dancemachine</a></div>
   <div class='concert-musiker'>Robert Linna</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Nexus+</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Nexus+</div>
   <div class="concert-band"><a href="../bands/lexsoul-dancemachine.html">Lexsoul Dancemachine</a></div>
   <div class='concert-musiker'>Joonas Mattias Sarapuu</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Nexus+</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Nexus+</div>
   <div class="concert-band"><a href="../bands/lexsoul-dancemachine.html">Lexsoul Dancemachine</a></div>
   <div class='concert-musiker'>Kristen Kütner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Nexus+</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Nexus+</div>
   <div class="concert-band"><a href="../bands/lexsoul-dancemachine.html">Lexsoul Dancemachine</a></div>
   <div class='concert-musiker'>Jürgen Kütner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Nexus+</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Nexus+</div>
   <div class="concert-band"><a href="../bands/lexsoul-dancemachine.html">Lexsoul Dancemachine</a></div>
   <div class='concert-musiker'>Martin Laksberg</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Nexus+</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Nexus+</div>
   <div class="concert-band"><a href="../bands/lexsoul-dancemachine.html">Lexsoul Dancemachine</a></div>
   <div class='concert-musiker'>Luiz Black</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 Nexus+</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · Nexus+</div>
   <div class="concert-band"><a href="../bands/lexsoul-dancemachine.html">Lexsoul Dancemachine</a></div>
   <div class='concert-musiker'>Caspar Salo</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/ingebrigt-h-ker-flaten-exit-knarr.html">Ingebrigt Håker Flaten (Exit) Knarr</a></div>
   <div class='concert-musiker'>Ingebrigt Håker Flaten</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/ingebrigt-h-ker-flaten-exit-knarr.html">Ingebrigt Håker Flaten (Exit) Knarr</a></div>
   <div class='concert-musiker'>Amalie Dahl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/ingebrigt-h-ker-flaten-exit-knarr.html">Ingebrigt Håker Flaten (Exit) Knarr</a></div>
   <div class='concert-musiker'>Karl Hjolmar Nyberg</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/ingebrigt-h-ker-flaten-exit-knarr.html">Ingebrigt Håker Flaten (Exit) Knarr</a></div>
   <div class='concert-musiker'>Marta Warelis</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/ingebrigt-h-ker-flaten-exit-knarr.html">Ingebrigt Håker Flaten (Exit) Knarr</a></div>
   <div class='concert-musiker'>Jonathan F. Home</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">22. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/ingebrigt-h-ker-flaten-exit-knarr.html">Ingebrigt Håker Flaten (Exit) Knarr</a></div>
   <div class='concert-musiker'>Olaf Olsen</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Buchbinderei Fuchs</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Buchbinderei Fuchs</div>
   <div class="concert-band"><a href="../bands/orte-des-gedenkens.html">Orte Des Gedenkens</a></div>
   <div class='concert-musiker'>Lukas Kranzelbinder</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Buchbinderei Fuchs</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Buchbinderei Fuchs</div>
   <div class="concert-band"><a href="../bands/orte-des-gedenkens.html">Orte Des Gedenkens</a></div>
   <div class='concert-musiker'>Sun Mi Hong</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/lexsoul-dancemachine.html">Lexsoul Dancemachine</a></div>
   <div class='concert-musiker'>Robert Linna</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/lexsoul-dancemachine.html">Lexsoul Dancemachine</a></div>
   <div class='concert-musiker'>Joonas Mattias Sarapuu</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/lexsoul-dancemachine.html">Lexsoul Dancemachine</a></div>
   <div class='concert-musiker'>Kristen Kütner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/lexsoul-dancemachine.html">Lexsoul Dancemachine</a></div>
   <div class='concert-musiker'>Jürgen Kütner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/lexsoul-dancemachine.html">Lexsoul Dancemachine</a></div>
   <div class='concert-musiker'>Martin Laksberg</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/lexsoul-dancemachine.html">Lexsoul Dancemachine</a></div>
   <div class='concert-musiker'>Luiz Black</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/lexsoul-dancemachine.html">Lexsoul Dancemachine</a></div>
   <div class='concert-musiker'>Caspar Salo</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Nexus+</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Nexus+</div>
   <div class="concert-band"><a href="../bands/schmack.html">Schmack</a></div>
   <div class='concert-musiker'>Andreas Holler</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Nexus+</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Nexus+</div>
   <div class="concert-band"><a href="../bands/schmack.html">Schmack</a></div>
   <div class='concert-musiker'>Phillipp Wohofsky</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Nexus+</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Nexus+</div>
   <div class="concert-band"><a href="../bands/schmack.html">Schmack</a></div>
   <div class='concert-musiker'>Tobias Wöhrer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Nexus+</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Nexus+</div>
   <div class="concert-band"><a href="../bands/schmack.html">Schmack</a></div>
   <div class='concert-musiker'>Partick Pillichshammer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Steinalm</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Steinalm</div>
   <div class="concert-band"><a href="../bands/we-hike-jazz-wanderung.html">We hike Jazz – Wanderung</a></div>
   <div class='concert-musiker'>Lukas Kranzelbinder</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Steinalm</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Steinalm</div>
   <div class="concert-band"><a href="../bands/we-hike-jazz-wanderung.html">We hike Jazz – Wanderung</a></div>
   <div class='concert-musiker'>Jon Irabagon</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Steinalm</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Steinalm</div>
   <div class="concert-band"><a href="../bands/we-hike-jazz-wanderung.html">We hike Jazz – Wanderung</a></div>
   <div class='concert-musiker'>Max  Andrzejewski</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Steinalm</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Steinalm</div>
   <div class="concert-band"><a href="../bands/we-hike-jazz-wanderung.html">We hike Jazz – Wanderung</a></div>
   <div class='concert-musiker'>Lorenz Widauer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Brücklwirtshaus</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Brücklwirtshaus</div>
   <div class="concert-band"><a href="../bands/amelie-dahl-invites-joel-grip-antonin-gerbal.html">Amelie Dahl invites Joel Grip & Antonin Gerbal</a></div>
   <div class='concert-musiker'>Amelie Dahl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Brücklwirtshaus</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Brücklwirtshaus</div>
   <div class="concert-band"><a href="../bands/amelie-dahl-invites-joel-grip-antonin-gerbal.html">Amelie Dahl invites Joel Grip & Antonin Gerbal</a></div>
   <div class='concert-musiker'>Joel Grip</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Brücklwirtshaus</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Brücklwirtshaus</div>
   <div class="concert-band"><a href="../bands/amelie-dahl-invites-joel-grip-antonin-gerbal.html">Amelie Dahl invites Joel Grip & Antonin Gerbal</a></div>
   <div class='concert-musiker'>Antonin Gerbal</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Alte Schmiede</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Alte Schmiede</div>
   <div class="concert-band"><a href="../bands/fluesterkneipe.html">Flüsterkneipe</a></div>
   <div class='concert-musiker'>Tobias Kobl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Alte Schmiede</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Alte Schmiede</div>
   <div class="concert-band"><a href="../bands/fluesterkneipe.html">Flüsterkneipe</a></div>
   <div class='concert-musiker'>Felix Zinsser</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Alte Schmiede</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Alte Schmiede</div>
   <div class="concert-band"><a href="../bands/fluesterkneipe.html">Flüsterkneipe</a></div>
   <div class='concert-musiker'>Gregor Fussenegger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Alte Schmiede</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Alte Schmiede</div>
   <div class="concert-band"><a href="../bands/fluesterkneipe.html">Flüsterkneipe</a></div>
   <div class='concert-musiker'>Friedrich Vösenhuber</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 SC</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · SC</div>
   <div class="concert-band"><a href="../bands/andreas-scherer-leo-genovese-at-the-beat-of-all-cause.html">Andreas Scherer & Leo Genovese „At The Beat Of All Cause“</a></div>
   <div class='concert-musiker'>Andreas Schaerer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 SC</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · SC</div>
   <div class="concert-band"><a href="../bands/andreas-scherer-leo-genovese-at-the-beat-of-all-cause.html">Andreas Scherer & Leo Genovese „At The Beat Of All Cause“</a></div>
   <div class='concert-musiker'>Leo Genovese</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/behind-the-beats-fuehrung-f-kinder.html">Behind the Beats – Führung f Kinder</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 SC</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · SC</div>
   <div class="concert-band"><a href="../bands/brennan-terwijn-lillinger.html">Brennan / Terwijn / Lillinger</a></div>
   <div class='concert-musiker'>Patricia Brennan</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 SC</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · SC</div>
   <div class="concert-band"><a href="../bands/brennan-terwijn-lillinger.html">Brennan / Terwijn / Lillinger</a></div>
   <div class='concert-musiker'>Jort Terwijn</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 SC</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · SC</div>
   <div class="concert-band"><a href="../bands/brennan-terwijn-lillinger.html">Brennan / Terwijn / Lillinger</a></div>
   <div class='concert-musiker'>Christian Lillinger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Gruberhalle</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/i-like-to-sleep.html">I like to sleep</a></div>
   <div class='concert-musiker'>Amund Storlokken Ase</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Gruberhalle</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/i-like-to-sleep.html">I like to sleep</a></div>
   <div class='concert-musiker'>Nicolas Leirtro</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Gruberhalle</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/i-like-to-sleep.html">I like to sleep</a></div>
   <div class='concert-musiker'>Oyvind Leite</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Fuchs</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Fuchs</div>
   <div class="concert-band"><a href="../bands/lampen.html">Lampen</a></div>
   <div class='concert-musiker'>Kalle Kalima</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Fuchs</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Fuchs</div>
   <div class="concert-band"><a href="../bands/lampen.html">Lampen</a></div>
   <div class='concert-musiker'>Tatu Rönkkö</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/soulvision-allstars-the-james-brown-tribute-show.html">SoulVision Allstars „The James Brown Tribute Show“</a></div>
   <div class='concert-musiker'>Rich Fonje</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/soulvision-allstars-the-james-brown-tribute-show.html">SoulVision Allstars „The James Brown Tribute Show“</a></div>
   <div class='concert-musiker'>Dave Feusi</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/soulvision-allstars-the-james-brown-tribute-show.html">SoulVision Allstars „The James Brown Tribute Show“</a></div>
   <div class='concert-musiker'>Fabienne Hoerni</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/soulvision-allstars-the-james-brown-tribute-show.html">SoulVision Allstars „The James Brown Tribute Show“</a></div>
   <div class='concert-musiker'>Bernhard Bomert</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/soulvision-allstars-the-james-brown-tribute-show.html">SoulVision Allstars „The James Brown Tribute Show“</a></div>
   <div class='concert-musiker'>Andreas Renggli</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/soulvision-allstars-the-james-brown-tribute-show.html">SoulVision Allstars „The James Brown Tribute Show“</a></div>
   <div class='concert-musiker'>Sam Siegenthaler</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/soulvision-allstars-the-james-brown-tribute-show.html">SoulVision Allstars „The James Brown Tribute Show“</a></div>
   <div class='concert-musiker'>Pascal P Kaeser</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/soulvision-allstars-the-james-brown-tribute-show.html">SoulVision Allstars „The James Brown Tribute Show“</a></div>
   <div class='concert-musiker'>JJ Flueck</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/bezau-beatz-orchestra-of-good-hope.html">BEZAU BEATZ Orchestra of Good Hope</a></div>
   <div class='concert-musiker'>Leo Genovese</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/bezau-beatz-orchestra-of-good-hope.html">BEZAU BEATZ Orchestra of Good Hope</a></div>
   <div class='concert-musiker'>Luis Vicente</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/bezau-beatz-orchestra-of-good-hope.html">BEZAU BEATZ Orchestra of Good Hope</a></div>
   <div class='concert-musiker'>Joao Pedro Brandao</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/bezau-beatz-orchestra-of-good-hope.html">BEZAU BEATZ Orchestra of Good Hope</a></div>
   <div class='concert-musiker'>Camila Nebbia</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/bezau-beatz-orchestra-of-good-hope.html">BEZAU BEATZ Orchestra of Good Hope</a></div>
   <div class='concert-musiker'>Sofia Salvo</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/bezau-beatz-orchestra-of-good-hope.html">BEZAU BEATZ Orchestra of Good Hope</a></div>
   <div class='concert-musiker'>Lucien Dubuis</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/bezau-beatz-orchestra-of-good-hope.html">BEZAU BEATZ Orchestra of Good Hope</a></div>
   <div class='concert-musiker'>Demian Cabaud</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/bezau-beatz-orchestra-of-good-hope.html">BEZAU BEATZ Orchestra of Good Hope</a></div>
   <div class='concert-musiker'>Pedro Melo Alves</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/bezau-beatz-orchestra-of-good-hope.html">BEZAU BEATZ Orchestra of Good Hope</a></div>
   <div class='concert-musiker'>Alfred Vogel</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/shanti-powa.html">Shanti Powa</a></div>
   <div class='concert-musiker'>Bertrand Rise</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/shanti-powa.html">Shanti Powa</a></div>
   <div class='concert-musiker'>Andreas Galante</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/shanti-powa.html">Shanti Powa</a></div>
   <div class='concert-musiker'>Jonas Tutzer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/shanti-powa.html">Shanti Powa</a></div>
   <div class='concert-musiker'>Angelo Ippati</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/shanti-powa.html">Shanti Powa</a></div>
   <div class='concert-musiker'>Thomas Maniacco</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/shanti-powa.html">Shanti Powa</a></div>
   <div class='concert-musiker'>Michael Rollmann</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/shanti-powa.html">Shanti Powa</a></div>
   <div class='concert-musiker'>Peter Burchia</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/shanti-powa.html">Shanti Powa</a></div>
   <div class='concert-musiker'>Lukas Pichler</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/shanti-powa.html">Shanti Powa</a></div>
   <div class='concert-musiker'>Florian Gamper</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/laura-jurd-rites-revelations.html">Laura Jurd „Rites & Revelations“</a></div>
   <div class='concert-musiker'>Laura Jurd</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/laura-jurd-rites-revelations.html">Laura Jurd „Rites & Revelations“</a></div>
   <div class='concert-musiker'>Ultan O’Brien</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/laura-jurd-rites-revelations.html">Laura Jurd „Rites & Revelations“</a></div>
   <div class='concert-musiker'>Tara Cunningham</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/laura-jurd-rites-revelations.html">Laura Jurd „Rites & Revelations“</a></div>
   <div class='concert-musiker'>Ruth Goller</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/laura-jurd-rites-revelations.html">Laura Jurd „Rites & Revelations“</a></div>
   <div class='concert-musiker'>Corrie Dick</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Gruberhalle</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/ph-nix-under-the-sun.html">PHØNIX "Under the Sun"</a></div>
   <div class='concert-musiker'>Emil Storlokken</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Gruberhalle</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/ph-nix-under-the-sun.html">PHØNIX "Under the Sun"</a></div>
   <div class='concert-musiker'>Jenny Froysa</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Gruberhalle</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/ph-nix-under-the-sun.html">PHØNIX "Under the Sun"</a></div>
   <div class='concert-musiker'>August Glännestrand</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/teis-semey-en-masse.html">Teis Semey „EN MASSE!“</a></div>
   <div class='concert-musiker'>Teis Semey</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/teis-semey-en-masse.html">Teis Semey „EN MASSE!“</a></div>
   <div class='concert-musiker'>Jose Soares</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/teis-semey-en-masse.html">Teis Semey „EN MASSE!“</a></div>
   <div class='concert-musiker'>Jesse Schilderinck</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/teis-semey-en-masse.html">Teis Semey „EN MASSE!“</a></div>
   <div class='concert-musiker'>Jort Terwijn</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/teis-semey-en-masse.html">Teis Semey „EN MASSE!“</a></div>
   <div class='concert-musiker'>Sun Mi Hong</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Nexus+</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Nexus+</div>
   <div class="concert-band"><a href="../bands/misz-sputnik.html">Misz Sputnik</a></div>
   <div class='concert-musiker'>Sigrid Langrehr</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Nexus+</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Nexus+</div>
   <div class="concert-band"><a href="../bands/misz-sputnik.html">Misz Sputnik</a></div>
   <div class='concert-musiker'>Laila Reichenpfader</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Nexus+</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Nexus+</div>
   <div class="concert-band"><a href="../bands/misz-sputnik.html">Misz Sputnik</a></div>
   <div class='concert-musiker'>Hubert Sommerauer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Nexus+</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Nexus+</div>
   <div class="concert-band"><a href="../bands/misz-sputnik.html">Misz Sputnik</a></div>
   <div class='concert-musiker'>Lucia Steidl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Nexus+</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Nexus+</div>
   <div class="concert-band"><a href="../bands/misz-sputnik.html">Misz Sputnik</a></div>
   <div class='concert-musiker'>Magdalena Heller</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Nexus+</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Nexus+</div>
   <div class="concert-band"><a href="../bands/misz-sputnik.html">Misz Sputnik</a></div>
   <div class='concert-musiker'>Paulina Krasser</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Nexus+</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Nexus+</div>
   <div class="concert-band"><a href="../bands/misz-sputnik.html">Misz Sputnik</a></div>
   <div class='concert-musiker'>Eva Maria Schitter</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Nexus+</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Nexus+</div>
   <div class="concert-band"><a href="../bands/misz-sputnik.html">Misz Sputnik</a></div>
   <div class='concert-musiker'>Bernhard Vierthaler</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Nexus+</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Nexus+</div>
   <div class="concert-band"><a href="../bands/misz-sputnik.html">Misz Sputnik</a></div>
   <div class='concert-musiker'>Lea Wiednig</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Nexus+</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Nexus+</div>
   <div class="concert-band"><a href="../bands/misz-sputnik.html">Misz Sputnik</a></div>
   <div class='concert-musiker'>Cornel Entfellner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/ahmed.html">دمحأ [Ahmed]</a></div>
   <div class='concert-musiker'>Pat  Thomas</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/ahmed.html">دمحأ [Ahmed]</a></div>
   <div class='concert-musiker'>Seymour Wright</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/ahmed.html">دمحأ [Ahmed]</a></div>
   <div class='concert-musiker'>Joel Grip</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/ahmed.html">دمحأ [Ahmed]</a></div>
   <div class='concert-musiker'>Antonin Gerbal</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Nexus+</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Nexus+</div>
   <div class="concert-band"><a href="../bands/electro-guzzi.html">Electro Guzzi</a></div>
   <div class='concert-musiker'>Bernhard Hammer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Nexus+</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Nexus+</div>
   <div class="concert-band"><a href="../bands/electro-guzzi.html">Electro Guzzi</a></div>
   <div class='concert-musiker'>Jakob Schneidewind</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Nexus+</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Nexus+</div>
   <div class="concert-band"><a href="../bands/electro-guzzi.html">Electro Guzzi</a></div>
   <div class='concert-musiker'>Bernhard Breuer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 Nexus+</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · Nexus+</div>
   <div class="concert-band"><a href="../bands/electro-guzzi.html">Electro Guzzi</a></div>
   <div class='concert-musiker'>Mario Stadler</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/tomoki-sanders.html">Tomoki Sanders</a></div>
   <div class='concert-musiker'>Tomoki Sanders</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/tomoki-sanders.html">Tomoki Sanders</a></div>
   <div class='concert-musiker'>Ian Finkelstein</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/tomoki-sanders.html">Tomoki Sanders</a></div>
   <div class='concert-musiker'>Mwanzi Harriott</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">23. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/tomoki-sanders.html">Tomoki Sanders</a></div>
   <div class='concert-musiker'>Christian Napoleon</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 Nexus Café</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · Nexus Café</div>
   <div class="concert-band"><a href="../bands/late-night-session-by-teis-semey.html">Late Night Session by Teis Semey</a></div>
   <div class='concert-musiker'>Teis Semey</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 Nexus Café</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · Nexus Café</div>
   <div class="concert-band"><a href="../bands/late-night-session-by-teis-semey.html">Late Night Session by Teis Semey</a></div>
   <div class='concert-musiker'>Ingebrigt Håker Flaten</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 Nexus Café</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · Nexus Café</div>
   <div class="concert-band"><a href="../bands/late-night-session-by-teis-semey.html">Late Night Session by Teis Semey</a></div>
   <div class='concert-musiker'>Amalie Dahl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 Nexus Café</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · Nexus Café</div>
   <div class="concert-band"><a href="../bands/late-night-session-by-teis-semey.html">Late Night Session by Teis Semey</a></div>
   <div class='concert-musiker'>Jesse Schilderink</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 Nexus Café</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · Nexus Café</div>
   <div class="concert-band"><a href="../bands/late-night-session-by-teis-semey.html">Late Night Session by Teis Semey</a></div>
   <div class='concert-musiker'>Christian Lillinger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 Ritzensse</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · Ritzensse</div>
   <div class="concert-band"><a href="../bands/konzert-im-ruderboot.html">Konzert im Ruderboot</a></div>
   <div class='concert-musiker'>Anna Tsombanis</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 Ritzensse</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · Ritzensse</div>
   <div class="concert-band"><a href="../bands/konzert-im-ruderboot.html">Konzert im Ruderboot</a></div>
   <div class='concert-musiker'>Yvonne Moriel</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 Kollingwald</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · Kollingwald</div>
   <div class="concert-band"><a href="../bands/laura-jurd-invites-nicolas-leirtro.html">Laura Jurd invites Nicolas Leirtro</a></div>
   <div class='concert-musiker'>Laura Jurd</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 Kollingwald</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · Kollingwald</div>
   <div class="concert-band"><a href="../bands/laura-jurd-invites-nicolas-leirtro.html">Laura Jurd invites Nicolas Leirtro</a></div>
   <div class='concert-musiker'>Nicolas Leirtro</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 Stöcklalm</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · Stöcklalm</div>
   <div class="concert-band"><a href="../bands/schneeberger-bakanic-quartett-alpin-swing.html">Schneeberger & Bakanic Quartett „Alpin Swing“</a></div>
   <div class='concert-musiker'>Diknu Schneeberger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 Stöcklalm</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · Stöcklalm</div>
   <div class="concert-band"><a href="../bands/schneeberger-bakanic-quartett-alpin-swing.html">Schneeberger & Bakanic Quartett „Alpin Swing“</a></div>
   <div class='concert-musiker'>Christian Bakanic</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 Stöcklalm</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · Stöcklalm</div>
   <div class="concert-band"><a href="../bands/schneeberger-bakanic-quartett-alpin-swing.html">Schneeberger & Bakanic Quartett „Alpin Swing“</a></div>
   <div class='concert-musiker'>Julian Wohlmuth</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 Stöcklalm</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · Stöcklalm</div>
   <div class="concert-band"><a href="../bands/schneeberger-bakanic-quartett-alpin-swing.html">Schneeberger & Bakanic Quartett „Alpin Swing“</a></div>
   <div class='concert-musiker'>Martin Heinzle</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/kinderkonzert-gedankenreiseorchester.html">Kinderkonzert Gedankenreiseorchester</a></div>
   <div class='concert-musiker'>Laura Lydia Pfeffer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/kinderkonzert-gedankenreiseorchester.html">Kinderkonzert Gedankenreiseorchester</a></div>
   <div class='concert-musiker'>Vicoria Pfeil</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/kinderkonzert-gedankenreiseorchester.html">Kinderkonzert Gedankenreiseorchester</a></div>
   <div class='concert-musiker'>Gidi Kalchhauser</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/kinderkonzert-gedankenreiseorchester.html">Kinderkonzert Gedankenreiseorchester</a></div>
   <div class='concert-musiker'>Paulina Wregg</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 Brücklwirtshaus</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · Brücklwirtshaus</div>
   <div class="concert-band"><a href="../bands/camila-nebbia-invites-john-edwards.html">Camila Nebbia invites John Edwards</a></div>
   <div class='concert-musiker'>Camila Nebbia</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 Brücklwirtshaus</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · Brücklwirtshaus</div>
   <div class="concert-band"><a href="../bands/camila-nebbia-invites-john-edwards.html">Camila Nebbia invites John Edwards</a></div>
   <div class='concert-musiker'>John Edwards</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 Gruberhalle</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/nothing-causes-anything.html">Nothing causes anything</a></div>
   <div class='concert-musiker'>Yvonne Moriel</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 Gruberhalle</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/nothing-causes-anything.html">Nothing causes anything</a></div>
   <div class='concert-musiker'>Alex Kranabetter</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 Gruberhalle</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/nothing-causes-anything.html">Nothing causes anything</a></div>
   <div class='concert-musiker'>Vincent Pongracz</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 Gruberhalle</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · Gruberhalle</div>
   <div class="concert-band"><a href="../bands/nothing-causes-anything.html">Nothing causes anything</a></div>
   <div class='concert-musiker'>Christian Lillinger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/afrodream.html">Afrodream</a></div>
   <div class='concert-musiker'>Abou Samb</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/afrodream.html">Afrodream</a></div>
   <div class='concert-musiker'>Gabriele Cappello</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/afrodream.html">Afrodream</a></div>
   <div class='concert-musiker'>Gianluca Gallucci</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/afrodream.html">Afrodream</a></div>
   <div class='concert-musiker'>Luca Vergano</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/afrodream.html">Afrodream</a></div>
   <div class='concert-musiker'>Ariel Verosto</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/afrodream.html">Afrodream</a></div>
   <div class='concert-musiker'>Guiseppe De Vito</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/sun-mi-hong-bida-orchestra.html">Sun-Mi Hong Bida Orchestra</a></div>
   <div class='concert-musiker'>Jozef Dumoulin</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/sun-mi-hong-bida-orchestra.html">Sun-Mi Hong Bida Orchestra</a></div>
   <div class='concert-musiker'>John Edwards</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/sun-mi-hong-bida-orchestra.html">Sun-Mi Hong Bida Orchestra</a></div>
   <div class='concert-musiker'>Mette Rasmussen</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/sun-mi-hong-bida-orchestra.html">Sun-Mi Hong Bida Orchestra</a></div>
   <div class='concert-musiker'>John Dikeman</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/sun-mi-hong-bida-orchestra.html">Sun-Mi Hong Bida Orchestra</a></div>
   <div class='concert-musiker'>Alistair Payne</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/sun-mi-hong-bida-orchestra.html">Sun-Mi Hong Bida Orchestra</a></div>
   <div class='concert-musiker'>Sun-Mi Hong</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/nomfusi.html">Nomfusi</a></div>
   <div class='concert-musiker'>Nomfusi Ngonyama</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/nomfusi.html">Nomfusi</a></div>
   <div class='concert-musiker'>Talo Ndou</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/nomfusi.html">Nomfusi</a></div>
   <div class='concert-musiker'>Lukas Pamminger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 Stadtpark</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · Stadtpark</div>
   <div class="concert-band"><a href="../bands/nomfusi.html">Nomfusi</a></div>
   <div class='concert-musiker'>Klaus Brennsteiner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/kalle-kalima-s-detour-with-leo-genovese-and-christian-lillinger.html">Kalle Kalima’s Detour with Leo Genovese and Christian Lillinger</a></div>
   <div class='concert-musiker'>Kalle Kalima</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/kalle-kalima-s-detour-with-leo-genovese-and-christian-lillinger.html">Kalle Kalima’s Detour with Leo Genovese and Christian Lillinger</a></div>
   <div class='concert-musiker'>Leo Genovese</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/kalle-kalima-s-detour-with-leo-genovese-and-christian-lillinger.html">Kalle Kalima’s Detour with Leo Genovese and Christian Lillinger</a></div>
   <div class='concert-musiker'>Christian Lillinger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/ancient-to-the-future.html">Ancient to the Future</a></div>
   <div class='concert-musiker'>Ava Mendoza</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/ancient-to-the-future.html">Ancient to the Future</a></div>
   <div class='concert-musiker'>Mojid Bekkas</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/ancient-to-the-future.html">Ancient to the Future</a></div>
   <div class='concert-musiker'>Xhosa Cole</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/ancient-to-the-future.html">Ancient to the Future</a></div>
   <div class='concert-musiker'>Hamid Drake</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/the-bad-plus.html">The Bad Plus</a></div>
   <div class='concert-musiker'>Chris  Potter</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/the-bad-plus.html">The Bad Plus</a></div>
   <div class='concert-musiker'>Craig Taborn</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/the-bad-plus.html">The Bad Plus</a></div>
   <div class='concert-musiker'>Reid Anderson</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 MS</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · MS</div>
   <div class="concert-band"><a href="../bands/the-bad-plus.html">The Bad Plus</a></div>
   <div class='concert-musiker'>Dave King</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 Nexus Café</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · Nexus Café</div>
   <div class="concert-band"><a href="../bands/spiritual-unity-session-hosted-by-lukas-kranzelbinder.html">Spiritual Unity Session hosted by Lukas Kranzelbinder</a></div>
   <div class='concert-musiker'>Lukas Kranzelbinder</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 Nexus Café</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · Nexus Café</div>
   <div class="concert-band"><a href="../bands/spiritual-unity-session-hosted-by-lukas-kranzelbinder.html">Spiritual Unity Session hosted by Lukas Kranzelbinder</a></div>
   <div class='concert-musiker'>Sun Mi Hong</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 Nexus Café</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · Nexus Café</div>
   <div class="concert-band"><a href="../bands/spiritual-unity-session-hosted-by-lukas-kranzelbinder.html">Spiritual Unity Session hosted by Lukas Kranzelbinder</a></div>
   <div class='concert-musiker'>Hamid Drake</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Aug 2025 · Festival 2025 Nexus Café</div>
+  <div class="concert-date">24. Aug 2025 · Festival 2025 · Nexus Café</div>
   <div class="concert-band"><a href="../bands/spiritual-unity-session-hosted-by-lukas-kranzelbinder.html">Spiritual Unity Session hosted by Lukas Kranzelbinder</a></div>
   <div class='concert-musiker'>Luis Vicente</div>
 </div></div>
@@ -1681,16 +1186,16 @@ a:hover { text-decoration: underline; color: var(--link-hover); }
   Jazzfest Wiki · 5936 Musiker · 13034 Konzerte · 1975–2025
   · Daten: Jazzfest Wien Chronik + Discogs API
 </footer>
-<script src="../search-data.js"></script>
 <script>
+// Globale Suche
+const SEARCH_DATA = window.JAZZFEST_SEARCH || [];
 const inp = document.getElementById('search-input');
 const res = document.getElementById('search-results');
-const SD = window.JAZZFEST_SEARCH || [];
 inp.addEventListener('input', function() {
   const q = this.value.toLowerCase().trim();
   res.innerHTML = '';
   if (q.length < 2) { res.style.display='none'; return; }
-  const hits = SD.filter(x => x.n.toLowerCase().includes(q)).slice(0, 12);
+  const hits = SEARCH_DATA.filter(x => x.n.toLowerCase().includes(q)).slice(0, 12);
   if (!hits.length) { res.style.display='none'; return; }
   hits.forEach(h => {
     const a = document.createElement('a');

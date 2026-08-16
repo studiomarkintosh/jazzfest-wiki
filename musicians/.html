@@ -9,7 +9,7 @@
 <body>
 <header id="wiki-header">
   <a class="logo" href="../../index.html">Jazz<span>fest</span> Wiki</a>
-  <div id="search-wrap">
+  <div id="search-wrap" style="position:relative">
     <input id="search-input" type="text" placeholder="Musiker, Band, Jahr …" autocomplete="off">
     <div id="search-results"></div>
   </div>
@@ -26,9 +26,9 @@
     <h1 class="page-title">?</h1>
 <div class="infobox">
   <div class="infobox-title">?</div>
-  <div class="profile-image-wrap"><div class="avatar-fallback">?</div></div>
+  
   <table>
-    <tr><td>Instrument</td><td>p, b, dr, perc</td></tr>
+    <tr><td>Instrument</td><td>Klavier, Kontrabass, Schlagzeug, Perkussion</td></tr>
     <tr><td>Auftritte</td><td><strong>4</strong></td></tr>
     <tr><td>Erstauftritt</td><td>21. May 1978</td></tr>
     <tr><td>Letzter</td><td>21. May 1978</td></tr>
@@ -37,39 +37,43 @@
     
   </table>
 </div>
-<p><span class="tag instrument">p</span><span class="tag instrument">b</span><span class="tag instrument">dr</span><span class="tag instrument">perc</span><a class="tag year" href="../years/1978.html">1978</a></p>
+<p><span class="tag instrument">Klavier</span><span class="tag instrument">Kontrabass</span><span class="tag instrument">Schlagzeug</span><span class="tag instrument">Perkussion</span><a class="tag year" href="../years/1978.html">1978</a></p>
 
 <div class="wiki-section">
   <h2>Auftritte am Jazzfest</h2>
-  <p>4 Auftritte dokumentiert.</p>
+  <p>4 Auftritte in 1 Jahr dokumentiert.</p>
+  <details class="year-accordion" open>
+  <summary><span class="acc-yr">Jazzfest 1978</span><span class="acc-cnt">4 Auftritte</span></summary>
   <table class="wiki-table">
-    <thead><tr><th>Datum</th><th>Band / Projekt</th><th>Instrument</th><th>Ort</th><th>Bühne</th></tr></thead>
+    <thead><tr><th>Datum</th><th>Band/Projekt</th><th>Instrument</th><th>Ort</th><th>Bühne</th></tr></thead>
     <tbody><tr>
   <td>21. May 1978</td>
   <td><a href="../bands/clifford-thornton-sextet.html">Clifford Thornton Sextet</a></td>
-  <td>p</td>
+  <td>Klavier</td>
   <td>Festival 78</td>
   <td>—</td>
 </tr><tr>
   <td>21. May 1978</td>
   <td><a href="../bands/clifford-thornton-sextet.html">Clifford Thornton Sextet</a></td>
-  <td>b</td>
+  <td>Kontrabass</td>
   <td>Festival 78</td>
   <td>—</td>
 </tr><tr>
   <td>21. May 1978</td>
   <td><a href="../bands/clifford-thornton-sextet.html">Clifford Thornton Sextet</a></td>
-  <td>dr</td>
+  <td>Schlagzeug</td>
   <td>Festival 78</td>
   <td>—</td>
 </tr><tr>
   <td>21. May 1978</td>
   <td><a href="../bands/clifford-thornton-sextet.html">Clifford Thornton Sextet</a></td>
-  <td>perc</td>
+  <td>Perkussion</td>
   <td>Festival 78</td>
   <td>—</td>
 </tr></tbody>
   </table>
+</details>
+
 </div>
 
 <div class='wiki-section'><h2>Mitspieler</h2><div class='mitspieler-list'><a class="tag" href="clifford-thornton.html">Clifford Thornton (4×)</a><a class="tag" href="richard-raux.html">Richard Raux (4×)</a></div></div>
@@ -82,16 +86,16 @@
   Jazzfest Wiki · 5936 Musiker · 13034 Konzerte · 1975–2025
   · Daten: Jazzfest Wien Chronik + Discogs API
 </footer>
-<script src="../../search-data.js"></script>
 <script>
+// Globale Suche
+const SEARCH_DATA = window.JAZZFEST_SEARCH || [];
 const inp = document.getElementById('search-input');
 const res = document.getElementById('search-results');
-const SD = window.JAZZFEST_SEARCH || [];
 inp.addEventListener('input', function() {
   const q = this.value.toLowerCase().trim();
   res.innerHTML = '';
   if (q.length < 2) { res.style.display='none'; return; }
-  const hits = SD.filter(x => x.n.toLowerCase().includes(q)).slice(0, 12);
+  const hits = SEARCH_DATA.filter(x => x.n.toLowerCase().includes(q)).slice(0, 12);
   if (!hits.length) { res.style.display='none'; return; }
   hits.forEach(h => {
     const a = document.createElement('a');

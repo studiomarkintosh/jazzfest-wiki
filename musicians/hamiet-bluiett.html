@@ -4,615 +4,194 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Hamiet Bluiett — Jazzfest Wiki</title>
-<style>
-/* Jazzfest Wiki — MediaWiki-inspiriertes Layout + Profil-Images */
-
-:root {
-  --bg: #fff;
-  --bg-content: #f8f9fa;
-  --border: #a2a9b1;
-  --border-light: #eaecf0;
-  --link: #3366cc;
-  --link-hover: #1a3f99;
-  --heading: #000;
-  --text: #202122;
-  --text-muted: #54595d;
-  --infobox-bg: #f8f9fa;
-  --infobox-header: #cee0f2;
-  --nav-bg: #f8f9fa;
-  --nav-border: #a2a9b1;
-  --tag-bg: #eaecf0;
-  --accent: #3366cc;
-  --red: #cc0000;
-}
-
-* { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-  font-family: -apple-system, 'Linux Libertine', Georgia, Times, serif;
-  font-size: 14px;
-  line-height: 1.6;
-  color: var(--text);
-  background: var(--bg-content);
-}
-
-/* HEADER */
-#wiki-header {
-  background: var(--bg);
-  border-bottom: 1px solid var(--border);
-  padding: 8px 16px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-#wiki-header .logo {
-  font-family: 'Linux Libertine', Georgia, serif;
-  font-size: 18px;
-  font-weight: bold;
-  color: var(--heading);
-  text-decoration: none;
-  white-space: nowrap;
-}
-
-#wiki-header .logo span { color: var(--accent); }
-
-#search-wrap { flex: 1; max-width: 400px; position: relative; }
-
-#search-input {
-  width: 100%;
-  padding: 5px 10px;
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  font-size: 13px;
-  outline: none;
-}
-
-#search-input:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 2px rgba(51,102,204,0.15);
-}
-
-#search-results {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-top: none;
-  max-height: 300px;
-  overflow-y: auto;
-  z-index: 200;
-  display: none;
-}
-
-#search-results a {
-  display: block;
-  padding: 6px 10px;
-  text-decoration: none;
-  color: var(--text);
-  border-bottom: 1px solid var(--border-light);
-}
-
-#search-results a:hover { background: var(--bg-content); }
-#search-results .sr-type { font-size: 11px; color: var(--text-muted); margin-left: 6px; }
-
-/* NAV */
-#wiki-nav {
-  background: var(--nav-bg);
-  border-bottom: 1px solid var(--nav-border);
-  padding: 0 16px;
-  display: flex;
-  gap: 0;
-  overflow-x: auto;
-}
-
-#wiki-nav a {
-  display: block;
-  padding: 8px 14px;
-  text-decoration: none;
-  color: var(--text);
-  font-size: 13px;
-  border-bottom: 2px solid transparent;
-  white-space: nowrap;
-}
-
-#wiki-nav a:hover, #wiki-nav a.active {
-  color: var(--accent);
-  border-bottom-color: var(--accent);
-}
-
-/* LAYOUT */
-#wiki-body {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px 16px;
-}
-
-.wiki-page {
-  background: var(--bg);
-  border: 1px solid var(--border-light);
-  padding: 20px 24px;
-}
-
-.page-title {
-  font-family: 'Linux Libertine', Georgia, serif;
-  font-size: 28px;
-  font-weight: normal;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 4px;
-  margin-bottom: 16px;
-  color: var(--heading);
-}
-
-/* INFOBOX */
-.infobox {
-  float: right;
-  clear: right;
-  margin: 0 0 16px 24px;
-  background: var(--infobox-bg);
-  border: 1px solid var(--border);
-  font-size: 13px;
-  max-width: 240px;
-  min-width: 200px;
-}
-
-.infobox-title {
-  background: var(--infobox-header);
-  text-align: center;
-  padding: 6px 10px;
-  font-weight: bold;
-  border-bottom: 1px solid var(--border);
-  font-size: 14px;
-}
-
-/* PROFIL-IMAGE */
-.profile-image-wrap {
-  width: 100%;
-  aspect-ratio: 1;
-  overflow: hidden;
-  border-bottom: 1px solid var(--border);
-  position: relative;
-  background: #e8ecf0;
-}
-
-.profile-image-wrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-/* Avatar-Fallback (Initialen) */
-.avatar-fallback {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 52px;
-  font-weight: bold;
-  color: var(--text-muted);
-  background: linear-gradient(135deg, #d0daea 0%, #b8c8de 100%);
-  letter-spacing: -2px;
-  user-select: none;
-}
-
-.infobox table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.infobox td {
-  padding: 4px 8px;
-  vertical-align: top;
-  border-bottom: 1px solid var(--border-light);
-}
-
-.infobox td:first-child {
-  color: var(--text-muted);
-  width: 45%;
-}
-
-/* MUSICIAN-GRID INDEX (mit Bild) */
-.musician-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 10px;
-  margin: 12px 0;
-}
-
-.musician-card {
-  background: var(--bg);
-  border: 1px solid var(--border-light);
-  text-decoration: none;
-  color: var(--text);
-  display: block;
-  overflow: hidden;
-  transition: border-color 0.15s;
-}
-
-.musician-card:hover {
-  border-color: var(--accent);
-  text-decoration: none;
-}
-
-.mc-image-wrap {
-  width: 100%;
-  aspect-ratio: 1;
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(135deg, #d8e4f0 0%, #c0d0e0 100%);
-}
-
-.musician-card .mc-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  position: absolute;
-  top: 0; left: 0;
-  z-index: 1;
-}
-
-.mc-avatar-bg {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 36px;
-  font-weight: bold;
-  color: #7a8fa8;
-  z-index: 0;
-}
-
-.musician-card .mc-avatar {
-  width: 100%;
-  aspect-ratio: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 36px;
-  font-weight: bold;
-  color: #888;
-  background: linear-gradient(135deg, #d8e4f0 0%, #c0d0e0 100%);
-  letter-spacing: -1px;
-}
-
-.musician-card .mc-info {
-  padding: 8px 10px;
-}
-
-.musician-card .mc-name {
-  font-weight: bold;
-  font-size: 13px;
-  line-height: 1.3;
-}
-
-.musician-card .mc-meta {
-  font-size: 11px;
-  color: var(--text-muted);
-  margin-top: 2px;
-}
-
-/* SECTIONS */
-.wiki-section { margin: 20px 0; }
-
-.wiki-section h2 {
-  font-family: 'Linux Libertine', Georgia, serif;
-  font-size: 20px;
-  font-weight: normal;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 2px;
-  margin-bottom: 12px;
-  color: var(--heading);
-}
-
-/* TABLES */
-.wiki-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13px;
-  margin: 8px 0;
-}
-
-.wiki-table th {
-  background: var(--bg-content);
-  border: 1px solid var(--border);
-  padding: 6px 10px;
-  text-align: left;
-  font-weight: bold;
-}
-
-.wiki-table td {
-  border: 1px solid var(--border-light);
-  padding: 5px 10px;
-  vertical-align: top;
-}
-
-.wiki-table tr:hover td { background: #f0f4ff; }
-
-/* TAGS */
-.tag {
-  display: inline-block;
-  background: var(--tag-bg);
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  padding: 1px 7px;
-  font-size: 12px;
-  margin: 2px;
-  color: var(--text);
-  text-decoration: none;
-}
-
-.tag:hover { background: var(--border); }
-.tag.instrument { background: #ddeeff; border-color: #99bbdd; }
-.tag.year { background: #eeffdd; border-color: #99cc77; }
-.tag.mitschnitt { background: #fff0cc; border-color: #ccaa44; }
-
-/* LINKS */
-a { color: var(--link); text-decoration: none; }
-a:hover { text-decoration: underline; color: var(--link-hover); }
-
-/* INDEX-STATS */
-.index-stats {
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-  margin: 16px 0;
-}
-
-.stat-card {
-  background: var(--infobox-bg);
-  border: 1px solid var(--border);
-  padding: 12px 20px;
-  text-align: center;
-  min-width: 120px;
-  flex: 1;
-}
-
-.stat-card .number {
-  font-size: 28px;
-  font-weight: bold;
-  color: var(--accent);
-  display: block;
-}
-
-.stat-card .label { font-size: 12px; color: var(--text-muted); }
-
-/* RELEASES */
-.release-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 10px 0;
-}
-
-.release-card {
-  display: flex;
-  gap: 8px;
-  background: var(--bg-content);
-  border: 1px solid var(--border-light);
-  padding: 8px;
-  max-width: 260px;
-  text-decoration: none;
-  color: var(--text);
-}
-
-.release-card img { width: 56px; height: 56px; object-fit: cover; flex-shrink: 0; }
-.release-card .rc-no-image {
-  width: 56px; height: 56px; flex-shrink: 0;
-  background: #dde4ee;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 22px; color: #888;
-}
-.release-card .rc-title { font-size: 12px; font-weight: bold; line-height: 1.3; }
-.release-card .rc-year { font-size: 11px; color: var(--text-muted); }
-.release-card:hover { border-color: var(--accent); }
-
-/* MITSPIELER */
-.mitspieler-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin: 8px 0;
-}
-
-/* ALPHABET NAV */
-.alpha-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin: 8px 0 16px;
-}
-
-.alpha-nav a {
-  display: block;
-  width: 28px;
-  height: 28px;
-  text-align: center;
-  line-height: 28px;
-  border: 1px solid var(--border);
-  font-size: 13px;
-  color: var(--text);
-  text-decoration: none;
-}
-
-.alpha-nav a:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
-
-/* GRAPH */
-#graph-container {
-  width: 100%;
-  height: 650px;
-  background: #fff;
-  border: 1px solid var(--border);
-  position: relative;
-}
-
-#graph-tooltip {
-  position: absolute;
-  background: rgba(0,0,0,0.85);
-  color: #fff;
-  padding: 8px 12px;
-  border-radius: 4px;
-  font-size: 12px;
-  pointer-events: none;
-  display: none;
-  z-index: 10;
-}
-
-/* YEAR */
-.concert-entry {
-  border-left: 3px solid var(--border);
-  padding: 6px 12px;
-  margin: 4px 0;
-}
-.concert-entry:hover { border-left-color: var(--accent); background: var(--bg-content); }
-.concert-date { font-size: 12px; color: var(--text-muted); }
-.concert-band { font-weight: bold; }
-.concert-musiker { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-
-/* FOOTER */
-#wiki-footer {
-  text-align: center;
-  padding: 20px;
-  color: var(--text-muted);
-  font-size: 12px;
-  border-top: 1px solid var(--border-light);
-  margin-top: 40px;
-}
-
-/* CLEARFIX */
-.clearfix::after { content: ""; display: table; clear: both; }
-
-@media (max-width: 600px) {
-  .infobox { float: none; margin: 0 0 16px; max-width: 100%; }
-  .musician-grid { grid-template-columns: repeat(2, 1fr); }
-  #graph-container { height: 400px; }
-}
-
-</style>
+<link rel="stylesheet" href="../../template/css/wiki.css">
 </head>
 <body>
 <header id="wiki-header">
-  <a class="logo" href="../index.html">Jazz<span>fest</span> Wiki</a>
-  <div id="search-wrap">
+  <a class="logo" href="../../index.html">Jazz<span>fest</span> Wiki</a>
+  <div id="search-wrap" style="position:relative">
     <input id="search-input" type="text" placeholder="Musiker, Band, Jahr …" autocomplete="off">
     <div id="search-results"></div>
   </div>
 </header>
 <nav id="wiki-nav">
-  <a href="../index.html">Hauptseite</a>
-  <a href="../musicians/index.html" class="active">Musiker</a>
-  <a href="../bands/index.html">Bands</a>
-  <a href="../years/index.html">Jahre</a>
-  <a href="../festivals.html">Festivalchronik</a>
-  <a href="../graph.html">Netzwerk</a>
+  <a href="../../index.html" >Hauptseite</a>
+  <a href="../../musicians/index.html" class="active">Musiker</a>
+  <a href="../../bands/index.html" >Bands</a>
+  <a href="../../years/index.html" >Jahre</a>
+  <a href="../../graph.html" >Netzwerk</a>
 </nav>
 <div id="wiki-body">
   <div class="wiki-page clearfix">
     <h1 class="page-title">Hamiet Bluiett</h1>
 <div class="infobox">
   <div class="infobox-title">Hamiet Bluiett</div>
-  <div class="profile-image-wrap" style="position:relative;background:linear-gradient(135deg,#d0daea,#b8c8de)"><div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:52px;font-weight:bold;color:#7a8fa8">HB</div><img src="https://i.discogs.com/TH1U5YwNOpQumKXEbayNsV_Pjlm_c_3aBYZlpD2mruE/rs:fit/g:sm/q:40/h:150/w:150/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9BLTI5Njk4/OC0xNTM5MTE3Nzgy/LTI2NTQuanBlZw.jpeg" alt="Hamiet Bluiett" onerror="this.style.display='none'" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block;z-index:1"></div>
+  <img class="infobox-thumb" src="https://i.discogs.com/TH1U5YwNOpQumKXEbayNsV_Pjlm_c_3aBYZlpD2mruE/rs:fit/g:sm/q:40/h:150/w:150/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9BLTI5Njk4/OC0xNTM5MTE3Nzgy/LTI2NTQuanBlZw.jpeg" alt="Hamiet Bluiett">
   <table>
-    <tr><td>Instrument</td><td>bs, bs, fl, cl, bs, fl, bcl</td></tr>
+    <tr><td>Instrument</td><td>Baritonsaxofon, Baritonsaxofon, Flöte, Klarinette, Baritonsaxofon, Flöte, Bassklarinette</td></tr>
     <tr><td>Auftritte</td><td><strong>12</strong></td></tr>
     <tr><td>Erstauftritt</td><td>17. Oct 1980</td></tr>
     <tr><td>Letzter</td><td>30. Aug 2015</td></tr>
     <tr><td>Bands</td><td>10</td></tr>
     <tr><td>Mitschnitte</td><td>1</td></tr>
-    <tr><td>Quelle</td><td><a href="https://www.discogs.com/artist/296988-Hamiet-Bluiett" target="_blank">Discogs</a></td></tr>
+    <tr><td>Discogs</td><td><a href="https://www.discogs.com/artist/296988-Hamiet-Bluiett" target="_blank">Discogs-Profil</a></td></tr>
   </table>
 </div>
-<p><span class="tag instrument">bs</span><span class="tag instrument">bs, fl, cl</span><span class="tag instrument">bs, fl, bcl</span><a class="tag year" href="../years/1996.html">1996</a><a class="tag year" href="../years/2003.html">2003</a><a class="tag year" href="../years/2015.html">2015</a><span class="tag mitschnitt">🎙 1 Mitschnitte</span></p>
+<p><span class="tag instrument">Baritonsaxofon</span><span class="tag instrument">Baritonsaxofon, Flöte, Klarinette</span><span class="tag instrument">Baritonsaxofon, Flöte, Bassklarinette</span><a class="tag year" href="../years/1996.html">1996</a><a class="tag year" href="../years/2003.html">2003</a><a class="tag year" href="../years/2015.html">2015</a><span class="tag mitschnitt">🎙 1 Mitschnitte</span></p>
 
 <div class="wiki-section">
   <h2>Auftritte am Jazzfest</h2>
-  <p>12 Auftritte dokumentiert.</p>
+  <p>12 Auftritte in 11 Jahren dokumentiert.</p>
+  <details class="year-accordion" open>
+  <summary><span class="acc-yr">Jazzfest 2015</span><span class="acc-cnt">1 Auftritt</span></summary>
   <table class="wiki-table">
-    <thead><tr><th>Datum</th><th>Band / Projekt</th><th>Instrument</th><th>Ort</th><th>Bühne</th></tr></thead>
+    <thead><tr><th>Datum</th><th>Band/Projekt</th><th>Instrument</th><th>Ort</th><th>Bühne</th></tr></thead>
     <tbody><tr>
   <td>30. Aug 2015</td>
   <td><a href="../bands/james-blood-ulmer.html">James Blood Ulmer</a> 🎙</td>
-  <td>bs</td>
+  <td>Baritonsaxofon</td>
   <td>Festival 15 MS</td>
   <td>—</td>
-</tr><tr>
+</tr></tbody>
+  </table>
+</details>
+<details class="year-accordion">
+  <summary><span class="acc-yr">Jazzfest 2003</span><span class="acc-cnt">2 Auftritte</span></summary>
+  <table class="wiki-table">
+    <thead><tr><th>Datum</th><th>Band/Projekt</th><th>Instrument</th><th>Ort</th><th>Bühne</th></tr></thead>
+    <tbody><tr>
   <td>31. Jan 2003</td>
   <td><a href="../bands/kahil-el-zabar-s-trifactor.html">Kahil El ’Zabar’s Trifactor</a></td>
-  <td>bs</td>
+  <td>Baritonsaxofon</td>
   <td>Nexus</td>
   <td>—</td>
 </tr><tr>
   <td>31. Jan 2003</td>
   <td><a href="../bands/kahil-el-zabar-s-trifactor.html">Kahil El’Zabar’s Trifactor</a></td>
-  <td>bs</td>
+  <td>Baritonsaxofon</td>
   <td>Nexus</td>
   <td>—</td>
-</tr><tr>
+</tr></tbody>
+  </table>
+</details>
+<details class="year-accordion">
+  <summary><span class="acc-yr">Jazzfest 1996</span><span class="acc-cnt">1 Auftritt</span></summary>
+  <table class="wiki-table">
+    <thead><tr><th>Datum</th><th>Band/Projekt</th><th>Instrument</th><th>Ort</th><th>Bühne</th></tr></thead>
+    <tbody><tr>
   <td>23. Aug 1996</td>
   <td><a href="../bands/craig-harris-the-jhetto-plays-the-music-of-sun-ra.html">Craig Harris The Jhetto plays the music of Sun Ra</a></td>
-  <td>bs</td>
+  <td>Baritonsaxofon</td>
   <td>Festival 96</td>
   <td>—</td>
-</tr><tr>
+</tr></tbody>
+  </table>
+</details>
+<details class="year-accordion">
+  <summary><span class="acc-yr">Jazzfest 1993</span><span class="acc-cnt">1 Auftritt</span></summary>
+  <table class="wiki-table">
+    <thead><tr><th>Datum</th><th>Band/Projekt</th><th>Instrument</th><th>Ort</th><th>Bühne</th></tr></thead>
+    <tbody><tr>
   <td>27. Aug 1993</td>
   <td><a href="../bands/david-murray-big-band.html">David Murray Big Band</a></td>
-  <td>bs</td>
+  <td>Baritonsaxofon</td>
   <td>Festival 93</td>
   <td>—</td>
-</tr><tr>
+</tr></tbody>
+  </table>
+</details>
+<details class="year-accordion">
+  <summary><span class="acc-yr">Jazzfest 1992</span><span class="acc-cnt">1 Auftritt</span></summary>
+  <table class="wiki-table">
+    <thead><tr><th>Datum</th><th>Band/Projekt</th><th>Instrument</th><th>Ort</th><th>Bühne</th></tr></thead>
+    <tbody><tr>
   <td>22. Feb 1992</td>
   <td><a href="../bands/hamiet-bluiett-trio.html">Hamiet Bluiett Trio</a></td>
-  <td>bs, fl, cl</td>
-  <td>Club</td>
-  <td>—</td>
-</tr><tr>
-  <td>23. Aug 1991</td>
-  <td><a href="../bands/bob-stewart-mingus-friends.html">Bob Stewart Mingus & Friends</a></td>
-  <td>bs</td>
-  <td>Festival 91</td>
-  <td>—</td>
-</tr><tr>
-  <td>26. Aug 1990</td>
-  <td><a href="../bands/world-saxophone-quartet-meets-african-drums.html">World Saxophone Quartet meets African Drums</a></td>
-  <td>bs</td>
-  <td>Festival 90</td>
-  <td>—</td>
-</tr><tr>
-  <td>14. Oct 1988</td>
-  <td><a href="../bands/world-saxophone-quartet.html">World Saxophone Quartet</a></td>
-  <td>bs</td>
-  <td>Club</td>
-  <td>—</td>
-</tr><tr>
-  <td>29. Aug 1987</td>
-  <td><a href="../bands/world-saxophone-quartet.html">World Saxophone Quartet</a></td>
-  <td>bs</td>
-  <td>Festival 87</td>
-  <td>—</td>
-</tr><tr>
-  <td>31. Aug 1984</td>
-  <td><a href="../bands/hamiet-bluiett-quintet.html">Hamiet Bluiett Quintet</a></td>
-  <td>bs, fl, bcl</td>
-  <td>Festival 84</td>
-  <td>—</td>
-</tr><tr>
-  <td>17. Oct 1980</td>
-  <td><a href="../bands/world-saxophone-quartet.html">World Saxophone Quartet</a></td>
-  <td>bs, fl, cl</td>
+  <td>Baritonsaxofon, Flöte, Klarinette</td>
   <td>Club</td>
   <td>—</td>
 </tr></tbody>
   </table>
+</details>
+<details class="year-accordion">
+  <summary><span class="acc-yr">Jazzfest 1991</span><span class="acc-cnt">1 Auftritt</span></summary>
+  <table class="wiki-table">
+    <thead><tr><th>Datum</th><th>Band/Projekt</th><th>Instrument</th><th>Ort</th><th>Bühne</th></tr></thead>
+    <tbody><tr>
+  <td>23. Aug 1991</td>
+  <td><a href="../bands/bob-stewart-mingus-friends.html">Bob Stewart Mingus & Friends</a></td>
+  <td>Baritonsaxofon</td>
+  <td>Festival 91</td>
+  <td>—</td>
+</tr></tbody>
+  </table>
+</details>
+<details class="year-accordion">
+  <summary><span class="acc-yr">Jazzfest 1990</span><span class="acc-cnt">1 Auftritt</span></summary>
+  <table class="wiki-table">
+    <thead><tr><th>Datum</th><th>Band/Projekt</th><th>Instrument</th><th>Ort</th><th>Bühne</th></tr></thead>
+    <tbody><tr>
+  <td>26. Aug 1990</td>
+  <td><a href="../bands/world-saxophone-quartet-meets-african-drums.html">World Saxophone Quartet meets African Drums</a></td>
+  <td>Baritonsaxofon</td>
+  <td>Festival 90</td>
+  <td>—</td>
+</tr></tbody>
+  </table>
+</details>
+<details class="year-accordion">
+  <summary><span class="acc-yr">Jazzfest 1988</span><span class="acc-cnt">1 Auftritt</span></summary>
+  <table class="wiki-table">
+    <thead><tr><th>Datum</th><th>Band/Projekt</th><th>Instrument</th><th>Ort</th><th>Bühne</th></tr></thead>
+    <tbody><tr>
+  <td>14. Oct 1988</td>
+  <td><a href="../bands/world-saxophone-quartet.html">World Saxophone Quartet</a></td>
+  <td>Baritonsaxofon</td>
+  <td>Club</td>
+  <td>—</td>
+</tr></tbody>
+  </table>
+</details>
+<details class="year-accordion">
+  <summary><span class="acc-yr">Jazzfest 1987</span><span class="acc-cnt">1 Auftritt</span></summary>
+  <table class="wiki-table">
+    <thead><tr><th>Datum</th><th>Band/Projekt</th><th>Instrument</th><th>Ort</th><th>Bühne</th></tr></thead>
+    <tbody><tr>
+  <td>29. Aug 1987</td>
+  <td><a href="../bands/world-saxophone-quartet.html">World Saxophone Quartet</a></td>
+  <td>Baritonsaxofon</td>
+  <td>Festival 87</td>
+  <td>—</td>
+</tr></tbody>
+  </table>
+</details>
+<details class="year-accordion">
+  <summary><span class="acc-yr">Jazzfest 1984</span><span class="acc-cnt">1 Auftritt</span></summary>
+  <table class="wiki-table">
+    <thead><tr><th>Datum</th><th>Band/Projekt</th><th>Instrument</th><th>Ort</th><th>Bühne</th></tr></thead>
+    <tbody><tr>
+  <td>31. Aug 1984</td>
+  <td><a href="../bands/hamiet-bluiett-quintet.html">Hamiet Bluiett Quintet</a></td>
+  <td>Baritonsaxofon, Flöte, Bassklarinette</td>
+  <td>Festival 84</td>
+  <td>—</td>
+</tr></tbody>
+  </table>
+</details>
+<details class="year-accordion">
+  <summary><span class="acc-yr">Jazzfest 1980</span><span class="acc-cnt">1 Auftritt</span></summary>
+  <table class="wiki-table">
+    <thead><tr><th>Datum</th><th>Band/Projekt</th><th>Instrument</th><th>Ort</th><th>Bühne</th></tr></thead>
+    <tbody><tr>
+  <td>17. Oct 1980</td>
+  <td><a href="../bands/world-saxophone-quartet.html">World Saxophone Quartet</a></td>
+  <td>Baritonsaxofon, Flöte, Klarinette</td>
+  <td>Club</td>
+  <td>—</td>
+</tr></tbody>
+  </table>
+</details>
+
 </div>
 
 <div class='wiki-section'><h2>Mitspieler</h2><div class='mitspieler-list'><a class="tag" href="david-murray.html">David Murray (5×)</a><a class="tag" href="oliver-lake.html">Oliver Lake (5×)</a><a class="tag" href="julius-hemphill.html">Julius Hemphill (3×)</a><a class="tag" href="fred-hopkins.html">Fred Hopkins (3×)</a><a class="tag" href="james-zollar.html">James Zollar (2×)</a><a class="tag" href="bob-stewart.html">Bob Stewart (2×)</a><a class="tag" href="hugh-ragin.html">Hugh Ragin (2×)</a><a class="tag" href="craig-harris.html">Craig Harris (2×)</a><a class="tag" href="billy-bang.html">Billy Bang (2×)</a><a class="tag" href="irene-datcher.html">Irene Datcher (1×)</a><a class="tag" href="charles-eubanks.html">Charles Eubanks (1×)</a><a class="tag" href="greg-bandy.html">Greg Bandy (1×)</a><a class="tag" href="john-stubblefield.html">John Stubblefield (1×)</a><a class="tag" href="arthur-blythe.html">Arthur Blythe (1×)</a><a class="tag" href="andy-chief-bey.html">Andy „Chief“ Bey (1×)</a><a class="tag" href="mor-thiam.html">Mor Thiam (1×)</a><a class="tag" href="mor-gueye.html">Mor Gueye (1×)</a><a class="tag" href="curtis-fowlkes.html">Curtis Fowlkes (1×)</a><a class="tag" href="steve-turre.html">Steve Turre (1×)</a><a class="tag" href="kelvyn-bell.html">Kelvyn Bell (1×)</a></div></div>
@@ -621,49 +200,49 @@ a:hover { text-decoration: underline; color: var(--link-hover); }
   <img src="https://i.discogs.com/ceuy9MbzHOn4gYrk9I6cD49-_5CQ5FQlfh-TwShbUl4/rs:fit/g:sm/q:40/h:150/w:150/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTEyNzk5/MjQ2LTE2MzUxOTE0/OTQtMTQ1OC5qcGVn.jpeg" alt="">
   <div>
     <div class="rc-title">We Will Gather When We Gather</div>
-    <div class="rc-year">2015 · Main</div>
+    <div class="rc-year">2015</div>
   </div>
 </div><div class="release-card">
   <img src="https://i.discogs.com/HD5NpuQOP3eTLwguJDSTfjdyuBuy_nzswnWqekcpQqM/rs:fit/g:sm/q:40/h:150/w:150/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTI4MTIy/NjktMTMwMjEzNjky/OS5qcGVn.jpeg" alt="">
   <div>
     <div class="rc-title">The Good Life (Music Of Ornette Coleman)</div>
-    <div class="rc-year">2009 · Main</div>
+    <div class="rc-year">2009</div>
   </div>
 </div><div class="release-card">
   <img src="https://i.discogs.com/K1ddLFaRQJkbAz_ENCJNmDAAUz4N5CqwIVWEpPWb13I/rs:fit/g:sm/q:40/h:150/w:150/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTEzMTk2/NDYtMTY1MjAzNjY0/NS0zODkxLmpwZWc.jpeg" alt="">
   <div>
     <div class="rc-title">Out Of Nowhere (Live At The Blue Note)</div>
-    <div class="rc-year">2005 · Main</div>
+    <div class="rc-year">2005</div>
   </div>
 </div><div class="release-card">
   <img src="https://i.discogs.com/PZjp8llkgJzuFW9rUKfHtlV3jja_ECsgKud8r93bn6U/rs:fit/g:sm/q:40/h:150/w:150/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTYyODI4/MTEtMTQyNzYwNzc3/Ny03NTQyLmpwZWc.jpeg" alt="">
   <div>
     <div class="rc-title">Talking Horns</div>
-    <div class="rc-year">2001 · Main</div>
+    <div class="rc-year">2001</div>
   </div>
 </div><div class="release-card">
   <img src="https://i.discogs.com/na6tj9qaNCf-QAV7WG3PHFRALDgGk8imlbSHLLOCwGw/rs:fit/g:sm/q:40/h:150/w:150/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTEzMDky/ODYtMTU5MTg0Mzc5/MS0yNzE4LmpwZWc.jpeg" alt="">
   <div>
     <div class="rc-title">The Calling</div>
-    <div class="rc-year">2001 · Main</div>
+    <div class="rc-year">2001</div>
   </div>
 </div><div class="release-card">
   <img src="https://i.discogs.com/2bGV7XqzZfeUdT0xMv7uFkgxzbSbgq8axzF6wfBdW1E/rs:fit/g:sm/q:40/h:150/w:150/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTI0OTcx/MzItMTU5MTg0NDc0/NS01MTA0LmpwZWc.jpeg" alt="">
   <div>
     <div class="rc-title">With Eyes Wide Open</div>
-    <div class="rc-year">2000 · Main</div>
+    <div class="rc-year">2000</div>
   </div>
 </div><div class="release-card">
   <img src="https://i.discogs.com/tyLi-YVpc7L5uDkYdMYIkqX70YLChPkqAs5-O0FpN08/rs:fit/g:sm/q:40/h:150/w:150/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTEwOTk2/ODEtMTQzMDk0Mzgy/Ny00MDkyLmpwZWc.jpeg" alt="">
   <div>
     <div class="rc-title">The Power</div>
-    <div class="rc-year">2000 · Main</div>
+    <div class="rc-year">2000</div>
   </div>
 </div><div class="release-card">
   <img src="https://i.discogs.com/i86ZQKiZTcg6p36goMj-eFwwLHK4TWiZ_NRsIbHplD8/rs:fit/g:sm/q:40/h:150/w:150/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTE2NDcz/NDUtMTIzNDM3Mzk2/MS5qcGVn.jpeg" alt="">
   <div>
     <div class="rc-title">Join Us</div>
-    <div class="rc-year">1999 · Main</div>
+    <div class="rc-year">1999</div>
   </div>
 </div></div></div>
 
@@ -673,16 +252,16 @@ a:hover { text-decoration: underline; color: var(--link-hover); }
   Jazzfest Wiki · 5936 Musiker · 13034 Konzerte · 1975–2025
   · Daten: Jazzfest Wien Chronik + Discogs API
 </footer>
-<script src="../search-data.js"></script>
 <script>
+// Globale Suche
+const SEARCH_DATA = window.JAZZFEST_SEARCH || [];
 const inp = document.getElementById('search-input');
 const res = document.getElementById('search-results');
-const SD = window.JAZZFEST_SEARCH || [];
 inp.addEventListener('input', function() {
   const q = this.value.toLowerCase().trim();
   res.innerHTML = '';
   if (q.length < 2) { res.style.display='none'; return; }
-  const hits = SD.filter(x => x.n.toLowerCase().includes(q)).slice(0, 12);
+  const hits = SEARCH_DATA.filter(x => x.n.toLowerCase().includes(q)).slice(0, 12);
   if (!hits.length) { res.style.display='none'; return; }
   hits.forEach(h => {
     const a = document.createElement('a');

@@ -4,2369 +4,1874 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>2016 — Jazzfest Wiki</title>
-<style>
-/* Jazzfest Wiki — MediaWiki-inspiriertes Layout + Profil-Images */
-
-:root {
-  --bg: #fff;
-  --bg-content: #f8f9fa;
-  --border: #a2a9b1;
-  --border-light: #eaecf0;
-  --link: #3366cc;
-  --link-hover: #1a3f99;
-  --heading: #000;
-  --text: #202122;
-  --text-muted: #54595d;
-  --infobox-bg: #f8f9fa;
-  --infobox-header: #cee0f2;
-  --nav-bg: #f8f9fa;
-  --nav-border: #a2a9b1;
-  --tag-bg: #eaecf0;
-  --accent: #3366cc;
-  --red: #cc0000;
-}
-
-* { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-  font-family: -apple-system, 'Linux Libertine', Georgia, Times, serif;
-  font-size: 14px;
-  line-height: 1.6;
-  color: var(--text);
-  background: var(--bg-content);
-}
-
-/* HEADER */
-#wiki-header {
-  background: var(--bg);
-  border-bottom: 1px solid var(--border);
-  padding: 8px 16px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-#wiki-header .logo {
-  font-family: 'Linux Libertine', Georgia, serif;
-  font-size: 18px;
-  font-weight: bold;
-  color: var(--heading);
-  text-decoration: none;
-  white-space: nowrap;
-}
-
-#wiki-header .logo span { color: var(--accent); }
-
-#search-wrap { flex: 1; max-width: 400px; position: relative; }
-
-#search-input {
-  width: 100%;
-  padding: 5px 10px;
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  font-size: 13px;
-  outline: none;
-}
-
-#search-input:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 2px rgba(51,102,204,0.15);
-}
-
-#search-results {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-top: none;
-  max-height: 300px;
-  overflow-y: auto;
-  z-index: 200;
-  display: none;
-}
-
-#search-results a {
-  display: block;
-  padding: 6px 10px;
-  text-decoration: none;
-  color: var(--text);
-  border-bottom: 1px solid var(--border-light);
-}
-
-#search-results a:hover { background: var(--bg-content); }
-#search-results .sr-type { font-size: 11px; color: var(--text-muted); margin-left: 6px; }
-
-/* NAV */
-#wiki-nav {
-  background: var(--nav-bg);
-  border-bottom: 1px solid var(--nav-border);
-  padding: 0 16px;
-  display: flex;
-  gap: 0;
-  overflow-x: auto;
-}
-
-#wiki-nav a {
-  display: block;
-  padding: 8px 14px;
-  text-decoration: none;
-  color: var(--text);
-  font-size: 13px;
-  border-bottom: 2px solid transparent;
-  white-space: nowrap;
-}
-
-#wiki-nav a:hover, #wiki-nav a.active {
-  color: var(--accent);
-  border-bottom-color: var(--accent);
-}
-
-/* LAYOUT */
-#wiki-body {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px 16px;
-}
-
-.wiki-page {
-  background: var(--bg);
-  border: 1px solid var(--border-light);
-  padding: 20px 24px;
-}
-
-.page-title {
-  font-family: 'Linux Libertine', Georgia, serif;
-  font-size: 28px;
-  font-weight: normal;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 4px;
-  margin-bottom: 16px;
-  color: var(--heading);
-}
-
-/* INFOBOX */
-.infobox {
-  float: right;
-  clear: right;
-  margin: 0 0 16px 24px;
-  background: var(--infobox-bg);
-  border: 1px solid var(--border);
-  font-size: 13px;
-  max-width: 240px;
-  min-width: 200px;
-}
-
-.infobox-title {
-  background: var(--infobox-header);
-  text-align: center;
-  padding: 6px 10px;
-  font-weight: bold;
-  border-bottom: 1px solid var(--border);
-  font-size: 14px;
-}
-
-/* PROFIL-IMAGE */
-.profile-image-wrap {
-  width: 100%;
-  aspect-ratio: 1;
-  overflow: hidden;
-  border-bottom: 1px solid var(--border);
-  position: relative;
-  background: #e8ecf0;
-}
-
-.profile-image-wrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-/* Avatar-Fallback (Initialen) */
-.avatar-fallback {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 52px;
-  font-weight: bold;
-  color: var(--text-muted);
-  background: linear-gradient(135deg, #d0daea 0%, #b8c8de 100%);
-  letter-spacing: -2px;
-  user-select: none;
-}
-
-.infobox table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.infobox td {
-  padding: 4px 8px;
-  vertical-align: top;
-  border-bottom: 1px solid var(--border-light);
-}
-
-.infobox td:first-child {
-  color: var(--text-muted);
-  width: 45%;
-}
-
-/* MUSICIAN-GRID INDEX (mit Bild) */
-.musician-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 10px;
-  margin: 12px 0;
-}
-
-.musician-card {
-  background: var(--bg);
-  border: 1px solid var(--border-light);
-  text-decoration: none;
-  color: var(--text);
-  display: block;
-  overflow: hidden;
-  transition: border-color 0.15s;
-}
-
-.musician-card:hover {
-  border-color: var(--accent);
-  text-decoration: none;
-}
-
-.mc-image-wrap {
-  width: 100%;
-  aspect-ratio: 1;
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(135deg, #d8e4f0 0%, #c0d0e0 100%);
-}
-
-.musician-card .mc-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  position: absolute;
-  top: 0; left: 0;
-  z-index: 1;
-}
-
-.mc-avatar-bg {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 36px;
-  font-weight: bold;
-  color: #7a8fa8;
-  z-index: 0;
-}
-
-.musician-card .mc-avatar {
-  width: 100%;
-  aspect-ratio: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 36px;
-  font-weight: bold;
-  color: #888;
-  background: linear-gradient(135deg, #d8e4f0 0%, #c0d0e0 100%);
-  letter-spacing: -1px;
-}
-
-.musician-card .mc-info {
-  padding: 8px 10px;
-}
-
-.musician-card .mc-name {
-  font-weight: bold;
-  font-size: 13px;
-  line-height: 1.3;
-}
-
-.musician-card .mc-meta {
-  font-size: 11px;
-  color: var(--text-muted);
-  margin-top: 2px;
-}
-
-/* SECTIONS */
-.wiki-section { margin: 20px 0; }
-
-.wiki-section h2 {
-  font-family: 'Linux Libertine', Georgia, serif;
-  font-size: 20px;
-  font-weight: normal;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 2px;
-  margin-bottom: 12px;
-  color: var(--heading);
-}
-
-/* TABLES */
-.wiki-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13px;
-  margin: 8px 0;
-}
-
-.wiki-table th {
-  background: var(--bg-content);
-  border: 1px solid var(--border);
-  padding: 6px 10px;
-  text-align: left;
-  font-weight: bold;
-}
-
-.wiki-table td {
-  border: 1px solid var(--border-light);
-  padding: 5px 10px;
-  vertical-align: top;
-}
-
-.wiki-table tr:hover td { background: #f0f4ff; }
-
-/* TAGS */
-.tag {
-  display: inline-block;
-  background: var(--tag-bg);
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  padding: 1px 7px;
-  font-size: 12px;
-  margin: 2px;
-  color: var(--text);
-  text-decoration: none;
-}
-
-.tag:hover { background: var(--border); }
-.tag.instrument { background: #ddeeff; border-color: #99bbdd; }
-.tag.year { background: #eeffdd; border-color: #99cc77; }
-.tag.mitschnitt { background: #fff0cc; border-color: #ccaa44; }
-
-/* LINKS */
-a { color: var(--link); text-decoration: none; }
-a:hover { text-decoration: underline; color: var(--link-hover); }
-
-/* INDEX-STATS */
-.index-stats {
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-  margin: 16px 0;
-}
-
-.stat-card {
-  background: var(--infobox-bg);
-  border: 1px solid var(--border);
-  padding: 12px 20px;
-  text-align: center;
-  min-width: 120px;
-  flex: 1;
-}
-
-.stat-card .number {
-  font-size: 28px;
-  font-weight: bold;
-  color: var(--accent);
-  display: block;
-}
-
-.stat-card .label { font-size: 12px; color: var(--text-muted); }
-
-/* RELEASES */
-.release-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 10px 0;
-}
-
-.release-card {
-  display: flex;
-  gap: 8px;
-  background: var(--bg-content);
-  border: 1px solid var(--border-light);
-  padding: 8px;
-  max-width: 260px;
-  text-decoration: none;
-  color: var(--text);
-}
-
-.release-card img { width: 56px; height: 56px; object-fit: cover; flex-shrink: 0; }
-.release-card .rc-no-image {
-  width: 56px; height: 56px; flex-shrink: 0;
-  background: #dde4ee;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 22px; color: #888;
-}
-.release-card .rc-title { font-size: 12px; font-weight: bold; line-height: 1.3; }
-.release-card .rc-year { font-size: 11px; color: var(--text-muted); }
-.release-card:hover { border-color: var(--accent); }
-
-/* MITSPIELER */
-.mitspieler-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin: 8px 0;
-}
-
-/* ALPHABET NAV */
-.alpha-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin: 8px 0 16px;
-}
-
-.alpha-nav a {
-  display: block;
-  width: 28px;
-  height: 28px;
-  text-align: center;
-  line-height: 28px;
-  border: 1px solid var(--border);
-  font-size: 13px;
-  color: var(--text);
-  text-decoration: none;
-}
-
-.alpha-nav a:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
-
-/* GRAPH */
-#graph-container {
-  width: 100%;
-  height: 650px;
-  background: #fff;
-  border: 1px solid var(--border);
-  position: relative;
-}
-
-#graph-tooltip {
-  position: absolute;
-  background: rgba(0,0,0,0.85);
-  color: #fff;
-  padding: 8px 12px;
-  border-radius: 4px;
-  font-size: 12px;
-  pointer-events: none;
-  display: none;
-  z-index: 10;
-}
-
-/* YEAR */
-.concert-entry {
-  border-left: 3px solid var(--border);
-  padding: 6px 12px;
-  margin: 4px 0;
-}
-.concert-entry:hover { border-left-color: var(--accent); background: var(--bg-content); }
-.concert-date { font-size: 12px; color: var(--text-muted); }
-.concert-band { font-weight: bold; }
-.concert-musiker { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-
-/* FOOTER */
-#wiki-footer {
-  text-align: center;
-  padding: 20px;
-  color: var(--text-muted);
-  font-size: 12px;
-  border-top: 1px solid var(--border-light);
-  margin-top: 40px;
-}
-
-/* CLEARFIX */
-.clearfix::after { content: ""; display: table; clear: both; }
-
-@media (max-width: 600px) {
-  .infobox { float: none; margin: 0 0 16px; max-width: 100%; }
-  .musician-grid { grid-template-columns: repeat(2, 1fr); }
-  #graph-container { height: 400px; }
-}
-
-</style>
+<link rel="stylesheet" href="../../template/css/wiki.css">
 </head>
 <body>
 <header id="wiki-header">
-  <a class="logo" href="../index.html">Jazz<span>fest</span> Wiki</a>
-  <div id="search-wrap">
+  <a class="logo" href="../../index.html">Jazz<span>fest</span> Wiki</a>
+  <div id="search-wrap" style="position:relative">
     <input id="search-input" type="text" placeholder="Musiker, Band, Jahr …" autocomplete="off">
     <div id="search-results"></div>
   </div>
 </header>
 <nav id="wiki-nav">
-  <a href="../index.html">Hauptseite</a>
-  <a href="../musicians/index.html">Musiker</a>
-  <a href="../bands/index.html">Bands</a>
-  <a href="../years/index.html" class="active">Jahre</a>
-  <a href="../festivals.html">Festivalchronik</a>
-  <a href="../graph.html">Netzwerk</a>
+  <a href="../../index.html" >Hauptseite</a>
+  <a href="../../musicians/index.html" >Musiker</a>
+  <a href="../../bands/index.html" >Bands</a>
+  <a href="../../years/index.html" class="active">Jahre</a>
+  <a href="../../graph.html" >Netzwerk</a>
 </nav>
 <div id="wiki-body">
   <div class="wiki-page clearfix">
     <h1 class="page-title">Jazzfest 2016</h1>
 <div class="wiki-section">
-  <p><strong>462 Konzert-Einträge</strong></p>
+  <p><strong>462 Konzerte</strong></p>
   <div class="year-concerts"><div class="concert-entry">
-  <div class="concert-date">7. Jan 2016 · Nexus Kino </div>
+  <div class="concert-date">7. Jan 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/alles-steht-kopf.html">Alles steht Kopf</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">7. Jan 2016 · Nexus Kino </div>
+  <div class="concert-date">7. Jan 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/steve-jobs.html">Steve Jobs</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">8. Jan 2016 · Nexus </div>
+  <div class="concert-date">8. Jan 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/trio-lepschi.html">Trio Lepschi</a></div>
   <div class='concert-musiker'>Stefan Slupezky</div>
 </div><div class="concert-entry">
-  <div class="concert-date">8. Jan 2016 · Nexus </div>
+  <div class="concert-date">8. Jan 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/trio-lepschi.html">Trio Lepschi</a></div>
   <div class='concert-musiker'>Martin Zrost</div>
 </div><div class="concert-entry">
-  <div class="concert-date">8. Jan 2016 · Nexus </div>
+  <div class="concert-date">8. Jan 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/trio-lepschi.html">Trio Lepschi</a></div>
   <div class='concert-musiker'>Tomas Slupezky</div>
 </div><div class="concert-entry">
-  <div class="concert-date">13. Jan 2016 · Nexus spezial </div>
+  <div class="concert-date">13. Jan 2016 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/sagenhafte-alpen.html">Sagenhafte Alpen</a></div>
   <div class='concert-musiker'>Bernd Römmelt</div>
 </div><div class="concert-entry">
-  <div class="concert-date">14. Jan 2016 · Nexus kino </div>
+  <div class="concert-date">14. Jan 2016 · Nexus kino · </div>
   <div class="concert-band"><a href="../bands/kasperl-und-die-falsche-medizin.html">Kasperl und die falsche Medizin</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">14. Jan 2016 · Nexus kino </div>
+  <div class="concert-date">14. Jan 2016 · Nexus kino · </div>
   <div class="concert-band"><a href="../bands/lampedusa-im-winter.html">Lampedusa im Winter</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">15. Jan 2016 · Nexus Café </div>
+  <div class="concert-date">15. Jan 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/spuerbar-mitsumma-die-zwei.html">Spürbar: Mitsumma & die Zwei</a></div>
   <div class='concert-musiker'>Birgit Margreiter</div>
 </div><div class="concert-entry">
-  <div class="concert-date">15. Jan 2016 · Nexus Café </div>
+  <div class="concert-date">15. Jan 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/spuerbar-mitsumma-die-zwei.html">Spürbar: Mitsumma & die Zwei</a></div>
   <div class='concert-musiker'>Sonja Pircher</div>
 </div><div class="concert-entry">
-  <div class="concert-date">15. Jan 2016 · Nexus Café </div>
+  <div class="concert-date">15. Jan 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/spuerbar-mitsumma-die-zwei.html">Spürbar: Mitsumma & die Zwei</a></div>
   <div class='concert-musiker'>Bernd Jäger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">15. Jan 2016 · Nexus Café </div>
+  <div class="concert-date">15. Jan 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/spuerbar-mitsumma-die-zwei.html">Spürbar: Mitsumma & die Zwei</a></div>
   <div class='concert-musiker'>Gerald Reis</div>
 </div><div class="concert-entry">
-  <div class="concert-date">15. Jan 2016 · Nexus Café </div>
+  <div class="concert-date">15. Jan 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/spuerbar-mitsumma-die-zwei.html">Spürbar: Mitsumma & die Zwei</a></div>
   <div class='concert-musiker'>Heinz Steiner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">15. Jan 2016 · Nexus Café </div>
+  <div class="concert-date">15. Jan 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/spuerbar-mitsumma-die-zwei.html">Spürbar: Mitsumma & die Zwei</a></div>
   <div class='concert-musiker'>Jörg Hanusch</div>
 </div><div class="concert-entry">
-  <div class="concert-date">15. Jan 2016 · Nexus Café </div>
+  <div class="concert-date">15. Jan 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/spuerbar-mitsumma-die-zwei.html">Spürbar: Mitsumma & die Zwei</a></div>
   <div class='concert-musiker'>Bernd Wöhrer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">16. Jan 2016 · Nexus Café </div>
+  <div class="concert-date">16. Jan 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-dominik-follmer.html">Lokale Bandrunde: Dominik Follmer</a></div>
   <div class='concert-musiker'>Dominik Follmer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">16. Jan 2016 · Nexus Theater </div>
+  <div class="concert-date">16. Jan 2016 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/gschnagga-theater-wir-koennen-noch-viel-zusammen-machen.html">Gschnagga Theater: Wir können noch viel zusammen machen</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">20. Jan 2016 · Nexus my Uni </div>
+  <div class="concert-date">20. Jan 2016 · Nexus my Uni · </div>
   <div class="concert-band"><a href="../bands/gegen-vorurteile.html">Gegen Vorurteile</a></div>
   <div class='concert-musiker'>Nina Horaczek Mag</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Jan 2016 · Nexus Kino </div>
+  <div class="concert-date">21. Jan 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/heidi.html">Heidi</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">21. Jan 2016 · Nexus Kino </div>
+  <div class="concert-date">21. Jan 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/malala-ihr-recht-auf-bildung.html">Malala – Ihr Recht auf Bildung</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">22. Jan 2016 · Winterfestival 16 </div>
+  <div class="concert-date">22. Jan 2016 · Winterfestival 16 · </div>
   <div class="concert-band"><a href="../bands/chuffdrone.html">Chuffdrone</a></div>
   <div class='concert-musiker'>Astrid Wiesinger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Jan 2016 · Winterfestival 16 </div>
+  <div class="concert-date">22. Jan 2016 · Winterfestival 16 · </div>
   <div class="concert-band"><a href="../bands/chuffdrone.html">Chuffdrone</a></div>
   <div class='concert-musiker'>Lisa Hofmaninger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Jan 2016 · Winterfestival 16 </div>
+  <div class="concert-date">22. Jan 2016 · Winterfestival 16 · </div>
   <div class="concert-band"><a href="../bands/chuffdrone.html">Chuffdrone</a></div>
   <div class='concert-musiker'>Hubert Gredler</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Jan 2016 · Winterfestival 16 </div>
+  <div class="concert-date">22. Jan 2016 · Winterfestival 16 · </div>
   <div class="concert-band"><a href="../bands/chuffdrone.html">Chuffdrone</a></div>
   <div class='concert-musiker'>Judith Ferstl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Jan 2016 · Winterfestival 16 </div>
+  <div class="concert-date">22. Jan 2016 · Winterfestival 16 · </div>
   <div class="concert-band"><a href="../bands/chuffdrone.html">Chuffdrone</a></div>
   <div class='concert-musiker'>Judith Schwarz</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Jan 2016 · Winterfestival 16 </div>
+  <div class="concert-date">22. Jan 2016 · Winterfestival 16 · </div>
   <div class="concert-band"><a href="../bands/sclavis-pifarely-courtois.html">Sclavis/Pifarely/Courtois</a></div>
   <div class='concert-musiker'>Louis Sclavis</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Jan 2016 · Winterfestival 16 </div>
+  <div class="concert-date">22. Jan 2016 · Winterfestival 16 · </div>
   <div class="concert-band"><a href="../bands/sclavis-pifarely-courtois.html">Sclavis/Pifarely/Courtois</a></div>
   <div class='concert-musiker'>Dominique Pifarely</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Jan 2016 · Winterfestival 16 </div>
+  <div class="concert-date">22. Jan 2016 · Winterfestival 16 · </div>
   <div class="concert-band"><a href="../bands/sclavis-pifarely-courtois.html">Sclavis/Pifarely/Courtois</a></div>
   <div class='concert-musiker'>Vincent Courtois</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Jan 2016 · Winterfestival 16 </div>
+  <div class="concert-date">23. Jan 2016 · Winterfestival 16 · </div>
   <div class="concert-band"><a href="../bands/nordic-duo.html">Nordic Duo</a></div>
   <div class='concert-musiker'>Jon Surman</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Jan 2016 · Winterfestival 16 </div>
+  <div class="concert-date">23. Jan 2016 · Winterfestival 16 · </div>
   <div class="concert-band"><a href="../bands/nordic-duo.html">Nordic Duo</a></div>
   <div class='concert-musiker'>Vigleik Storaas</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Jan 2016 · Winterfestival 16 </div>
+  <div class="concert-date">23. Jan 2016 · Winterfestival 16 · </div>
   <div class="concert-band"><a href="../bands/papanosh.html">Papanosh</a></div>
   <div class='concert-musiker'>Raphael Quenehen</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Jan 2016 · Winterfestival 16 </div>
+  <div class="concert-date">23. Jan 2016 · Winterfestival 16 · </div>
   <div class="concert-band"><a href="../bands/papanosh.html">Papanosh</a></div>
   <div class='concert-musiker'>Quentin Ghomari</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Jan 2016 · Winterfestival 16 </div>
+  <div class="concert-date">23. Jan 2016 · Winterfestival 16 · </div>
   <div class="concert-band"><a href="../bands/papanosh.html">Papanosh</a></div>
   <div class='concert-musiker'>Thibault Cellier</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Jan 2016 · Winterfestival 16 </div>
+  <div class="concert-date">23. Jan 2016 · Winterfestival 16 · </div>
   <div class="concert-band"><a href="../bands/papanosh.html">Papanosh</a></div>
   <div class='concert-musiker'>Boris Boublis</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Jan 2016 · Winterfestival 16 </div>
+  <div class="concert-date">23. Jan 2016 · Winterfestival 16 · </div>
   <div class="concert-band"><a href="../bands/papanosh.html">Papanosh</a></div>
   <div class='concert-musiker'>Jeremie Piazza</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Jan 2016 · Nexus Kino </div>
+  <div class="concert-date">28. Jan 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/der-kleine-prinz.html">Der kleine Prinz</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">28. Jan 2016 · Nexus Kino </div>
+  <div class="concert-date">28. Jan 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/wie-die-anderen.html">Wie die Anderen</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">30. Jan 2016 · Nexus Kabarett </div>
+  <div class="concert-date">30. Jan 2016 · Nexus Kabarett · </div>
   <div class="concert-band"><a href="../bands/gunkl-so-sachen-ein-stapel-anmerkungen.html">Gunkl: So Sachen – ein Stapel Anmerkungen</a></div>
   <div class='concert-musiker'>Gunkl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">3. Feb 2016 · Nexus spezial </div>
+  <div class="concert-date">3. Feb 2016 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/immer-wieder-russland.html">Immer wieder Russland</a></div>
   <div class='concert-musiker'>Holger Fritzsche</div>
 </div><div class="concert-entry">
-  <div class="concert-date">4. Feb 2016 · Nexus Kino </div>
+  <div class="concert-date">4. Feb 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/kasperl-und-die-verrueckten-faschingskrapfen.html">Kasperl und die verrückten Faschingskrapfen</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">4. Feb 2016 · Nexus Kino </div>
+  <div class="concert-date">4. Feb 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/wie-auf-erden.html">Wie auf Erden</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">6. Feb 2016 · Nexus spezial </div>
+  <div class="concert-date">6. Feb 2016 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/fasching-im-nexus.html">Fasching im Nexus</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">10. Feb 2016 · Nexus my Uni </div>
+  <div class="concert-date">10. Feb 2016 · Nexus my Uni · </div>
   <div class="concert-band"><a href="../bands/die-fleischluege-wie-uns-die-tierindustrie-krankmacht.html">Die Fleischlüge: Wie uns die Tierindustrie krankmacht</a></div>
   <div class='concert-musiker'>Hans Ulrich Grimm Dr</div>
 </div><div class="concert-entry">
-  <div class="concert-date">10. Feb 2016 · Nexus spezial </div>
+  <div class="concert-date">10. Feb 2016 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/heringsschmaus-im-cafe-nexus.html">Heringsschmaus im Cafe Nexus</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">11. Feb 2016 · Nexus Kino </div>
+  <div class="concert-date">11. Feb 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/10-milliarden-wie-werden-wir-alle-satt.html">10 Milliarden – Wie werden wir alle satt</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">11. Feb 2016 · Nexus Kino </div>
+  <div class="concert-date">11. Feb 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/vilja-und-die-raeuber.html">Vilja und die Räuber</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">11. Feb 2016 · Nexus spezial </div>
+  <div class="concert-date">11. Feb 2016 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/wein-u-kaeseverkostung.html">Wein u Käseverkostung</a></div>
   <div class='concert-musiker'>Georg Fürstauer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">11. Feb 2016 · Nexus spezial </div>
+  <div class="concert-date">11. Feb 2016 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/wein-u-kaeseverkostung.html">Wein u Käseverkostung</a></div>
   <div class='concert-musiker'>Jörg Zisler</div>
 </div><div class="concert-entry">
-  <div class="concert-date">12. Feb 2016 · Nexus </div>
+  <div class="concert-date">12. Feb 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/gebhard-ullmann-basement-research.html">Gebhard Ullmann Basement research</a> 🎙</div>
   <div class='concert-musiker'>Gebhard Ullmann</div>
 </div><div class="concert-entry">
-  <div class="concert-date">12. Feb 2016 · Nexus </div>
+  <div class="concert-date">12. Feb 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/gebhard-ullmann-basement-research.html">Gebhard Ullmann Basement research</a> 🎙</div>
   <div class='concert-musiker'>Julian Argüelles</div>
 </div><div class="concert-entry">
-  <div class="concert-date">12. Feb 2016 · Nexus </div>
+  <div class="concert-date">12. Feb 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/gebhard-ullmann-basement-research.html">Gebhard Ullmann Basement research</a> 🎙</div>
   <div class='concert-musiker'>Steve Swell</div>
 </div><div class="concert-entry">
-  <div class="concert-date">12. Feb 2016 · Nexus </div>
+  <div class="concert-date">12. Feb 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/gebhard-ullmann-basement-research.html">Gebhard Ullmann Basement research</a> 🎙</div>
   <div class='concert-musiker'>Pascal Niggenkemper</div>
 </div><div class="concert-entry">
-  <div class="concert-date">12. Feb 2016 · Nexus </div>
+  <div class="concert-date">12. Feb 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/gebhard-ullmann-basement-research.html">Gebhard Ullmann Basement research</a> 🎙</div>
   <div class='concert-musiker'>Gerard Cleaver</div>
 </div><div class="concert-entry">
-  <div class="concert-date">13. Feb 2016 · Nexus Café </div>
+  <div class="concert-date">13. Feb 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-instant-karma.html">Lokale Bandrunde: Instant Karma</a></div>
   <div class='concert-musiker'>Alex Wimmer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">13. Feb 2016 · Nexus Café </div>
+  <div class="concert-date">13. Feb 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-instant-karma.html">Lokale Bandrunde: Instant Karma</a></div>
   <div class='concert-musiker'>Chris Pucher</div>
 </div><div class="concert-entry">
-  <div class="concert-date">13. Feb 2016 · Nexus Café </div>
+  <div class="concert-date">13. Feb 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-instant-karma.html">Lokale Bandrunde: Instant Karma</a></div>
   <div class='concert-musiker'>Alex Fraueneder</div>
 </div><div class="concert-entry">
-  <div class="concert-date">13. Feb 2016 · Nexus Café </div>
+  <div class="concert-date">13. Feb 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-instant-karma.html">Lokale Bandrunde: Instant Karma</a></div>
   <div class='concert-musiker'>Chris Gruber</div>
 </div><div class="concert-entry">
-  <div class="concert-date">13. Feb 2016 · Nexus Theater </div>
+  <div class="concert-date">13. Feb 2016 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/gschnagga-theater-das-maedchenund-der-mond.html">Gschnagga Theater: Das Mädchenund der Mond</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">18. Feb 2016 · Nexus Kino </div>
+  <div class="concert-date">18. Feb 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/die-melodie-des-meers.html">Die Melodie des Meers</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">18. Feb 2016 · Nexus Kino </div>
+  <div class="concert-date">18. Feb 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/kirschblueten-und-rote-bohnen.html">Kirschblüten und rote Bohnen</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">20. Feb 2016 · Nexus </div>
+  <div class="concert-date">20. Feb 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/7-dials-mystery.html">7 Dials Mystery</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">20. Feb 2016 · Nexus </div>
+  <div class="concert-date">20. Feb 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/across-a-blackened-sky.html">Across a blackened Sky</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">20. Feb 2016 · Nexus </div>
+  <div class="concert-date">20. Feb 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/adlsdead.html">adlSdead</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">20. Feb 2016 · Nexus </div>
+  <div class="concert-date">20. Feb 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/the-warning.html">The Warning</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">25. Feb 2016 · Nexus Kino </div>
+  <div class="concert-date">25. Feb 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/die-peanuts.html">Die Peanuts</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">25. Feb 2016 · Nexus Kino </div>
+  <div class="concert-date">25. Feb 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/sture-boecke.html">Sture Böcke</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">26. Feb 2016 · Nexus Café </div>
+  <div class="concert-date">26. Feb 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/cjuw.html">CJUW</a></div>
   <div class='concert-musiker'>Cornel Hofer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Feb 2016 · Nexus Café </div>
+  <div class="concert-date">26. Feb 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/cjuw.html">CJUW</a></div>
   <div class='concert-musiker'>Julian Hutter</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Feb 2016 · Nexus Café </div>
+  <div class="concert-date">26. Feb 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/cjuw.html">CJUW</a></div>
   <div class='concert-musiker'>Wolfgang Schwarzbach</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Feb 2016 · Nexus Kabarett </div>
+  <div class="concert-date">27. Feb 2016 · Nexus Kabarett · </div>
   <div class="concert-band"><a href="../bands/heilbutt-rosen-schwarzgeldklinik.html">Heilbutt & Rosen: Schwarzgeldklinik</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">2. Mar 2016 · Nexus spezial </div>
+  <div class="concert-date">2. Mar 2016 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/laos-kambodscha.html">Laos & Kambodscha</a></div>
   <div class='concert-musiker'>Olaf Schubert</div>
 </div><div class="concert-entry">
-  <div class="concert-date">3. Mar 2016 · Nexus Kino </div>
+  <div class="concert-date">3. Mar 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/er-ist-wieder-da.html">Er ist wieder da</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">3. Mar 2016 · Nexus Kino </div>
+  <div class="concert-date">3. Mar 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/kasperl-und-das-verkleckste-osterei.html">Kasperl und das verkleckste Osterei</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">4. Mar 2016 · Nexus Ausstellung </div>
+  <div class="concert-date">4. Mar 2016 · Nexus Ausstellung · </div>
   <div class="concert-band"><a href="../bands/vernissage-manuel-gorkiewicz.html">Vernissage: Manuel Gorkiewicz</a></div>
   <div class='concert-musiker'>Manuel Gorkiewicz</div>
 </div><div class="concert-entry">
-  <div class="concert-date">8. Mar 2016 · Nexus Theater </div>
+  <div class="concert-date">8. Mar 2016 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/vagina-monologue.html">Vagina Monologue</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">9. Mar 2016 · Nexus my Uni </div>
+  <div class="concert-date">9. Mar 2016 · Nexus my Uni · </div>
   <div class="concert-band"><a href="../bands/warum-uns-der-nahe-osten-so-nahe-ist.html">Warum uns der nahe Osten so nahe ist</a></div>
   <div class='concert-musiker'>Karin Kneissl Dr</div>
 </div><div class="concert-entry">
-  <div class="concert-date">10. Mar 2016 · Nexus Kino </div>
+  <div class="concert-date">10. Mar 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/die-winzlinge-operation-zuckerdose.html">Die Winzlinge – Operation Zuckerdose</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">10. Mar 2016 · Nexus Kino </div>
+  <div class="concert-date">10. Mar 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/sufragette-taten-statt-worte.html">Sufragette – Taten statt Worte</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">11. Mar 2016 · Nexus Kino </div>
+  <div class="concert-date">11. Mar 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/amy.html">Amy</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">11. Mar 2016 · Nexus Kino </div>
+  <div class="concert-date">11. Mar 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/janis-little-girl-blue.html">Janis – Little Girl Blue</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">12. Mar 2016 · Nexus Theater </div>
+  <div class="concert-date">12. Mar 2016 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/gschnagga-theater-die-omama-im-apfelbaum.html">Gschnagga Theater: Die Omama im Apfelbaum</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">15. Mar 2016 · Nexus Theater </div>
+  <div class="concert-date">15. Mar 2016 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/der-vorname.html">Der Vorname</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">17. Mar 2016 · Nexus Theater </div>
+  <div class="concert-date">17. Mar 2016 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/der-vorname.html">Der Vorname</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">18. Mar 2016 · Nexus Theater </div>
+  <div class="concert-date">18. Mar 2016 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/der-vorname.html">Der Vorname</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">19. Mar 2016 · Nexus Theater </div>
+  <div class="concert-date">19. Mar 2016 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/der-vorname.html">Der Vorname</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">22. Mar 2016 · Nexus Theater </div>
+  <div class="concert-date">22. Mar 2016 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/der-vorname.html">Der Vorname</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">24. Mar 2016 · Nexus Kino </div>
+  <div class="concert-date">24. Mar 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/louder-than-bombs.html">Louder than Bombs</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">24. Mar 2016 · Nexus Kino </div>
+  <div class="concert-date">24. Mar 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/robinson-crusoe.html">Robinson Crusoe</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">26. Mar 2016 · Nexus Café </div>
+  <div class="concert-date">26. Mar 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-martin-rainer.html">Lokale Bandrunde: Martin Rainer</a></div>
   <div class='concert-musiker'>Martin Rainer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">31. Mar 2016 · Nexus Kino </div>
+  <div class="concert-date">31. Mar 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/das-brandneue-testament.html">Das Brandneue Testament</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">31. Mar 2016 · Nexus Kino </div>
+  <div class="concert-date">31. Mar 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/sebastian-und-die-feuerretter.html">Sebastian und die Feuerretter</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">1. Apr 2016 · Nexus </div>
+  <div class="concert-date">1. Apr 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/vincent-pongracz-synthestic-octet.html">Vincent Pongracz " Synthestic Octet"</a> 🎙</div>
   <div class='concert-musiker'>Vincent Pongracz</div>
 </div><div class="concert-entry">
-  <div class="concert-date">1. Apr 2016 · Nexus </div>
+  <div class="concert-date">1. Apr 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/vincent-pongracz-synthestic-octet.html">Vincent Pongracz " Synthestic Octet"</a> 🎙</div>
   <div class='concert-musiker'>Doris Nicoletti</div>
 </div><div class="concert-entry">
-  <div class="concert-date">1. Apr 2016 · Nexus </div>
+  <div class="concert-date">1. Apr 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/vincent-pongracz-synthestic-octet.html">Vincent Pongracz " Synthestic Octet"</a> 🎙</div>
   <div class='concert-musiker'>Richard Köster</div>
 </div><div class="concert-entry">
-  <div class="concert-date">1. Apr 2016 · Nexus </div>
+  <div class="concert-date">1. Apr 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/vincent-pongracz-synthestic-octet.html">Vincent Pongracz " Synthestic Octet"</a> 🎙</div>
   <div class='concert-musiker'>Manu  Mayr</div>
 </div><div class="concert-entry">
-  <div class="concert-date">1. Apr 2016 · Nexus </div>
+  <div class="concert-date">1. Apr 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/vincent-pongracz-synthestic-octet.html">Vincent Pongracz " Synthestic Octet"</a> 🎙</div>
   <div class='concert-musiker'>Clemens Salesny</div>
 </div><div class="concert-entry">
-  <div class="concert-date">1. Apr 2016 · Nexus </div>
+  <div class="concert-date">1. Apr 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/vincent-pongracz-synthestic-octet.html">Vincent Pongracz " Synthestic Octet"</a> 🎙</div>
   <div class='concert-musiker'>Alois Eberl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">1. Apr 2016 · Nexus </div>
+  <div class="concert-date">1. Apr 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/vincent-pongracz-synthestic-octet.html">Vincent Pongracz " Synthestic Octet"</a> 🎙</div>
   <div class='concert-musiker'>Peter Rom</div>
 </div><div class="concert-entry">
-  <div class="concert-date">1. Apr 2016 · Nexus </div>
+  <div class="concert-date">1. Apr 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/vincent-pongracz-synthestic-octet.html">Vincent Pongracz " Synthestic Octet"</a> 🎙</div>
   <div class='concert-musiker'>Lukas König</div>
 </div><div class="concert-entry">
-  <div class="concert-date">2. Apr 2016 · Nexus Café </div>
+  <div class="concert-date">2. Apr 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-happy-hoagascht.html">Lokale Bandrunde: Happy Hoagascht</a></div>
   <div class='concert-musiker'>Stefan Schipflinger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">2. Apr 2016 · Nexus Café </div>
+  <div class="concert-date">2. Apr 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-happy-hoagascht.html">Lokale Bandrunde: Happy Hoagascht</a></div>
   <div class='concert-musiker'>Florian Schwarzenbacher</div>
 </div><div class="concert-entry">
-  <div class="concert-date">2. Apr 2016 · Nexus Café </div>
+  <div class="concert-date">2. Apr 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-happy-hoagascht.html">Lokale Bandrunde: Happy Hoagascht</a></div>
   <div class='concert-musiker'>Mario Maierhofer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">2. Apr 2016 · Nexus Café </div>
+  <div class="concert-date">2. Apr 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-happy-hoagascht.html">Lokale Bandrunde: Happy Hoagascht</a></div>
   <div class='concert-musiker'>Ludwig Schwarzenbacher</div>
 </div><div class="concert-entry">
-  <div class="concert-date">2. Apr 2016 · Nexus Theater </div>
+  <div class="concert-date">2. Apr 2016 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/gschnagga-theater-heidi.html">Gschnagga Theater: Heidi</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">5. Apr 2016 · Nexus Theater </div>
+  <div class="concert-date">5. Apr 2016 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/krieg-stell-dir-vor-er-waer-hier.html">Krieg. Stell dir vor er wär hier</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">6. Apr 2016 · Nexus spezial </div>
+  <div class="concert-date">6. Apr 2016 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/tief-in-afrika.html">Tief in Afrika</a></div>
   <div class='concert-musiker'>Hartmut Fiebig</div>
 </div><div class="concert-entry">
-  <div class="concert-date">7. Apr 2016 · Nexus Kino </div>
+  <div class="concert-date">7. Apr 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/freunde-fuers-leben.html">Freunde fürs Leben</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">7. Apr 2016 · Nexus Kino </div>
+  <div class="concert-date">7. Apr 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/kasperl-und-das-neugierige-elefantenkind.html">Kasperl und das neugierige Elefantenkind</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">8. Apr 2016 · Nexus Singer Songwriter </div>
+  <div class="concert-date">8. Apr 2016 · Nexus Singer Songwriter · </div>
   <div class="concert-band"><a href="../bands/anna-katt.html">Anna Katt</a> 🎙</div>
   <div class='concert-musiker'>Kristina Lindberg</div>
 </div><div class="concert-entry">
-  <div class="concert-date">8. Apr 2016 · Nexus Singer Songwriter </div>
+  <div class="concert-date">8. Apr 2016 · Nexus Singer Songwriter · </div>
   <div class="concert-band"><a href="../bands/anna-katt.html">Anna Katt</a> 🎙</div>
   <div class='concert-musiker'>Stefan Lindberg</div>
 </div><div class="concert-entry">
-  <div class="concert-date">8. Apr 2016 · Nexus Singer Songwriter </div>
+  <div class="concert-date">8. Apr 2016 · Nexus Singer Songwriter · </div>
   <div class="concert-band"><a href="../bands/anna-katt.html">Anna Katt</a> 🎙</div>
   <div class='concert-musiker'>Manuel Mitterhuber</div>
 </div><div class="concert-entry">
-  <div class="concert-date">8. Apr 2016 · Nexus Singer Songwriter </div>
+  <div class="concert-date">8. Apr 2016 · Nexus Singer Songwriter · </div>
   <div class="concert-band"><a href="../bands/mel-mayr.html">Mel Mayr</a> 🎙</div>
   <div class='concert-musiker'>Mel Mayr</div>
 </div><div class="concert-entry">
-  <div class="concert-date">8. Apr 2016 · Nexus Singer Songwriter </div>
+  <div class="concert-date">8. Apr 2016 · Nexus Singer Songwriter · </div>
   <div class="concert-band"><a href="../bands/schmieds-plus.html">Schmieds Plus</a> 🎙</div>
   <div class='concert-musiker'>Mira Lu Kovacs</div>
 </div><div class="concert-entry">
-  <div class="concert-date">8. Apr 2016 · Nexus Singer Songwriter </div>
+  <div class="concert-date">8. Apr 2016 · Nexus Singer Songwriter · </div>
   <div class="concert-band"><a href="../bands/schmieds-plus.html">Schmieds Plus</a> 🎙</div>
   <div class='concert-musiker'>Walter Singer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">8. Apr 2016 · Nexus Singer Songwriter </div>
+  <div class="concert-date">8. Apr 2016 · Nexus Singer Songwriter · </div>
   <div class="concert-band"><a href="../bands/schmieds-plus.html">Schmieds Plus</a> 🎙</div>
   <div class='concert-musiker'>Christian Grobauer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">9. Apr 2016 · Nexus Singer Songwriter </div>
+  <div class="concert-date">9. Apr 2016 · Nexus Singer Songwriter · </div>
   <div class="concert-band"><a href="../bands/avec.html">AVEC</a> 🎙</div>
   <div class='concert-musiker'>Miriam Hufnagl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">9. Apr 2016 · Nexus Singer Songwriter </div>
+  <div class="concert-date">9. Apr 2016 · Nexus Singer Songwriter · </div>
   <div class="concert-band"><a href="../bands/avec.html">AVEC</a> 🎙</div>
   <div class='concert-musiker'>Andreas Häuserer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">9. Apr 2016 · Nexus Singer Songwriter </div>
+  <div class="concert-date">9. Apr 2016 · Nexus Singer Songwriter · </div>
   <div class="concert-band"><a href="../bands/avec.html">AVEC</a> 🎙</div>
   <div class='concert-musiker'>Lukas Hillebrand</div>
 </div><div class="concert-entry">
-  <div class="concert-date">9. Apr 2016 · Nexus Singer Songwriter </div>
+  <div class="concert-date">9. Apr 2016 · Nexus Singer Songwriter · </div>
   <div class="concert-band"><a href="../bands/lost-name.html">Lost Name</a> 🎙</div>
   <div class='concert-musiker'>Andreas Langhammer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">9. Apr 2016 · Nexus Singer Songwriter </div>
+  <div class="concert-date">9. Apr 2016 · Nexus Singer Songwriter · </div>
   <div class="concert-band"><a href="../bands/phela.html">Phela</a> 🎙</div>
   <div class='concert-musiker'>Phela</div>
 </div><div class="concert-entry">
-  <div class="concert-date">9. Apr 2016 · Nexus Singer Songwriter </div>
+  <div class="concert-date">9. Apr 2016 · Nexus Singer Songwriter · </div>
   <div class="concert-band"><a href="../bands/phela.html">Phela</a> 🎙</div>
   <div class='concert-musiker'>Roman Goly</div>
 </div><div class="concert-entry">
-  <div class="concert-date">9. Apr 2016 · Nexus Singer Songwriter </div>
+  <div class="concert-date">9. Apr 2016 · Nexus Singer Songwriter · </div>
   <div class="concert-band"><a href="../bands/phela.html">Phela</a> 🎙</div>
   <div class='concert-musiker'>Moritz Brümmer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">12. Apr 2016 · Nexus spezial </div>
+  <div class="concert-date">12. Apr 2016 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/joe-pichler-27145km-von-salzburg-nach-indien.html">Joe Pichler: 27145Km von Salzburg nach Indien</a></div>
   <div class='concert-musiker'>Joe Pichler</div>
 </div><div class="concert-entry">
-  <div class="concert-date">13. Apr 2016 · Nexus my Uni </div>
+  <div class="concert-date">13. Apr 2016 · Nexus my Uni · </div>
   <div class="concert-band"><a href="../bands/sport-ist-mord.html">Sport ist Mord</a></div>
   <div class='concert-musiker'>David Dr Niederseer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">14. Apr 2016 · Nexus Kino </div>
+  <div class="concert-date">14. Apr 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/die-wilden-kerle-6-die-legende-lebt.html">Die wilden Kerle 6 Die Legende lebt</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">14. Apr 2016 · Nexus Kino </div>
+  <div class="concert-date">14. Apr 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/spotlight.html">Spotlight</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">16. Apr 2016 · Nexus </div>
+  <div class="concert-date">16. Apr 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/tomasz-stanko-ny-quartet.html">Tomasz Stanko NY Quartet</a> 🎙</div>
   <div class='concert-musiker'>Tomasz Stanko</div>
 </div><div class="concert-entry">
-  <div class="concert-date">16. Apr 2016 · Nexus </div>
+  <div class="concert-date">16. Apr 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/tomasz-stanko-ny-quartet.html">Tomasz Stanko NY Quartet</a> 🎙</div>
   <div class='concert-musiker'>David Virelles</div>
 </div><div class="concert-entry">
-  <div class="concert-date">16. Apr 2016 · Nexus </div>
+  <div class="concert-date">16. Apr 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/tomasz-stanko-ny-quartet.html">Tomasz Stanko NY Quartet</a> 🎙</div>
   <div class='concert-musiker'>Reuben Rogers</div>
 </div><div class="concert-entry">
-  <div class="concert-date">16. Apr 2016 · Nexus </div>
+  <div class="concert-date">16. Apr 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/tomasz-stanko-ny-quartet.html">Tomasz Stanko NY Quartet</a> 🎙</div>
   <div class='concert-musiker'>Gerald Cleaver</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Apr 2016 · Nexus Kabarett </div>
+  <div class="concert-date">19. Apr 2016 · Nexus Kabarett · </div>
   <div class="concert-band"><a href="../bands/best-of-kultkabaret.html">Best of Kultkabaret</a></div>
   <div class='concert-musiker'>Manfred Baumann</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Apr 2016 · Nexus Kabarett </div>
+  <div class="concert-date">19. Apr 2016 · Nexus Kabarett · </div>
   <div class="concert-band"><a href="../bands/best-of-kultkabaret.html">Best of Kultkabaret</a></div>
   <div class='concert-musiker'>Peter Blaikner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Apr 2016 · Nexus Kabarett </div>
+  <div class="concert-date">19. Apr 2016 · Nexus Kabarett · </div>
   <div class="concert-band"><a href="../bands/best-of-kultkabaret.html">Best of Kultkabaret</a></div>
   <div class='concert-musiker'>Fritz Messner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Apr 2016 · Nexus Kabarett </div>
+  <div class="concert-date">19. Apr 2016 · Nexus Kabarett · </div>
   <div class="concert-band"><a href="../bands/best-of-kultkabaret.html">Best of Kultkabaret</a></div>
   <div class='concert-musiker'>Manfred Baumann</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Apr 2016 · Nexus Kabarett </div>
+  <div class="concert-date">19. Apr 2016 · Nexus Kabarett · </div>
   <div class="concert-band"><a href="../bands/best-of-kultkabaret.html">Best of Kultkabaret</a></div>
   <div class='concert-musiker'>Peter Blaikner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Apr 2016 · Nexus Kabarett </div>
+  <div class="concert-date">19. Apr 2016 · Nexus Kabarett · </div>
   <div class="concert-band"><a href="../bands/best-of-kultkabaret.html">Best of Kultkabaret</a></div>
   <div class='concert-musiker'>Fritz Messner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. Apr 2016 · Nexus Kino </div>
+  <div class="concert-date">21. Apr 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/eine-familie-zu-vermieten.html">Eine Familie zu vermieten</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">21. Apr 2016 · Nexus Kino </div>
+  <div class="concert-date">21. Apr 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/rettet-raffi.html">Rettet Raffi</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">23. Apr 2016 · Nexus Kino </div>
+  <div class="concert-date">23. Apr 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/herrenkinoabend-the-hateful-eight.html">Herrenkinoabend; The Hateful Eight</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">28. Apr 2016 · Nexus Kino </div>
+  <div class="concert-date">28. Apr 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/ein-mann-namens-ove.html">Ein Mann Namens Ove</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">28. Apr 2016 · Nexus Kino </div>
+  <div class="concert-date">28. Apr 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/schellen-ursli.html">Schellen-Ursli</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">30. Apr 2016 · Nexus Café </div>
+  <div class="concert-date">30. Apr 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/matchball-49.html">Matchball 49</a></div>
   <div class='concert-musiker'>Martin Brunner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">30. Apr 2016 · Nexus Café </div>
+  <div class="concert-date">30. Apr 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/matchball-49.html">Matchball 49</a></div>
   <div class='concert-musiker'>Bernhard Jäger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">30. Apr 2016 · Nexus Café </div>
+  <div class="concert-date">30. Apr 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/matchball-49.html">Matchball 49</a></div>
   <div class='concert-musiker'>Gerald Reis</div>
 </div><div class="concert-entry">
-  <div class="concert-date">30. Apr 2016 · Nexus Café </div>
+  <div class="concert-date">30. Apr 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/matchball-49.html">Matchball 49</a></div>
   <div class='concert-musiker'>Heinz Steiner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">5. May 2016 · Nexus Kino </div>
+  <div class="concert-date">5. May 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/birnenkuschen-mit-lavendel.html">Birnenkuschen mit Lavendel</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">5. May 2016 · Nexus Kino </div>
+  <div class="concert-date">5. May 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/kasperl-und-die-quallenfalle.html">Kasperl und die Quallenfalle</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">6. May 2016 · Nexus </div>
+  <div class="concert-date">6. May 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/tim-berne-snakeoil-you-ve-been-watching-me.html">Tim Berne Snakeoil: You’ve been watching me</a></div>
   <div class='concert-musiker'>Tim Berne</div>
 </div><div class="concert-entry">
-  <div class="concert-date">6. May 2016 · Nexus </div>
+  <div class="concert-date">6. May 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/tim-berne-snakeoil-you-ve-been-watching-me.html">Tim Berne Snakeoil: You’ve been watching me</a></div>
   <div class='concert-musiker'>Oscar Noriega</div>
 </div><div class="concert-entry">
-  <div class="concert-date">6. May 2016 · Nexus </div>
+  <div class="concert-date">6. May 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/tim-berne-snakeoil-you-ve-been-watching-me.html">Tim Berne Snakeoil: You’ve been watching me</a></div>
   <div class='concert-musiker'>Matt Mitchell</div>
 </div><div class="concert-entry">
-  <div class="concert-date">6. May 2016 · Nexus </div>
+  <div class="concert-date">6. May 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/tim-berne-snakeoil-you-ve-been-watching-me.html">Tim Berne Snakeoil: You’ve been watching me</a></div>
   <div class='concert-musiker'>Ryan Ferreira</div>
 </div><div class="concert-entry">
-  <div class="concert-date">6. May 2016 · Nexus </div>
+  <div class="concert-date">6. May 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/tim-berne-snakeoil-you-ve-been-watching-me.html">Tim Berne Snakeoil: You’ve been watching me</a></div>
   <div class='concert-musiker'>Ches Smith</div>
 </div><div class="concert-entry">
-  <div class="concert-date">7. May 2016 · Nexus Theater </div>
+  <div class="concert-date">7. May 2016 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/gschnagga-theater-scheckenalarm.html">Gschnagga Theater: Scheckenalarm</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">11. May 2016 · Nexus my Uni </div>
+  <div class="concert-date">11. May 2016 · Nexus my Uni · </div>
   <div class="concert-band"><a href="../bands/zur-geologie-des-steinernen-meeres.html">Zur Geologie des Steinernen Meeres</a></div>
   <div class='concert-musiker'>Gottfried Tichy</div>
 </div><div class="concert-entry">
-  <div class="concert-date">12. May 2016 · Nexus Kino </div>
+  <div class="concert-date">12. May 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/das-tagebuch-der-anne-frank.html">Das Tagebuch der Anne Frank</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">12. May 2016 · Nexus Kino </div>
+  <div class="concert-date">12. May 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/zoomania.html">Zoomania</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">13. May 2016 · Nexus Kino </div>
+  <div class="concert-date">13. May 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/herrenkino-13-hours-the-secret-soldiers-of-benghazi.html">Herrenkino: 13 Hours: The secret Soldiers of Benghazi</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">14. May 2016 · Nexus spezial </div>
+  <div class="concert-date">14. May 2016 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/nici-s-rocknacht.html">Nici’s Rocknacht</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">19. May 2016 · Nexus Kino </div>
+  <div class="concert-date">19. May 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/kung-fu-panda-3.html">Kung Fu Panda 3</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">19. May 2016 · Nexus Kino </div>
+  <div class="concert-date">19. May 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/room.html">Room</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">20. May 2016 · Nexus Ausstellung </div>
+  <div class="concert-date">20. May 2016 · Nexus Ausstellung · </div>
   <div class="concert-band"><a href="../bands/vernissage-anna-jermolaewa-a-noble-experiment.html">Vernissage: Anna Jermolaewa: A noble Experiment</a></div>
   <div class='concert-musiker'>Anna Jermolaewa</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. May 2016 · Nexus Kabarett </div>
+  <div class="concert-date">21. May 2016 · Nexus Kabarett · </div>
   <div class="concert-band"><a href="../bands/oe3-fisch-grete-und-das-kammerl-des-schreckens.html">Ö3 Fisch Grete und das Kammerl des Schreckens</a></div>
   <div class='concert-musiker'>Marion Petric</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. May 2016 · Nexus </div>
+  <div class="concert-date">25. May 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/25-jahre-saxofour.html">25 Jahre Saxofour</a> 🎙</div>
   <div class='concert-musiker'>Wolfgang Puschnig</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. May 2016 · Nexus </div>
+  <div class="concert-date">25. May 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/25-jahre-saxofour.html">25 Jahre Saxofour</a> 🎙</div>
   <div class='concert-musiker'>Florian Bramböck</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. May 2016 · Nexus </div>
+  <div class="concert-date">25. May 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/25-jahre-saxofour.html">25 Jahre Saxofour</a> 🎙</div>
   <div class='concert-musiker'>Klaus Dickbauer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. May 2016 · Nexus </div>
+  <div class="concert-date">25. May 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/25-jahre-saxofour.html">25 Jahre Saxofour</a> 🎙</div>
   <div class='concert-musiker'>Christian Maurer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. May 2016 · Nexus </div>
+  <div class="concert-date">25. May 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/25-jahre-saxofour.html">25 Jahre Saxofour</a> 🎙</div>
   <div class='concert-musiker'>Jamaalaadeen Tacuma</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. May 2016 · Nexus </div>
+  <div class="concert-date">25. May 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/25-jahre-saxofour.html">25 Jahre Saxofour</a> 🎙</div>
   <div class='concert-musiker'>Timmy Hutson</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. May 2016 · Nexus Kino </div>
+  <div class="concert-date">26. May 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/das-dschungelbuch.html">Das Dschungelbuch</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">26. May 2016 · Nexus Kino </div>
+  <div class="concert-date">26. May 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/son-of-saul.html">Son of Saul</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">27. May 2016 · Nexus Café </div>
+  <div class="concert-date">27. May 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-the-dukes.html">Lokale Bandrunde: The Dukes</a></div>
   <div class='concert-musiker'>Stefan Harml</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. May 2016 · Nexus Café </div>
+  <div class="concert-date">27. May 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-the-dukes.html">Lokale Bandrunde: The Dukes</a></div>
   <div class='concert-musiker'>David Walcher</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. May 2016 · Nexus Café </div>
+  <div class="concert-date">27. May 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-the-dukes.html">Lokale Bandrunde: The Dukes</a></div>
   <div class='concert-musiker'>Tommy Tranninger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">2. Jun 2016 · Nexus kino </div>
+  <div class="concert-date">2. Jun 2016 · Nexus kino · </div>
   <div class="concert-band"><a href="../bands/hannas-schlafende-hunde.html">Hannas schlafende Hunde</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">2. Jun 2016 · Nexus kino </div>
+  <div class="concert-date">2. Jun 2016 · Nexus kino · </div>
   <div class="concert-band"><a href="../bands/kasperl-und-die-traurige-prinzessin.html">Kasperl und die traurige Prinzessin</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">4. Jun 2016 · Nexus Kabarett </div>
+  <div class="concert-date">4. Jun 2016 · Nexus Kabarett · </div>
   <div class="concert-band"><a href="../bands/franz-hochwimmer-programmaenderung.html">Franz Hochwimmer: Programmänderung</a></div>
   <div class='concert-musiker'>Franz Hochwimmer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">7. Jun 2016 · Nexus Theater </div>
+  <div class="concert-date">7. Jun 2016 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/der-mysterioese-koffer.html">Der mysteriöse Koffer</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">8. Jun 2016 · Nexus my Uni </div>
+  <div class="concert-date">8. Jun 2016 · Nexus my Uni · </div>
   <div class="concert-band"><a href="../bands/die-geheimen-spielregeln-der-macht.html">Die geheimen Spielregeln der Macht</a></div>
   <div class='concert-musiker'>Christine Bauer-Jelinek</div>
 </div><div class="concert-entry">
-  <div class="concert-date">9. Jun 2016 · Nexus Kino </div>
+  <div class="concert-date">9. Jun 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/ewige-jugend.html">Ewige Jugend</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">9. Jun 2016 · Nexus Kino </div>
+  <div class="concert-date">9. Jun 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/unsere-wildnis.html">Unsere Wildnis</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">10. Jun 2016 · Nexus Café </div>
+  <div class="concert-date">10. Jun 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandruned-crude.html">Lokale Bandruned: Crude</a></div>
   <div class='concert-musiker'>Reinhard Wagner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">10. Jun 2016 · Nexus Café </div>
+  <div class="concert-date">10. Jun 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandruned-crude.html">Lokale Bandruned: Crude</a></div>
   <div class='concert-musiker'>Leopold Wagner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">10. Jun 2016 · Nexus Café </div>
+  <div class="concert-date">10. Jun 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandruned-crude.html">Lokale Bandruned: Crude</a></div>
   <div class='concert-musiker'>Manuel Pink</div>
 </div><div class="concert-entry">
-  <div class="concert-date">10. Jun 2016 · Nexus Café </div>
+  <div class="concert-date">10. Jun 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandruned-crude.html">Lokale Bandruned: Crude</a></div>
   <div class='concert-musiker'>Daniel Potocnik</div>
 </div><div class="concert-entry">
-  <div class="concert-date">11. Jun 2016 · Nexus Kino </div>
+  <div class="concert-date">11. Jun 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/herrenkinoabend-the-first-avenger.html">Herrenkinoabend: The first Avenger</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">14. Jun 2016 · Nexus Theater </div>
+  <div class="concert-date">14. Jun 2016 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/der-vorname.html">Der Vorname</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">15. Jun 2016 · Nexus Theater </div>
+  <div class="concert-date">15. Jun 2016 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/der-vorname.html">Der Vorname</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">17. Jun 2016 · Nexus Theater </div>
+  <div class="concert-date">17. Jun 2016 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/der-vorname.html">Der Vorname</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">18. Jun 2016 · Nexus Theater </div>
+  <div class="concert-date">18. Jun 2016 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/der-vorname.html">Der Vorname</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">21. Jun 2016 · Nexus Theater </div>
+  <div class="concert-date">21. Jun 2016 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/der-vorname.html">Der Vorname</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">23. Jun 2016 · Nexus Kino </div>
+  <div class="concert-date">23. Jun 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/angry-birds.html">Angry Birds</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">23. Jun 2016 · Nexus Kino </div>
+  <div class="concert-date">23. Jun 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/bauernopfer-spiel-der-koenige.html">Bauernopfer – Spiel der Könige</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">25. Jun 2016 · Nexus Café </div>
+  <div class="concert-date">25. Jun 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/saalfelden-verein-t-blues-juice.html">Saalfelden Verein(t): Blues Juice</a></div>
   <div class='concert-musiker'>Heli Punzenberger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Jun 2016 · Nexus Café </div>
+  <div class="concert-date">25. Jun 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/saalfelden-verein-t-blues-juice.html">Saalfelden Verein(t): Blues Juice</a></div>
   <div class='concert-musiker'>Nane Frühstückl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">30. Jun 2016 · Nexus Kino </div>
+  <div class="concert-date">30. Jun 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/ente-gut-maedchen-allein-zu-hause.html">Ente gut! Mädchen allein zu Hause</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">30. Jun 2016 · Nexus Kino </div>
+  <div class="concert-date">30. Jun 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/remember-vergiss-nicht-dich-zu-erinnern.html">Remember: Vergiss nicht Dich zu erinnern</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">28. Jul 2016 · Nexus Kino </div>
+  <div class="concert-date">28. Jul 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/nur-fliegen-ist-schoener.html">Nur fliegen ist schöner</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">29. Jul 2016 · Nexus Café </div>
+  <div class="concert-date">29. Jul 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/tmg.html">TMG</a></div>
   <div class='concert-musiker'>Thomas Gschoßmann</div>
 </div><div class="concert-entry">
-  <div class="concert-date">30. Jul 2016 · Nexus Café </div>
+  <div class="concert-date">30. Jul 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/die-typhoid-marys.html">Die Typhoid Marys</a></div>
   <div class='concert-musiker'>Anne Aichriedler</div>
 </div><div class="concert-entry">
-  <div class="concert-date">30. Jul 2016 · Nexus Café </div>
+  <div class="concert-date">30. Jul 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/die-typhoid-marys.html">Die Typhoid Marys</a></div>
   <div class='concert-musiker'>Christina Laubenbacher</div>
 </div><div class="concert-entry">
-  <div class="concert-date">4. Aug 2016 · Nexus Kino </div>
+  <div class="concert-date">4. Aug 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/athos-im-jenseits-dieser-welt.html">Athos – Im Jenseits dieser Welt</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">5. Aug 2016 · Nexus Kino </div>
+  <div class="concert-date">5. Aug 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/herrenkino-the-conjuring-2.html">Herrenkino: The Conjuring 2</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">11. Aug 2016 · Nexus Kino </div>
+  <div class="concert-date">11. Aug 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/ma-ma-der-ursprung-der-liebe.html">Ma ma – Der Ursprung der Liebe</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">12. Aug 2016 · Nexus Café </div>
+  <div class="concert-date">12. Aug 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/the-attic-o-r.html">The Attic O.R.</a></div>
   <div class='concert-musiker'>Sara  Brandner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">12. Aug 2016 · Nexus Café </div>
+  <div class="concert-date">12. Aug 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/the-attic-o-r.html">The Attic O.R.</a></div>
   <div class='concert-musiker'>Martin Niederls</div>
 </div><div class="concert-entry">
-  <div class="concert-date">12. Aug 2016 · Nexus Café </div>
+  <div class="concert-date">12. Aug 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/the-attic-o-r.html">The Attic O.R.</a></div>
   <div class='concert-musiker'>Johannes Moser</div>
 </div><div class="concert-entry">
-  <div class="concert-date">12. Aug 2016 · Nexus Café </div>
+  <div class="concert-date">12. Aug 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/the-attic-o-r.html">The Attic O.R.</a></div>
   <div class='concert-musiker'>Sebastian Arzbacher</div>
 </div><div class="concert-entry">
-  <div class="concert-date">13. Aug 2016 · Nexus Café </div>
+  <div class="concert-date">13. Aug 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/libertango.html">Libertango</a></div>
   <div class='concert-musiker'>Sigrid Gerlach</div>
 </div><div class="concert-entry">
-  <div class="concert-date">13. Aug 2016 · Nexus Café </div>
+  <div class="concert-date">13. Aug 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/libertango.html">Libertango</a></div>
   <div class='concert-musiker'>Sabine Linecker</div>
 </div><div class="concert-entry">
-  <div class="concert-date">13. Aug 2016 · Nexus Café </div>
+  <div class="concert-date">13. Aug 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/libertango.html">Libertango</a></div>
   <div class='concert-musiker'>Michael Brandl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">13. Aug 2016 · Nexus Café </div>
+  <div class="concert-date">13. Aug 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/libertango.html">Libertango</a></div>
   <div class='concert-musiker'>Geri Sauberer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">18. Aug 2016 · Nexus Kino </div>
+  <div class="concert-date">18. Aug 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/fruehstueck-mit-monsieur-henri.html">Frühstück mit Monsieur Henri</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">19. Aug 2016 · Nexus Café </div>
+  <div class="concert-date">19. Aug 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/the-hotrod-s.html">The Hotrod’s</a></div>
   <div class='concert-musiker'>Alex Willinger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Aug 2016 · Nexus Café </div>
+  <div class="concert-date">19. Aug 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/the-hotrod-s.html">The Hotrod’s</a></div>
   <div class='concert-musiker'>Bernhard Oastermaier</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Aug 2016 · Nexus Café </div>
+  <div class="concert-date">19. Aug 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/the-hotrod-s.html">The Hotrod’s</a></div>
   <div class='concert-musiker'>Marcel Chytra</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2016 · Nexus Café </div>
+  <div class="concert-date">20. Aug 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-the-reckless.html">Lokale Bandrunde: The Reckless</a></div>
   <div class='concert-musiker'>Michi Zehentner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2016 · Nexus Café </div>
+  <div class="concert-date">20. Aug 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-the-reckless.html">Lokale Bandrunde: The Reckless</a></div>
   <div class='concert-musiker'>Mark Rieder</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2016 · Nexus Café </div>
+  <div class="concert-date">20. Aug 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-the-reckless.html">Lokale Bandrunde: The Reckless</a></div>
   <div class='concert-musiker'>Florian Voithofer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">20. Aug 2016 · Nexus Café </div>
+  <div class="concert-date">20. Aug 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-the-reckless.html">Lokale Bandrunde: The Reckless</a></div>
   <div class='concert-musiker'>Geri Rendl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2016 · Festival 16 CS </div>
+  <div class="concert-date">25. Aug 2016 · Festival 16 CS · </div>
   <div class="concert-band"><a href="../bands/ostbeatbend.html">Ostbeatbend</a></div>
   <div class='concert-musiker'>Alex Zechbauer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2016 · Festival 16 CS </div>
+  <div class="concert-date">25. Aug 2016 · Festival 16 CS · </div>
   <div class="concert-band"><a href="../bands/ostbeatbend.html">Ostbeatbend</a></div>
   <div class='concert-musiker'>Michi Brandl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2016 · Festival 16 CS </div>
+  <div class="concert-date">25. Aug 2016 · Festival 16 CS · </div>
   <div class="concert-band"><a href="../bands/ostbeatbend.html">Ostbeatbend</a></div>
   <div class='concert-musiker'>Slavoljub Jeremic</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2016 · Festival 16 CS </div>
+  <div class="concert-date">25. Aug 2016 · Festival 16 CS · </div>
   <div class="concert-band"><a href="../bands/ostbeatbend.html">Ostbeatbend</a></div>
   <div class='concert-musiker'>Roland Oberndorfer-Wagner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2016 · Festival 16 CS </div>
+  <div class="concert-date">25. Aug 2016 · Festival 16 CS · </div>
   <div class="concert-band"><a href="../bands/otava-yo.html">Otava Yo</a></div>
   <div class='concert-musiker'>Alexej Belkin</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2016 · Festival 16 CS </div>
+  <div class="concert-date">25. Aug 2016 · Festival 16 CS · </div>
   <div class="concert-band"><a href="../bands/otava-yo.html">Otava Yo</a></div>
   <div class='concert-musiker'>Alexey Skosyrev</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2016 · Festival 16 CS </div>
+  <div class="concert-date">25. Aug 2016 · Festival 16 CS · </div>
   <div class="concert-band"><a href="../bands/otava-yo.html">Otava Yo</a></div>
   <div class='concert-musiker'>Dmitry Shikhardin</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2016 · Festival 16 CS </div>
+  <div class="concert-date">25. Aug 2016 · Festival 16 CS · </div>
   <div class="concert-band"><a href="../bands/otava-yo.html">Otava Yo</a></div>
   <div class='concert-musiker'>Julia Usova</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2016 · Festival 16 CS </div>
+  <div class="concert-date">25. Aug 2016 · Festival 16 CS · </div>
   <div class="concert-band"><a href="../bands/otava-yo.html">Otava Yo</a></div>
   <div class='concert-musiker'>Petr Sergeev</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2016 · Festival 16 CS </div>
+  <div class="concert-date">25. Aug 2016 · Festival 16 CS · </div>
   <div class="concert-band"><a href="../bands/otava-yo.html">Otava Yo</a></div>
   <div class='concert-musiker'>Timur Sigidin</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2016 · Festival 16 SC </div>
+  <div class="concert-date">25. Aug 2016 · Festival 16 SC · </div>
   <div class="concert-band"><a href="../bands/mamby-pamby-boys.html">Mamby Pamby Boys</a></div>
   <div class='concert-musiker'>Fabian Rucker</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2016 · Festival 16 SC </div>
+  <div class="concert-date">25. Aug 2016 · Festival 16 SC · </div>
   <div class="concert-band"><a href="../bands/mamby-pamby-boys.html">Mamby Pamby Boys</a></div>
   <div class='concert-musiker'>Phillipp Nykrin</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2016 · Festival 16 SC </div>
+  <div class="concert-date">25. Aug 2016 · Festival 16 SC · </div>
   <div class="concert-band"><a href="../bands/mamby-pamby-boys.html">Mamby Pamby Boys</a></div>
   <div class='concert-musiker'>Andreas Lettner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2016 · Festival 16 SC </div>
+  <div class="concert-date">25. Aug 2016 · Festival 16 SC · </div>
   <div class="concert-band"><a href="../bands/starlite-motel.html">Starlite Motel</a></div>
   <div class='concert-musiker'>Jamie Saft</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2016 · Festival 16 SC </div>
+  <div class="concert-date">25. Aug 2016 · Festival 16 SC · </div>
   <div class="concert-band"><a href="../bands/starlite-motel.html">Starlite Motel</a></div>
   <div class='concert-musiker'>Rune Nergaard</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2016 · Festival 16 SC </div>
+  <div class="concert-date">25. Aug 2016 · Festival 16 SC · </div>
   <div class="concert-band"><a href="../bands/starlite-motel.html">Starlite Motel</a></div>
   <div class='concert-musiker'>Kristoffer Alberts</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2016 · Festival 16 SC </div>
+  <div class="concert-date">25. Aug 2016 · Festival 16 SC · </div>
   <div class="concert-band"><a href="../bands/starlite-motel.html">Starlite Motel</a></div>
   <div class='concert-musiker'>Gard Nilssen</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Aug 2016 · Nexus Ausstellung </div>
+  <div class="concert-date">25. Aug 2016 · Nexus Ausstellung · </div>
   <div class="concert-band"><a href="../bands/anna-jermolaewa-a-noble-experiment.html">Anna Jermolaewa: A noble Experiment</a></div>
   <div class='concert-musiker'>Anna Jermolaewa</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 CS </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 CS · </div>
   <div class="concert-band"><a href="../bands/dawanggang.html">Dawanggang</a></div>
   <div class='concert-musiker'>Song Yuzhe</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 CS </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 CS · </div>
   <div class="concert-band"><a href="../bands/dawanggang.html">Dawanggang</a></div>
   <div class='concert-musiker'>Sourlas Achilleas</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 CS </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 CS · </div>
   <div class="concert-band"><a href="../bands/dawanggang.html">Dawanggang</a></div>
   <div class='concert-musiker'>Andrej Ugoljew</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 CS </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 CS · </div>
   <div class="concert-band"><a href="../bands/dawanggang.html">Dawanggang</a></div>
   <div class='concert-musiker'>Jack Nissan</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 CS </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 CS · </div>
   <div class="concert-band"><a href="../bands/dawanggang.html">Dawanggang</a></div>
   <div class='concert-musiker'>Masaya Hijikata</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 CS </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 CS · </div>
   <div class="concert-band"><a href="../bands/douba-foli.html">Douba Foli</a></div>
   <div class='concert-musiker'>Abdoulaye Diabate</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 CS </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 CS · </div>
   <div class="concert-band"><a href="../bands/douba-foli.html">Douba Foli</a></div>
   <div class='concert-musiker'>Modibo Diabate</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 CS </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 CS · </div>
   <div class="concert-band"><a href="../bands/douba-foli.html">Douba Foli</a></div>
   <div class='concert-musiker'>Mamadou Diabate</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 CS </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 CS · </div>
   <div class="concert-band"><a href="../bands/douba-foli.html">Douba Foli</a></div>
   <div class='concert-musiker'>Brahima Diabate</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 CS </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 CS · </div>
   <div class="concert-band"><a href="../bands/douba-foli.html">Douba Foli</a></div>
   <div class='concert-musiker'>Sekou Dembele</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 CS </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 CS · </div>
   <div class="concert-band"><a href="../bands/douba-foli.html">Douba Foli</a></div>
   <div class='concert-musiker'>Kalifa Kone</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 CS </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 CS · </div>
   <div class="concert-band"><a href="../bands/douba-foli.html">Douba Foli</a></div>
   <div class='concert-musiker'>Djakaridja Dagnogo</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 CS </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 CS · </div>
   <div class="concert-band"><a href="../bands/douba-foli.html">Douba Foli</a></div>
   <div class='concert-musiker'>Sigi Finkel</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 CS </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 CS · </div>
   <div class="concert-band"><a href="../bands/douba-foli.html">Douba Foli</a></div>
   <div class='concert-musiker'>Alois Eberl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 CS </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 CS · </div>
   <div class="concert-band"><a href="../bands/douba-foli.html">Douba Foli</a></div>
   <div class='concert-musiker'>Alex Meik</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/krokofant.html">Krokofant</a></div>
   <div class='concert-musiker'>Tom Hasslan</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/krokofant.html">Krokofant</a></div>
   <div class='concert-musiker'>Jorgen Mathisen</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/krokofant.html">Krokofant</a></div>
   <div class='concert-musiker'>Axel Skalstad</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/marty-ehrlich-sextet.html">Marty Ehrlich Sextet</a></div>
   <div class='concert-musiker'>Marty Ehrlich</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/marty-ehrlich-sextet.html">Marty Ehrlich Sextet</a></div>
   <div class='concert-musiker'>Jack Walrath</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/marty-ehrlich-sextet.html">Marty Ehrlich Sextet</a></div>
   <div class='concert-musiker'>Ray Anderson</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/marty-ehrlich-sextet.html">Marty Ehrlich Sextet</a></div>
   <div class='concert-musiker'>James Blood Weidmann</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/marty-ehrlich-sextet.html">Marty Ehrlich Sextet</a></div>
   <div class='concert-musiker'>Brad Jones</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/marty-ehrlich-sextet.html">Marty Ehrlich Sextet</a></div>
   <div class='concert-musiker'>Ben Perowsky</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/shake-stew-the-golden-fang.html">Shake Stew – The golden Fang</a></div>
   <div class='concert-musiker'>Lukas Kranzelbinder</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/shake-stew-the-golden-fang.html">Shake Stew – The golden Fang</a></div>
   <div class='concert-musiker'>Mario Rom</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/shake-stew-the-golden-fang.html">Shake Stew – The golden Fang</a></div>
   <div class='concert-musiker'>Johannes Schleiermacher</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/shake-stew-the-golden-fang.html">Shake Stew – The golden Fang</a></div>
   <div class='concert-musiker'>Clemens Salesny</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/shake-stew-the-golden-fang.html">Shake Stew – The golden Fang</a></div>
   <div class='concert-musiker'>Manuel Mayr</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/shake-stew-the-golden-fang.html">Shake Stew – The golden Fang</a></div>
   <div class='concert-musiker'>Niki Dolp</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/shake-stew-the-golden-fang.html">Shake Stew – The golden Fang</a></div>
   <div class='concert-musiker'>Herbert Pirker</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/vincent-courtois-mediums.html">Vincent Courtois: Mediums</a></div>
   <div class='concert-musiker'>Vincent Courtois</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/vincent-courtois-mediums.html">Vincent Courtois: Mediums</a></div>
   <div class='concert-musiker'>Daniel Erdmann</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/vincent-courtois-mediums.html">Vincent Courtois: Mediums</a></div>
   <div class='concert-musiker'>Robin Fincker</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 SC </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 SC · </div>
   <div class="concert-band"><a href="../bands/paal-nilssen-live-large-unit-ana.html">Paal Nilssen-Live Large Unit "ANA"</a></div>
   <div class='concert-musiker'>Paal Nilssen-Love</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 SC </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 SC · </div>
   <div class="concert-band"><a href="../bands/paal-nilssen-live-large-unit-ana.html">Paal Nilssen-Live Large Unit "ANA"</a></div>
   <div class='concert-musiker'>Thomas Johannsson</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 SC </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 SC · </div>
   <div class="concert-band"><a href="../bands/paal-nilssen-live-large-unit-ana.html">Paal Nilssen-Live Large Unit "ANA"</a></div>
   <div class='concert-musiker'>Mats Äleklint</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 SC </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 SC · </div>
   <div class="concert-band"><a href="../bands/paal-nilssen-live-large-unit-ana.html">Paal Nilssen-Live Large Unit "ANA"</a></div>
   <div class='concert-musiker'>Julien Kjaer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 SC </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 SC · </div>
   <div class="concert-band"><a href="../bands/paal-nilssen-live-large-unit-ana.html">Paal Nilssen-Live Large Unit "ANA"</a></div>
   <div class='concert-musiker'>Klaus Holm</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 SC </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 SC · </div>
   <div class="concert-band"><a href="../bands/paal-nilssen-live-large-unit-ana.html">Paal Nilssen-Live Large Unit "ANA"</a></div>
   <div class='concert-musiker'>Per – Ake Holmlander</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 SC </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 SC · </div>
   <div class="concert-band"><a href="../bands/paal-nilssen-live-large-unit-ana.html">Paal Nilssen-Live Large Unit "ANA"</a></div>
   <div class='concert-musiker'>Ketil Gutvik</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 SC </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 SC · </div>
   <div class="concert-band"><a href="../bands/paal-nilssen-live-large-unit-ana.html">Paal Nilssen-Live Large Unit "ANA"</a></div>
   <div class='concert-musiker'>Jon Rune Strom</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 SC </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 SC · </div>
   <div class="concert-band"><a href="../bands/paal-nilssen-live-large-unit-ana.html">Paal Nilssen-Live Large Unit "ANA"</a></div>
   <div class='concert-musiker'>Christian Meaas Svendsson</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 SC </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 SC · </div>
   <div class="concert-band"><a href="../bands/paal-nilssen-live-large-unit-ana.html">Paal Nilssen-Live Large Unit "ANA"</a></div>
   <div class='concert-musiker'>Andreas Wildhagen</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 SC </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 SC · </div>
   <div class="concert-band"><a href="../bands/paal-nilssen-live-large-unit-ana.html">Paal Nilssen-Live Large Unit "ANA"</a></div>
   <div class='concert-musiker'>Paulinho Bicolor</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 SC </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 SC · </div>
   <div class="concert-band"><a href="../bands/paal-nilssen-live-large-unit-ana.html">Paal Nilssen-Live Large Unit "ANA"</a></div>
   <div class='concert-musiker'>Christian Obermayer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 SC </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 SC · </div>
   <div class="concert-band"><a href="../bands/paal-nilssen-live-large-unit-ana.html">Paal Nilssen-Live Large Unit "ANA"</a></div>
   <div class='concert-musiker'>Kristoffer Alberts</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 SC </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 SC · </div>
   <div class="concert-band"><a href="../bands/tim-berne-mark-ducret.html">Tim Berne/ Mark Ducret</a></div>
   <div class='concert-musiker'>Tim Berne</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 2016 · Festival 16 SC </div>
+  <div class="concert-date">26. Aug 2016 · Festival 16 SC · </div>
   <div class="concert-band"><a href="../bands/tim-berne-mark-ducret.html">Tim Berne/ Mark Ducret</a></div>
   <div class='concert-musiker'>Marc Ducret</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 CS </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 CS · </div>
   <div class="concert-band"><a href="../bands/mostar-sevdah-reunion.html">Mostar Sevdah Reunion</a></div>
   <div class='concert-musiker'>Nermin Aluki</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 CS </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 CS · </div>
   <div class="concert-band"><a href="../bands/mostar-sevdah-reunion.html">Mostar Sevdah Reunion</a></div>
   <div class='concert-musiker'>Milic Petrovi</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 CS </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 CS · </div>
   <div class="concert-band"><a href="../bands/mostar-sevdah-reunion.html">Mostar Sevdah Reunion</a></div>
   <div class='concert-musiker'>Sandi Durakovi</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 CS </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 CS · </div>
   <div class="concert-band"><a href="../bands/mostar-sevdah-reunion.html">Mostar Sevdah Reunion</a></div>
   <div class='concert-musiker'>Gabriel Prusina</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 CS </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 CS · </div>
   <div class="concert-band"><a href="../bands/mostar-sevdah-reunion.html">Mostar Sevdah Reunion</a></div>
   <div class='concert-musiker'>Vanja Radoja</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 CS </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 CS · </div>
   <div class="concert-band"><a href="../bands/mostar-sevdah-reunion.html">Mostar Sevdah Reunion</a></div>
   <div class='concert-musiker'>Marko Jakovlievi</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 CS </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 CS · </div>
   <div class="concert-band"><a href="../bands/mostar-sevdah-reunion.html">Mostar Sevdah Reunion</a></div>
   <div class='concert-musiker'>Senad Trnovac</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 CS </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 CS · </div>
   <div class="concert-band"><a href="../bands/salah-ammo-orwa-saleh-friends.html">Salah Ammo, Orwa Saleh & Friends</a></div>
   <div class='concert-musiker'>Salah Ammo</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 CS </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 CS · </div>
   <div class="concert-band"><a href="../bands/salah-ammo-orwa-saleh-friends.html">Salah Ammo, Orwa Saleh & Friends</a></div>
   <div class='concert-musiker'>Orwad Saleh</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 CS </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 CS · </div>
   <div class="concert-band"><a href="../bands/salah-ammo-orwa-saleh-friends.html">Salah Ammo, Orwa Saleh & Friends</a></div>
   <div class='concert-musiker'>Julia Siedl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 CS </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 CS · </div>
   <div class="concert-band"><a href="../bands/salah-ammo-orwa-saleh-friends.html">Salah Ammo, Orwa Saleh & Friends</a></div>
   <div class='concert-musiker'>Maias Alyamani</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 CS </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 CS · </div>
   <div class="concert-band"><a href="../bands/salah-ammo-orwa-saleh-friends.html">Salah Ammo, Orwa Saleh & Friends</a></div>
   <div class='concert-musiker'>Uygar Cagli</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 CS </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 CS · </div>
   <div class="concert-band"><a href="../bands/salah-ammo-orwa-saleh-friends.html">Salah Ammo, Orwa Saleh & Friends</a></div>
   <div class='concert-musiker'>Peter Gabis</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 Huggenberg </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 Huggenberg · </div>
   <div class="concert-band"><a href="../bands/libertango-guests.html">Libertango & Guests</a></div>
   <div class='concert-musiker'>Sigi Gerlach</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 Huggenberg </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 Huggenberg · </div>
   <div class="concert-band"><a href="../bands/libertango-guests.html">Libertango & Guests</a></div>
   <div class='concert-musiker'>Sabine Linecker</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 Huggenberg </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 Huggenberg · </div>
   <div class="concert-band"><a href="../bands/libertango-guests.html">Libertango & Guests</a></div>
   <div class='concert-musiker'>Michael Brandl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 Huggenberg </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 Huggenberg · </div>
   <div class="concert-band"><a href="../bands/libertango-guests.html">Libertango & Guests</a></div>
   <div class='concert-musiker'>Geri Sauberer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 Huggenberg </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 Huggenberg · </div>
   <div class="concert-band"><a href="../bands/libertango-guests.html">Libertango & Guests</a></div>
   <div class='concert-musiker'>Margarete Hlawa-Grundner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 Huggenberg </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 Huggenberg · </div>
   <div class="concert-band"><a href="../bands/libertango-guests.html">Libertango & Guests</a></div>
   <div class='concert-musiker'>Manfred Wambacher</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/chiri-the-return-of-spring.html">Chiri – The return of Spring</a></div>
   <div class='concert-musiker'>Bae il Dong</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/chiri-the-return-of-spring.html">Chiri – The return of Spring</a></div>
   <div class='concert-musiker'>Scott Tinkler</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/chiri-the-return-of-spring.html">Chiri – The return of Spring</a></div>
   <div class='concert-musiker'>Simon Barker</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/daniel-rosenboom-burning-ghsost.html">Daniel Rosenboom: Burning Ghsost</a></div>
   <div class='concert-musiker'>Daniel Rosenboom</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/daniel-rosenboom-burning-ghsost.html">Daniel Rosenboom: Burning Ghsost</a></div>
   <div class='concert-musiker'>Jake Vossler</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/daniel-rosenboom-burning-ghsost.html">Daniel Rosenboom: Burning Ghsost</a></div>
   <div class='concert-musiker'>Richard Giddens</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/daniel-rosenboom-burning-ghsost.html">Daniel Rosenboom: Burning Ghsost</a></div>
   <div class='concert-musiker'>Aaron McLendon</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/edi-nulz-an-der-vulgaeren-kante.html">Edi Nulz – An der vulgären Kante</a></div>
   <div class='concert-musiker'>Siegmar Brecher</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/edi-nulz-an-der-vulgaeren-kante.html">Edi Nulz – An der vulgären Kante</a></div>
   <div class='concert-musiker'>Julian Adam Pajz</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/edi-nulz-an-der-vulgaeren-kante.html">Edi Nulz – An der vulgären Kante</a></div>
   <div class='concert-musiker'>Valentin Schuster</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/emile-parisien-quartet-feat-joachim-kuehn-michel-portal.html">Emile Parisien Quartet feat. Joachim Kühn & Michel Portal</a></div>
   <div class='concert-musiker'>Emile Parisien</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/emile-parisien-quartet-feat-joachim-kuehn-michel-portal.html">Emile Parisien Quartet feat. Joachim Kühn & Michel Portal</a></div>
   <div class='concert-musiker'>Joachim Kuhn</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/emile-parisien-quartet-feat-joachim-kuehn-michel-portal.html">Emile Parisien Quartet feat. Joachim Kühn & Michel Portal</a></div>
   <div class='concert-musiker'>Mario Costa</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/emile-parisien-quartet-feat-joachim-kuehn-michel-portal.html">Emile Parisien Quartet feat. Joachim Kühn & Michel Portal</a></div>
   <div class='concert-musiker'>Simon Tailleu</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/emile-parisien-quartet-feat-joachim-kuehn-michel-portal.html">Emile Parisien Quartet feat. Joachim Kühn & Michel Portal</a></div>
   <div class='concert-musiker'>Manu Codjia</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/emile-parisien-quartet-feat-joachim-kuehn-michel-portal.html">Emile Parisien Quartet feat. Joachim Kühn & Michel Portal</a></div>
   <div class='concert-musiker'>Michel Portal</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/emile-parisien-quartet-feat-joachim-kuehn-michel-portal.html">Emile Parisien Quartet feat. Joachim Kühn & Michel Portal</a></div>
   <div class='concert-musiker'>Wolfgang Reisinger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/thomas-de-pourquery-supersonic-play-sun-ra.html">Thomas de Pourquery – Supersonic Play Sun Ra</a></div>
   <div class='concert-musiker'>Thomas Pourquery</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/thomas-de-pourquery-supersonic-play-sun-ra.html">Thomas de Pourquery – Supersonic Play Sun Ra</a></div>
   <div class='concert-musiker'>Laurent Bardainne</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/thomas-de-pourquery-supersonic-play-sun-ra.html">Thomas de Pourquery – Supersonic Play Sun Ra</a></div>
   <div class='concert-musiker'>Fabrice Martinez</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/thomas-de-pourquery-supersonic-play-sun-ra.html">Thomas de Pourquery – Supersonic Play Sun Ra</a></div>
   <div class='concert-musiker'>Arnaud Roulin</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/thomas-de-pourquery-supersonic-play-sun-ra.html">Thomas de Pourquery – Supersonic Play Sun Ra</a></div>
   <div class='concert-musiker'>Fred Galiay</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/thomas-de-pourquery-supersonic-play-sun-ra.html">Thomas de Pourquery – Supersonic Play Sun Ra</a></div>
   <div class='concert-musiker'>Edward Perraud</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/tomeka-reid-quartet.html">Tomeka Reid Quartet</a></div>
   <div class='concert-musiker'>Tomeka Reid</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/tomeka-reid-quartet.html">Tomeka Reid Quartet</a></div>
   <div class='concert-musiker'>Mary Halvorson</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/tomeka-reid-quartet.html">Tomeka Reid Quartet</a></div>
   <div class='concert-musiker'>Jason Roebke</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/tomeka-reid-quartet.html">Tomeka Reid Quartet</a></div>
   <div class='concert-musiker'>Tomas Fujiwara</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 SC </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 SC · </div>
   <div class="concert-band"><a href="../bands/jim-black-new-quartet-malamute.html">Jim Black New Quartet: Malamute</a></div>
   <div class='concert-musiker'>Jim Black</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 SC </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 SC · </div>
   <div class="concert-band"><a href="../bands/jim-black-new-quartet-malamute.html">Jim Black New Quartet: Malamute</a></div>
   <div class='concert-musiker'>Oscar Gudjonsson</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 SC </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 SC · </div>
   <div class="concert-band"><a href="../bands/jim-black-new-quartet-malamute.html">Jim Black New Quartet: Malamute</a></div>
   <div class='concert-musiker'>Elias Stemeseder</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 SC </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 SC · </div>
   <div class="concert-band"><a href="../bands/jim-black-new-quartet-malamute.html">Jim Black New Quartet: Malamute</a></div>
   <div class='concert-musiker'>Chris Tordini</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 2016 · Festival 16 SC </div>
+  <div class="concert-date">27. Aug 2016 · Festival 16 SC · </div>
   <div class="concert-band"><a href="../bands/michael-riessler-double-fond.html">Michael Riessler "Double Fond"</a></div>
   <div class='concert-musiker'>Michael Riessler</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 2016 · Festival 16 Kinderkonzert </div>
+  <div class="concert-date">28. Aug 2016 · Festival 16 Kinderkonzert · </div>
   <div class="concert-band"><a href="../bands/groovetrotters.html">Groovetrotters</a></div>
   <div class='concert-musiker'>Claudio Spieler</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 2016 · Festival 16 Kinderkonzert </div>
+  <div class="concert-date">28. Aug 2016 · Festival 16 Kinderkonzert · </div>
   <div class="concert-band"><a href="../bands/groovetrotters.html">Groovetrotters</a></div>
   <div class='concert-musiker'>Johannes Bohun</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">28. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/erlend-apneseth-trio-det-andre-rommet.html">Erlend Apneseth Trio Det andre Rommet</a></div>
   <div class='concert-musiker'>Erlend Apneseth</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">28. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/erlend-apneseth-trio-det-andre-rommet.html">Erlend Apneseth Trio Det andre Rommet</a></div>
   <div class='concert-musiker'>Stephan Meidell</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">28. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/erlend-apneseth-trio-det-andre-rommet.html">Erlend Apneseth Trio Det andre Rommet</a></div>
   <div class='concert-musiker'>Oyvind Hegg-Lunde</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">28. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/henry-butler-steven-bernstein-the-hot-9-viper-s-drag.html">Henry Butler, Steven Bernstein & the Hot 9 Viper’s Drag</a></div>
   <div class='concert-musiker'>Henry Butler</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">28. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/henry-butler-steven-bernstein-the-hot-9-viper-s-drag.html">Henry Butler, Steven Bernstein & the Hot 9 Viper’s Drag</a></div>
   <div class='concert-musiker'>Steven Bernstein</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">28. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/henry-butler-steven-bernstein-the-hot-9-viper-s-drag.html">Henry Butler, Steven Bernstein & the Hot 9 Viper’s Drag</a></div>
   <div class='concert-musiker'>Curtis Fowlkes</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">28. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/henry-butler-steven-bernstein-the-hot-9-viper-s-drag.html">Henry Butler, Steven Bernstein & the Hot 9 Viper’s Drag</a></div>
   <div class='concert-musiker'>Charlie Burnham</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">28. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/henry-butler-steven-bernstein-the-hot-9-viper-s-drag.html">Henry Butler, Steven Bernstein & the Hot 9 Viper’s Drag</a></div>
   <div class='concert-musiker'>Doug Wieselman</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">28. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/henry-butler-steven-bernstein-the-hot-9-viper-s-drag.html">Henry Butler, Steven Bernstein & the Hot 9 Viper’s Drag</a></div>
   <div class='concert-musiker'>Peter Apfelbaum</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">28. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/henry-butler-steven-bernstein-the-hot-9-viper-s-drag.html">Henry Butler, Steven Bernstein & the Hot 9 Viper’s Drag</a></div>
   <div class='concert-musiker'>Erich Lawrence</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">28. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/henry-butler-steven-bernstein-the-hot-9-viper-s-drag.html">Henry Butler, Steven Bernstein & the Hot 9 Viper’s Drag</a></div>
   <div class='concert-musiker'>Matt Munisteri</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">28. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/henry-butler-steven-bernstein-the-hot-9-viper-s-drag.html">Henry Butler, Steven Bernstein & the Hot 9 Viper’s Drag</a></div>
   <div class='concert-musiker'>Brad Jones</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">28. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/henry-butler-steven-bernstein-the-hot-9-viper-s-drag.html">Henry Butler, Steven Bernstein & the Hot 9 Viper’s Drag</a></div>
   <div class='concert-musiker'>Donald Edwards</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">28. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/human-feel.html">Human Feel</a></div>
   <div class='concert-musiker'>Chris Speed</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">28. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/human-feel.html">Human Feel</a></div>
   <div class='concert-musiker'>Andrew D’Angelo</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">28. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/human-feel.html">Human Feel</a></div>
   <div class='concert-musiker'>Kurt Rosenwinkel</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">28. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/human-feel.html">Human Feel</a></div>
   <div class='concert-musiker'>Jim Black</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">28. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/schaerer-biondini-kalima-niggli.html">Schaerer/Biondini/Kalima/Niggli</a></div>
   <div class='concert-musiker'>Andreas Schaerer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">28. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/schaerer-biondini-kalima-niggli.html">Schaerer/Biondini/Kalima/Niggli</a></div>
   <div class='concert-musiker'>Luciano Biondini</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">28. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/schaerer-biondini-kalima-niggli.html">Schaerer/Biondini/Kalima/Niggli</a></div>
   <div class='concert-musiker'>Kalle Kalima</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">28. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/schaerer-biondini-kalima-niggli.html">Schaerer/Biondini/Kalima/Niggli</a></div>
   <div class='concert-musiker'>Lucas Niggli</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">28. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/susana-santos-silva-life-and-other-transient-storms.html">Susana Santos Silva Life and other Transient Storms</a></div>
   <div class='concert-musiker'>Susana Silva</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">28. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/susana-santos-silva-life-and-other-transient-storms.html">Susana Santos Silva Life and other Transient Storms</a></div>
   <div class='concert-musiker'>Lotte Anker</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">28. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/susana-santos-silva-life-and-other-transient-storms.html">Susana Santos Silva Life and other Transient Storms</a></div>
   <div class='concert-musiker'>Sten Sandell</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">28. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/susana-santos-silva-life-and-other-transient-storms.html">Susana Santos Silva Life and other Transient Storms</a></div>
   <div class='concert-musiker'>Torbjörn Zetterberg</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 2016 · Festival 16 MS </div>
+  <div class="concert-date">28. Aug 2016 · Festival 16 MS · </div>
   <div class="concert-band"><a href="../bands/susana-santos-silva-life-and-other-transient-storms.html">Susana Santos Silva Life and other Transient Storms</a></div>
   <div class='concert-musiker'>Jon Fält</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 2016 · Festival 16 Stöckl Alm </div>
+  <div class="concert-date">28. Aug 2016 · Festival 16 Stöckl Alm · </div>
   <div class="concert-band"><a href="../bands/kollegium-kalksburg.html">Kollegium Kalksburg</a></div>
   <div class='concert-musiker'>Heinz Ditsch</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 2016 · Festival 16 Stöckl Alm </div>
+  <div class="concert-date">28. Aug 2016 · Festival 16 Stöckl Alm · </div>
   <div class="concert-band"><a href="../bands/kollegium-kalksburg.html">Kollegium Kalksburg</a></div>
   <div class='concert-musiker'>Paul Skrepek</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 2016 · Festival 16 Stöckl Alm </div>
+  <div class="concert-date">28. Aug 2016 · Festival 16 Stöckl Alm · </div>
   <div class="concert-band"><a href="../bands/kollegium-kalksburg.html">Kollegium Kalksburg</a></div>
   <div class='concert-musiker'>Wolfgang Wizlsperger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 2016 · Festival 16 Vorderkühbühel </div>
+  <div class="concert-date">28. Aug 2016 · Festival 16 Vorderkühbühel · </div>
   <div class="concert-band"><a href="../bands/in-compagnia.html">In Compagnia</a></div>
   <div class='concert-musiker'>Emma Montanari</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 2016 · Festival 16 Vorderkühbühel </div>
+  <div class="concert-date">28. Aug 2016 · Festival 16 Vorderkühbühel · </div>
   <div class="concert-band"><a href="../bands/in-compagnia.html">In Compagnia</a></div>
   <div class='concert-musiker'>Giulio Venier</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 2016 · Festival 16 Vorderkühbühel </div>
+  <div class="concert-date">28. Aug 2016 · Festival 16 Vorderkühbühel · </div>
   <div class="concert-band"><a href="../bands/in-compagnia.html">In Compagnia</a></div>
   <div class='concert-musiker'>Flavio Bortuzzo</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 2016 · Festival 16 Vorderkühbühel </div>
+  <div class="concert-date">28. Aug 2016 · Festival 16 Vorderkühbühel · </div>
   <div class="concert-band"><a href="../bands/in-compagnia.html">In Compagnia</a></div>
   <div class='concert-musiker'>Wolfgang Moritz</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 2016 · Festival 16 Vorderkühbühel </div>
+  <div class="concert-date">28. Aug 2016 · Festival 16 Vorderkühbühel · </div>
   <div class="concert-band"><a href="../bands/in-compagnia.html">In Compagnia</a></div>
   <div class='concert-musiker'>Andreas Safer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 2016 · Festival 16 Vorderkühbühel </div>
+  <div class="concert-date">28. Aug 2016 · Festival 16 Vorderkühbühel · </div>
   <div class="concert-band"><a href="../bands/in-compagnia.html">In Compagnia</a></div>
   <div class='concert-musiker'>Bertl Pfundner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">9. Sep 2016 · Nexus Café </div>
+  <div class="concert-date">9. Sep 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-julie-and-the-blue-eyes.html">Lokale Bandrunde: Julie and the blue Eyes</a></div>
   <div class='concert-musiker'>Julia Herzog</div>
 </div><div class="concert-entry">
-  <div class="concert-date">9. Sep 2016 · Nexus Café </div>
+  <div class="concert-date">9. Sep 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-julie-and-the-blue-eyes.html">Lokale Bandrunde: Julie and the blue Eyes</a></div>
   <div class='concert-musiker'>Daniel Zech</div>
 </div><div class="concert-entry">
-  <div class="concert-date">9. Sep 2016 · Nexus Café </div>
+  <div class="concert-date">9. Sep 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-julie-and-the-blue-eyes.html">Lokale Bandrunde: Julie and the blue Eyes</a></div>
   <div class='concert-musiker'>Thomas Oertner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">9. Sep 2016 · Nexus Café </div>
+  <div class="concert-date">9. Sep 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-julie-and-the-blue-eyes.html">Lokale Bandrunde: Julie and the blue Eyes</a></div>
   <div class='concert-musiker'>Jack Kreuzer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">10. Sep 2016 · Nexus Kabarett </div>
+  <div class="concert-date">10. Sep 2016 · Nexus Kabarett · </div>
   <div class="concert-band"><a href="../bands/fritz-egger-jenseits-der-scherzgrenze.html">Fritz Egger: Jenseits der Scherzgrenze</a></div>
   <div class='concert-musiker'>Fritz Egger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">14. Sep 2016 · Nexus my Uni </div>
+  <div class="concert-date">14. Sep 2016 · Nexus my Uni · </div>
   <div class="concert-band"><a href="../bands/land-ausstellen-kultur-in-sicht.html">Land Ausstellen – Kultur in Sicht</a></div>
   <div class='concert-musiker'>Martin Hochleitner Mag Dr</div>
 </div><div class="concert-entry">
-  <div class="concert-date">16. Sep 2016 · Nexus Kino </div>
+  <div class="concert-date">16. Sep 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/herrenkino-jason-bourne.html">Herrenkino: Jason Bourne</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">17. Sep 2016 · Nexus Café </div>
+  <div class="concert-date">17. Sep 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/electrotuete-dj-odd-b-branks.html">Electrotüte: DJ Odd & B. Branks</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">24. Sep 2016 · Nexus spezial </div>
+  <div class="concert-date">24. Sep 2016 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/80s-clubbing.html">80s Clubbing</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">30. Sep 2016 · Nexus Ausstellung </div>
+  <div class="concert-date">30. Sep 2016 · Nexus Ausstellung · </div>
   <div class="concert-band"><a href="../bands/liddy-scheffknecht-dream-argument.html">Liddy Scheffknecht: Dream Argument</a></div>
   <div class='concert-musiker'>Liddy Scheffknecht</div>
 </div><div class="concert-entry">
-  <div class="concert-date">1. Oct 2016 · Nexus spezial </div>
+  <div class="concert-date">1. Oct 2016 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/musik-verbindet-integrationskonzert.html">Musik verbindet – Integrationskonzert</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">5. Oct 2016 · Nexus spezial </div>
+  <div class="concert-date">5. Oct 2016 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/kanada-alaska-north-of-normal.html">Kanada – Alaska: North of Normal</a></div>
   <div class='concert-musiker'>Thomas Sbampato</div>
 </div><div class="concert-entry">
-  <div class="concert-date">6. Oct 2016 · Nexus Kino </div>
+  <div class="concert-date">6. Oct 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/kasperl-im-reich-des-zwergenkoenigs.html">Kasperl im Reich des Zwergenkönigs</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">6. Oct 2016 · Nexus Kino </div>
+  <div class="concert-date">6. Oct 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/toni-erdmann.html">Toni Erdmann</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">7. Oct 2016 · Nexus Café </div>
+  <div class="concert-date">7. Oct 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-waste-of-ink.html">Lokale Bandrunde: Waste of Ink</a></div>
   <div class='concert-musiker'>Martin Reiter</div>
 </div><div class="concert-entry">
-  <div class="concert-date">8. Oct 2016 · Nexus </div>
+  <div class="concert-date">8. Oct 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/honky-tonk-juicy.html">Honky Tonk: Juicy</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">8. Oct 2016 · Nexus Café </div>
+  <div class="concert-date">8. Oct 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/honky-tonk-2some.html">Honky Tonk: 2Some</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">11. Oct 2016 · Nexus Kabarett </div>
+  <div class="concert-date">11. Oct 2016 · Nexus Kabarett · </div>
   <div class="concert-band"><a href="../bands/roland-dueringer-weltfremd.html">Roland Düringer – Weltfremd</a></div>
   <div class='concert-musiker'>Roland Düringer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">12. Oct 2016 · Nexus my Uni </div>
+  <div class="concert-date">12. Oct 2016 · Nexus my Uni · </div>
   <div class="concert-band"><a href="../bands/wie-rechts-ist-europa.html">Wie rechts ist Europa ?</a></div>
   <div class='concert-musiker'>Albert Lichtblau Dr</div>
 </div><div class="concert-entry">
-  <div class="concert-date">13. Oct 2016 · Nexus Kabarett </div>
+  <div class="concert-date">13. Oct 2016 · Nexus Kabarett · </div>
   <div class="concert-band"><a href="../bands/thomas-wizany-praesentiert-du-bist-was-du-isst.html">Thomas Wizany präsentiert Du bist was du isst</a></div>
   <div class='concert-musiker'>Thomas Wizany</div>
 </div><div class="concert-entry">
-  <div class="concert-date">13. Oct 2016 · Nexus Kino </div>
+  <div class="concert-date">13. Oct 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/captain-fantastic.html">Captain Fantastic</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">13. Oct 2016 · Nexus Kino </div>
+  <div class="concert-date">13. Oct 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/molly-monster.html">Molly Monster</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">15. Oct 2016 · Nexus spezial </div>
+  <div class="concert-date">15. Oct 2016 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/electrotuete-dj-hillberg.html">Electrotüte: DJ Hillberg</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">15. Oct 2016 · Nexus Theater </div>
+  <div class="concert-date">15. Oct 2016 · Nexus Theater · </div>
   <div class="concert-band"><a href="../bands/gschnagga-theater-frogo-lele-frosch-sein-ist-doof.html">Gschnagga Theater: Frogo & Lele: Frosch sein ist doof</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">20. Oct 2016 · Nexus Kino </div>
+  <div class="concert-date">20. Oct 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/conni-co.html">Conni & Co</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">20. Oct 2016 · Nexus Kino </div>
+  <div class="concert-date">20. Oct 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/el-olivo.html">El Olivo</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">22. Oct 2016 · Nexus spezial </div>
+  <div class="concert-date">22. Oct 2016 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/jugend-feiert-frei-und-laut.html">Jugend feiert – frei und laut</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">25. Oct 2016 · Nexus spezial </div>
+  <div class="concert-date">25. Oct 2016 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/olio-e-vino-degustation-von-fundamentum.html">Olio e Vino – Degustation von Fundamentum</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">27. Oct 2016 · Nexus Kino </div>
+  <div class="concert-date">27. Oct 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/der-landarzt-von-chaussy.html">Der Landarzt von Chaussy</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">27. Oct 2016 · Nexus Kino </div>
+  <div class="concert-date">27. Oct 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/pets.html">Pets</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">28. Oct 2016 · Nexus Kino </div>
+  <div class="concert-date">28. Oct 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/maenner-kinoabend-the-purge-3.html">Männer Kinoabend: The Purge 3</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">29. Oct 2016 · Nexus </div>
+  <div class="concert-date">29. Oct 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/crossroad.html">Crossroad</a></div>
   <div class='concert-musiker'>Roberto Altendorfer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">29. Oct 2016 · Nexus </div>
+  <div class="concert-date">29. Oct 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/crossroad.html">Crossroad</a></div>
   <div class='concert-musiker'>Tom Jelinek</div>
 </div><div class="concert-entry">
-  <div class="concert-date">29. Oct 2016 · Nexus </div>
+  <div class="concert-date">29. Oct 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/crossroad.html">Crossroad</a></div>
   <div class='concert-musiker'>Karl Maier</div>
 </div><div class="concert-entry">
-  <div class="concert-date">29. Oct 2016 · Nexus </div>
+  <div class="concert-date">29. Oct 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/crossroad.html">Crossroad</a></div>
   <div class='concert-musiker'>Reini Rank</div>
 </div><div class="concert-entry">
-  <div class="concert-date">29. Oct 2016 · Nexus </div>
+  <div class="concert-date">29. Oct 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/crossroad.html">Crossroad</a></div>
   <div class='concert-musiker'>Eric Voggenberger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">2. Nov 2016 · Nexus Kino </div>
+  <div class="concert-date">2. Nov 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/finsdet-dorie.html">Finsdet Dorie</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">2. Nov 2016 · Nexus spezial </div>
+  <div class="concert-date">2. Nov 2016 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/irland-zauber-der-gruenen-insel.html">Irland – Zauber der grünen Insel</a></div>
   <div class='concert-musiker'>Heiko Beyer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">3. Nov 2016 · Nexus Kino </div>
+  <div class="concert-date">3. Nov 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/kasperl-und-der-loe-loe-loewe.html">Kasperl und der Lö-Lö-Löwe</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">3. Nov 2016 · Nexus Kino </div>
+  <div class="concert-date">3. Nov 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/snowden.html">Snowden</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">3. Nov 2016 · Nexus Kino </div>
+  <div class="concert-date">3. Nov 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/vom-geheimnisvollen-bergmaennlein.html">Vom Geheimnisvollen Bergmännlein</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">4. Nov 2016 · Nexus Café </div>
+  <div class="concert-date">4. Nov 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-amy-wald.html">Lokale Bandrunde: Amy Wald</a></div>
   <div class='concert-musiker'>Amina Kowald</div>
 </div><div class="concert-entry">
-  <div class="concert-date">4. Nov 2016 · Nexus Café </div>
+  <div class="concert-date">4. Nov 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-amy-wald.html">Lokale Bandrunde: Amy Wald</a></div>
   <div class='concert-musiker'>Martin Stark</div>
 </div><div class="concert-entry">
-  <div class="concert-date">4. Nov 2016 · Nexus Café </div>
+  <div class="concert-date">4. Nov 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-amy-wald.html">Lokale Bandrunde: Amy Wald</a></div>
   <div class='concert-musiker'>Christoph Roither</div>
 </div><div class="concert-entry">
-  <div class="concert-date">4. Nov 2016 · Nexus Kino </div>
+  <div class="concert-date">4. Nov 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/grosser-baer-kleiner-baer.html">Grosser Bär, kleiner Bär</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">5. Nov 2016 · Nexus Café </div>
+  <div class="concert-date">5. Nov 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/electrotuete-tony-vegazz.html">Electrotüte: Tony Vegazz</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">5. Nov 2016 · Nexus kino </div>
+  <div class="concert-date">5. Nov 2016 · Nexus kino · </div>
   <div class="concert-band"><a href="../bands/totkaeppchen-und-der-hungrige-wolf.html">Totkäppchen und der hungrige Wolf</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">9. Nov 2016 · Nexus my Uni </div>
+  <div class="concert-date">9. Nov 2016 · Nexus my Uni · </div>
   <div class="concert-band"><a href="../bands/unser-gehirn-evolution-emotion-u-intelligenz.html">Unser Gehirn: Evolution, Emotion u Intelligenz</a></div>
   <div class='concert-musiker'>Wolfgang Klimesch Dr</div>
 </div><div class="concert-entry">
-  <div class="concert-date">10. Nov 2016 · Nexus Kino </div>
+  <div class="concert-date">10. Nov 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/auf-augenhoehe.html">Auf Augenhöhe</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">11. Nov 2016 · Nexus Kino </div>
+  <div class="concert-date">11. Nov 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/bei-tag-und-bei-nacht-aus-dem-leben-des-bergdoktors.html">Bei Tag und bei Nacht – Aus dem Leben des Bergdoktors</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">11. Nov 2016 · Nexus Kino </div>
+  <div class="concert-date">11. Nov 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/das-leben-ist-keine-generalprobe.html">Das Leben ist keine Generalprobe</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">11. Nov 2016 · Nexus Kino </div>
+  <div class="concert-date">11. Nov 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/erfuelltes-leben-wenn-die-schale-ueberfliesst.html">Erfülltes Leben – Wenn die Schale überfliesst</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">12. Nov 2016 · Nexus spezial </div>
+  <div class="concert-date">12. Nov 2016 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/wortkklauberei-poetry-slam-workshop.html">Wortkklauberei – Poetry Slam Workshop</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">15. Nov 2016 · Nexus spezial </div>
+  <div class="concert-date">15. Nov 2016 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/1-pinzgauer-querbeettag.html">1. Pinzgauer Querbeettag</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">17. Nov 2016 · Nexus Kino </div>
+  <div class="concert-date">17. Nov 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/egon-schiele-tod-und-maedchen.html">Egon Schiele – Tod und Mädchen</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">17. Nov 2016 · Nexus Kino </div>
+  <div class="concert-date">17. Nov 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/elliot-der-drache.html">Elliot der Drache</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">18. Nov 2016 · Nexus spezial </div>
+  <div class="concert-date">18. Nov 2016 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/wortkklauberei-poetry-slamim-nexus.html">Wortkklauberei – Poetry Slamim Nexus</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">19. Nov 2016 · Nexus Kabarett </div>
+  <div class="concert-date">19. Nov 2016 · Nexus Kabarett · </div>
   <div class="concert-band"><a href="../bands/thomas-stipsits-manuel-rubey-gott-und-soehne.html">Thomas Stipsits & Manuel Rubey: Gott und Söhne</a></div>
   <div class='concert-musiker'>Thomas Stipsitz</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Nov 2016 · Nexus Kabarett </div>
+  <div class="concert-date">19. Nov 2016 · Nexus Kabarett · </div>
   <div class="concert-band"><a href="../bands/thomas-stipsits-manuel-rubey-gott-und-soehne.html">Thomas Stipsits & Manuel Rubey: Gott und Söhne</a></div>
   <div class='concert-musiker'>Manuel Rubey</div>
 </div><div class="concert-entry">
-  <div class="concert-date">23. Nov 2016 · Nexus spezial </div>
+  <div class="concert-date">23. Nov 2016 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/im-indischen-himalaja.html">Im Indischen Himalaja</a></div>
   <div class='concert-musiker'>Ferdinand Salzmann</div>
 </div><div class="concert-entry">
-  <div class="concert-date">24. Nov 2016 · Nexus Kino </div>
+  <div class="concert-date">24. Nov 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/24-wochen.html">24 Wochen</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">24. Nov 2016 · Nexus Kino </div>
+  <div class="concert-date">24. Nov 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/burg-schreckenstein.html">Burg Schreckenstein</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">25. Nov 2016 · Nexus Ausstellung </div>
+  <div class="concert-date">25. Nov 2016 · Nexus Ausstellung · </div>
   <div class="concert-band"><a href="../bands/vernissage-tim-ulrichs.html">Vernissage: Tim Ulrichs</a></div>
   <div class='concert-musiker'>Tim Ulrichs</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Nov 2016 · Nexus </div>
+  <div class="concert-date">26. Nov 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/zeit-los.html">Zeit:los</a></div>
   <div class='concert-musiker'>Hans Fuchs</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Nov 2016 · Nexus </div>
+  <div class="concert-date">26. Nov 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/zeit-los.html">Zeit:los</a></div>
   <div class='concert-musiker'>Peter Medek</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Nov 2016 · Nexus </div>
+  <div class="concert-date">26. Nov 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/zeit-los.html">Zeit:los</a></div>
   <div class='concert-musiker'>Charly Rabanser</div>
 </div><div class="concert-entry">
-  <div class="concert-date">1. Dec 2016 · Nexus Kino </div>
+  <div class="concert-date">1. Dec 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/kasperl-und-das-tannenbaeumchen.html">Kasperl und das Tannenbäumchen</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">1. Dec 2016 · Nexus Kino </div>
+  <div class="concert-date">1. Dec 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/welcome-to-norway.html">Welcome to Norway</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">2. Dec 2016 · Nexus </div>
+  <div class="concert-date">2. Dec 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/oesterr-ensemble-fuer-neue-musik-made-in-the-usa.html">Österr. Ensemble für neue Musik "….made in the USA"</a></div>
   <div class='concert-musiker'>Rupert Struber</div>
 </div><div class="concert-entry">
-  <div class="concert-date">2. Dec 2016 · Nexus </div>
+  <div class="concert-date">2. Dec 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/oesterr-ensemble-fuer-neue-musik-made-in-the-usa.html">Österr. Ensemble für neue Musik "….made in the USA"</a></div>
   <div class='concert-musiker'>Ekkehard Windrich</div>
 </div><div class="concert-entry">
-  <div class="concert-date">2. Dec 2016 · Nexus </div>
+  <div class="concert-date">2. Dec 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/oesterr-ensemble-fuer-neue-musik-made-in-the-usa.html">Österr. Ensemble für neue Musik "….made in the USA"</a></div>
   <div class='concert-musiker'>Michaela Girardi</div>
 </div><div class="concert-entry">
-  <div class="concert-date">2. Dec 2016 · Nexus </div>
+  <div class="concert-date">2. Dec 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/oesterr-ensemble-fuer-neue-musik-made-in-the-usa.html">Österr. Ensemble für neue Musik "….made in the USA"</a></div>
   <div class='concert-musiker'>Juta Javorka</div>
 </div><div class="concert-entry">
-  <div class="concert-date">2. Dec 2016 · Nexus </div>
+  <div class="concert-date">2. Dec 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/oesterr-ensemble-fuer-neue-musik-made-in-the-usa.html">Österr. Ensemble für neue Musik "….made in the USA"</a></div>
   <div class='concert-musiker'>Peter Sigl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">7. Dec 2016 · Nexus spezial </div>
+  <div class="concert-date">7. Dec 2016 · Nexus spezial · </div>
   <div class="concert-band"><a href="../bands/9-monate-suedamerika-von-feuerland-bis-galapagos.html">9 Monate Südamerika Von Feuerland bis Galapagos</a></div>
   <div class='concert-musiker'>Oliver Bolch</div>
 </div><div class="concert-entry">
-  <div class="concert-date">8. Dec 2016 · Nexus Kino </div>
+  <div class="concert-date">8. Dec 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/maennerkino-die-glorreichen-sieben.html">Männerkino: Die Glorreichen Sieben</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">8. Dec 2016 · Nexus Kino </div>
+  <div class="concert-date">8. Dec 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/patterson.html">Patterson</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">8. Dec 2016 · Nexus Kino </div>
+  <div class="concert-date">8. Dec 2016 · Nexus Kino · </div>
   <div class="concert-band"><a href="../bands/petterson-und-findus-das-schoenste-weihnachten-ueberhaupt.html">Petterson und Findus: Das schönste Weihnachten überhaupt</a></div>
   
 </div><div class="concert-entry">
-  <div class="concert-date">10. Dec 2016 · Nexus Café </div>
+  <div class="concert-date">10. Dec 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-amy-wald.html">Lokale Bandrunde: Amy Wald</a></div>
   <div class='concert-musiker'>Amina Kowald</div>
 </div><div class="concert-entry">
-  <div class="concert-date">10. Dec 2016 · Nexus Café </div>
+  <div class="concert-date">10. Dec 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-amy-wald.html">Lokale Bandrunde: Amy Wald</a></div>
   <div class='concert-musiker'>Martin Stark</div>
 </div><div class="concert-entry">
-  <div class="concert-date">10. Dec 2016 · Nexus Café </div>
+  <div class="concert-date">10. Dec 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/lokale-bandrunde-amy-wald.html">Lokale Bandrunde: Amy Wald</a></div>
   <div class='concert-musiker'>Christoph Roither</div>
 </div><div class="concert-entry">
-  <div class="concert-date">17. Dec 2016 · Nexus Café </div>
+  <div class="concert-date">17. Dec 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/tj-and-trhe-grooveboots.html">TJ and trhe Grooveboots</a></div>
   <div class='concert-musiker'>Tom Jelinek</div>
 </div><div class="concert-entry">
-  <div class="concert-date">17. Dec 2016 · Nexus Café </div>
+  <div class="concert-date">17. Dec 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/tj-and-trhe-grooveboots.html">TJ and trhe Grooveboots</a></div>
   <div class='concert-musiker'>Peter Medek</div>
 </div><div class="concert-entry">
-  <div class="concert-date">17. Dec 2016 · Nexus Café </div>
+  <div class="concert-date">17. Dec 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/tj-and-trhe-grooveboots.html">TJ and trhe Grooveboots</a></div>
   <div class='concert-musiker'>Wolfgang Höllerer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">17. Dec 2016 · Nexus Café </div>
+  <div class="concert-date">17. Dec 2016 · Nexus Café · </div>
   <div class="concert-band"><a href="../bands/tj-and-trhe-grooveboots.html">TJ and trhe Grooveboots</a></div>
   <div class='concert-musiker'>Gustl Fischer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Dec 2016 · Nexus </div>
+  <div class="concert-date">25. Dec 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/christmas-clubbing.html">Christmas Clubbing</a></div>
   <div class='concert-musiker'>Davidecks&Drums</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Dec 2016 · Nexus </div>
+  <div class="concert-date">25. Dec 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/christmas-clubbing.html">Christmas Clubbing</a></div>
   <div class='concert-musiker'>Banarilla</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Dec 2016 · Nexus </div>
+  <div class="concert-date">25. Dec 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/christmas-clubbing.html">Christmas Clubbing</a></div>
   <div class='concert-musiker'>Matthrix</div>
 </div><div class="concert-entry">
-  <div class="concert-date">25. Dec 2016 · Nexus </div>
+  <div class="concert-date">25. Dec 2016 · Nexus · </div>
   <div class="concert-band"><a href="../bands/christmas-clubbing.html">Christmas Clubbing</a></div>
   <div class='concert-musiker'>OSDillinger</div>
 </div></div>
@@ -2377,16 +1882,16 @@ a:hover { text-decoration: underline; color: var(--link-hover); }
   Jazzfest Wiki · 5936 Musiker · 13034 Konzerte · 1975–2025
   · Daten: Jazzfest Wien Chronik + Discogs API
 </footer>
-<script src="../search-data.js"></script>
 <script>
+// Globale Suche
+const SEARCH_DATA = window.JAZZFEST_SEARCH || [];
 const inp = document.getElementById('search-input');
 const res = document.getElementById('search-results');
-const SD = window.JAZZFEST_SEARCH || [];
 inp.addEventListener('input', function() {
   const q = this.value.toLowerCase().trim();
   res.innerHTML = '';
   if (q.length < 2) { res.style.display='none'; return; }
-  const hits = SD.filter(x => x.n.toLowerCase().includes(q)).slice(0, 12);
+  const hits = SEARCH_DATA.filter(x => x.n.toLowerCase().includes(q)).slice(0, 12);
   if (!hits.length) { res.style.display='none'; return; }
   hits.forEach(h => {
     const a = document.createElement('a');

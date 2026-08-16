@@ -4,1141 +4,646 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>1988 — Jazzfest Wiki</title>
-<style>
-/* Jazzfest Wiki — MediaWiki-inspiriertes Layout + Profil-Images */
-
-:root {
-  --bg: #fff;
-  --bg-content: #f8f9fa;
-  --border: #a2a9b1;
-  --border-light: #eaecf0;
-  --link: #3366cc;
-  --link-hover: #1a3f99;
-  --heading: #000;
-  --text: #202122;
-  --text-muted: #54595d;
-  --infobox-bg: #f8f9fa;
-  --infobox-header: #cee0f2;
-  --nav-bg: #f8f9fa;
-  --nav-border: #a2a9b1;
-  --tag-bg: #eaecf0;
-  --accent: #3366cc;
-  --red: #cc0000;
-}
-
-* { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-  font-family: -apple-system, 'Linux Libertine', Georgia, Times, serif;
-  font-size: 14px;
-  line-height: 1.6;
-  color: var(--text);
-  background: var(--bg-content);
-}
-
-/* HEADER */
-#wiki-header {
-  background: var(--bg);
-  border-bottom: 1px solid var(--border);
-  padding: 8px 16px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-#wiki-header .logo {
-  font-family: 'Linux Libertine', Georgia, serif;
-  font-size: 18px;
-  font-weight: bold;
-  color: var(--heading);
-  text-decoration: none;
-  white-space: nowrap;
-}
-
-#wiki-header .logo span { color: var(--accent); }
-
-#search-wrap { flex: 1; max-width: 400px; position: relative; }
-
-#search-input {
-  width: 100%;
-  padding: 5px 10px;
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  font-size: 13px;
-  outline: none;
-}
-
-#search-input:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 2px rgba(51,102,204,0.15);
-}
-
-#search-results {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-top: none;
-  max-height: 300px;
-  overflow-y: auto;
-  z-index: 200;
-  display: none;
-}
-
-#search-results a {
-  display: block;
-  padding: 6px 10px;
-  text-decoration: none;
-  color: var(--text);
-  border-bottom: 1px solid var(--border-light);
-}
-
-#search-results a:hover { background: var(--bg-content); }
-#search-results .sr-type { font-size: 11px; color: var(--text-muted); margin-left: 6px; }
-
-/* NAV */
-#wiki-nav {
-  background: var(--nav-bg);
-  border-bottom: 1px solid var(--nav-border);
-  padding: 0 16px;
-  display: flex;
-  gap: 0;
-  overflow-x: auto;
-}
-
-#wiki-nav a {
-  display: block;
-  padding: 8px 14px;
-  text-decoration: none;
-  color: var(--text);
-  font-size: 13px;
-  border-bottom: 2px solid transparent;
-  white-space: nowrap;
-}
-
-#wiki-nav a:hover, #wiki-nav a.active {
-  color: var(--accent);
-  border-bottom-color: var(--accent);
-}
-
-/* LAYOUT */
-#wiki-body {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px 16px;
-}
-
-.wiki-page {
-  background: var(--bg);
-  border: 1px solid var(--border-light);
-  padding: 20px 24px;
-}
-
-.page-title {
-  font-family: 'Linux Libertine', Georgia, serif;
-  font-size: 28px;
-  font-weight: normal;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 4px;
-  margin-bottom: 16px;
-  color: var(--heading);
-}
-
-/* INFOBOX */
-.infobox {
-  float: right;
-  clear: right;
-  margin: 0 0 16px 24px;
-  background: var(--infobox-bg);
-  border: 1px solid var(--border);
-  font-size: 13px;
-  max-width: 240px;
-  min-width: 200px;
-}
-
-.infobox-title {
-  background: var(--infobox-header);
-  text-align: center;
-  padding: 6px 10px;
-  font-weight: bold;
-  border-bottom: 1px solid var(--border);
-  font-size: 14px;
-}
-
-/* PROFIL-IMAGE */
-.profile-image-wrap {
-  width: 100%;
-  aspect-ratio: 1;
-  overflow: hidden;
-  border-bottom: 1px solid var(--border);
-  position: relative;
-  background: #e8ecf0;
-}
-
-.profile-image-wrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-/* Avatar-Fallback (Initialen) */
-.avatar-fallback {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 52px;
-  font-weight: bold;
-  color: var(--text-muted);
-  background: linear-gradient(135deg, #d0daea 0%, #b8c8de 100%);
-  letter-spacing: -2px;
-  user-select: none;
-}
-
-.infobox table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.infobox td {
-  padding: 4px 8px;
-  vertical-align: top;
-  border-bottom: 1px solid var(--border-light);
-}
-
-.infobox td:first-child {
-  color: var(--text-muted);
-  width: 45%;
-}
-
-/* MUSICIAN-GRID INDEX (mit Bild) */
-.musician-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 10px;
-  margin: 12px 0;
-}
-
-.musician-card {
-  background: var(--bg);
-  border: 1px solid var(--border-light);
-  text-decoration: none;
-  color: var(--text);
-  display: block;
-  overflow: hidden;
-  transition: border-color 0.15s;
-}
-
-.musician-card:hover {
-  border-color: var(--accent);
-  text-decoration: none;
-}
-
-.mc-image-wrap {
-  width: 100%;
-  aspect-ratio: 1;
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(135deg, #d8e4f0 0%, #c0d0e0 100%);
-}
-
-.musician-card .mc-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  position: absolute;
-  top: 0; left: 0;
-  z-index: 1;
-}
-
-.mc-avatar-bg {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 36px;
-  font-weight: bold;
-  color: #7a8fa8;
-  z-index: 0;
-}
-
-.musician-card .mc-avatar {
-  width: 100%;
-  aspect-ratio: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 36px;
-  font-weight: bold;
-  color: #888;
-  background: linear-gradient(135deg, #d8e4f0 0%, #c0d0e0 100%);
-  letter-spacing: -1px;
-}
-
-.musician-card .mc-info {
-  padding: 8px 10px;
-}
-
-.musician-card .mc-name {
-  font-weight: bold;
-  font-size: 13px;
-  line-height: 1.3;
-}
-
-.musician-card .mc-meta {
-  font-size: 11px;
-  color: var(--text-muted);
-  margin-top: 2px;
-}
-
-/* SECTIONS */
-.wiki-section { margin: 20px 0; }
-
-.wiki-section h2 {
-  font-family: 'Linux Libertine', Georgia, serif;
-  font-size: 20px;
-  font-weight: normal;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 2px;
-  margin-bottom: 12px;
-  color: var(--heading);
-}
-
-/* TABLES */
-.wiki-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13px;
-  margin: 8px 0;
-}
-
-.wiki-table th {
-  background: var(--bg-content);
-  border: 1px solid var(--border);
-  padding: 6px 10px;
-  text-align: left;
-  font-weight: bold;
-}
-
-.wiki-table td {
-  border: 1px solid var(--border-light);
-  padding: 5px 10px;
-  vertical-align: top;
-}
-
-.wiki-table tr:hover td { background: #f0f4ff; }
-
-/* TAGS */
-.tag {
-  display: inline-block;
-  background: var(--tag-bg);
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  padding: 1px 7px;
-  font-size: 12px;
-  margin: 2px;
-  color: var(--text);
-  text-decoration: none;
-}
-
-.tag:hover { background: var(--border); }
-.tag.instrument { background: #ddeeff; border-color: #99bbdd; }
-.tag.year { background: #eeffdd; border-color: #99cc77; }
-.tag.mitschnitt { background: #fff0cc; border-color: #ccaa44; }
-
-/* LINKS */
-a { color: var(--link); text-decoration: none; }
-a:hover { text-decoration: underline; color: var(--link-hover); }
-
-/* INDEX-STATS */
-.index-stats {
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-  margin: 16px 0;
-}
-
-.stat-card {
-  background: var(--infobox-bg);
-  border: 1px solid var(--border);
-  padding: 12px 20px;
-  text-align: center;
-  min-width: 120px;
-  flex: 1;
-}
-
-.stat-card .number {
-  font-size: 28px;
-  font-weight: bold;
-  color: var(--accent);
-  display: block;
-}
-
-.stat-card .label { font-size: 12px; color: var(--text-muted); }
-
-/* RELEASES */
-.release-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 10px 0;
-}
-
-.release-card {
-  display: flex;
-  gap: 8px;
-  background: var(--bg-content);
-  border: 1px solid var(--border-light);
-  padding: 8px;
-  max-width: 260px;
-  text-decoration: none;
-  color: var(--text);
-}
-
-.release-card img { width: 56px; height: 56px; object-fit: cover; flex-shrink: 0; }
-.release-card .rc-no-image {
-  width: 56px; height: 56px; flex-shrink: 0;
-  background: #dde4ee;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 22px; color: #888;
-}
-.release-card .rc-title { font-size: 12px; font-weight: bold; line-height: 1.3; }
-.release-card .rc-year { font-size: 11px; color: var(--text-muted); }
-.release-card:hover { border-color: var(--accent); }
-
-/* MITSPIELER */
-.mitspieler-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin: 8px 0;
-}
-
-/* ALPHABET NAV */
-.alpha-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin: 8px 0 16px;
-}
-
-.alpha-nav a {
-  display: block;
-  width: 28px;
-  height: 28px;
-  text-align: center;
-  line-height: 28px;
-  border: 1px solid var(--border);
-  font-size: 13px;
-  color: var(--text);
-  text-decoration: none;
-}
-
-.alpha-nav a:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
-
-/* GRAPH */
-#graph-container {
-  width: 100%;
-  height: 650px;
-  background: #fff;
-  border: 1px solid var(--border);
-  position: relative;
-}
-
-#graph-tooltip {
-  position: absolute;
-  background: rgba(0,0,0,0.85);
-  color: #fff;
-  padding: 8px 12px;
-  border-radius: 4px;
-  font-size: 12px;
-  pointer-events: none;
-  display: none;
-  z-index: 10;
-}
-
-/* YEAR */
-.concert-entry {
-  border-left: 3px solid var(--border);
-  padding: 6px 12px;
-  margin: 4px 0;
-}
-.concert-entry:hover { border-left-color: var(--accent); background: var(--bg-content); }
-.concert-date { font-size: 12px; color: var(--text-muted); }
-.concert-band { font-weight: bold; }
-.concert-musiker { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-
-/* FOOTER */
-#wiki-footer {
-  text-align: center;
-  padding: 20px;
-  color: var(--text-muted);
-  font-size: 12px;
-  border-top: 1px solid var(--border-light);
-  margin-top: 40px;
-}
-
-/* CLEARFIX */
-.clearfix::after { content: ""; display: table; clear: both; }
-
-@media (max-width: 600px) {
-  .infobox { float: none; margin: 0 0 16px; max-width: 100%; }
-  .musician-grid { grid-template-columns: repeat(2, 1fr); }
-  #graph-container { height: 400px; }
-}
-
-</style>
+<link rel="stylesheet" href="../../template/css/wiki.css">
 </head>
 <body>
 <header id="wiki-header">
-  <a class="logo" href="../index.html">Jazz<span>fest</span> Wiki</a>
-  <div id="search-wrap">
+  <a class="logo" href="../../index.html">Jazz<span>fest</span> Wiki</a>
+  <div id="search-wrap" style="position:relative">
     <input id="search-input" type="text" placeholder="Musiker, Band, Jahr …" autocomplete="off">
     <div id="search-results"></div>
   </div>
 </header>
 <nav id="wiki-nav">
-  <a href="../index.html">Hauptseite</a>
-  <a href="../musicians/index.html">Musiker</a>
-  <a href="../bands/index.html">Bands</a>
-  <a href="../years/index.html" class="active">Jahre</a>
-  <a href="../festivals.html">Festivalchronik</a>
-  <a href="../graph.html">Netzwerk</a>
+  <a href="../../index.html" >Hauptseite</a>
+  <a href="../../musicians/index.html" >Musiker</a>
+  <a href="../../bands/index.html" >Bands</a>
+  <a href="../../years/index.html" class="active">Jahre</a>
+  <a href="../../graph.html" >Netzwerk</a>
 </nav>
 <div id="wiki-body">
   <div class="wiki-page clearfix">
     <h1 class="page-title">Jazzfest 1988</h1>
 <div class="wiki-section">
-  <p><strong>155 Konzert-Einträge</strong></p>
+  <p><strong>155 Konzerte</strong></p>
   <div class="year-concerts"><div class="concert-entry">
-  <div class="concert-date">30. Jan 1988 · Club-Echo </div>
+  <div class="concert-date">30. Jan 1988 · Club-Echo · </div>
   <div class="concert-band"><a href="../bands/oezay-band.html">Özay & Band</a></div>
   <div class='concert-musiker'>Özay</div>
 </div><div class="concert-entry">
-  <div class="concert-date">30. Jan 1988 · Club-Echo </div>
+  <div class="concert-date">30. Jan 1988 · Club-Echo · </div>
   <div class="concert-band"><a href="../bands/oezay-band.html">Özay & Band</a></div>
   <div class='concert-musiker'>Heiner Althaus</div>
 </div><div class="concert-entry">
-  <div class="concert-date">30. Jan 1988 · Club-Echo </div>
+  <div class="concert-date">30. Jan 1988 · Club-Echo · </div>
   <div class="concert-band"><a href="../bands/oezay-band.html">Özay & Band</a></div>
   <div class='concert-musiker'>Kirk Lightsey</div>
 </div><div class="concert-entry">
-  <div class="concert-date">30. Jan 1988 · Club-Echo </div>
+  <div class="concert-date">30. Jan 1988 · Club-Echo · </div>
   <div class="concert-band"><a href="../bands/oezay-band.html">Özay & Band</a></div>
   <div class='concert-musiker'>Malissa Slocum</div>
 </div><div class="concert-entry">
-  <div class="concert-date">30. Jan 1988 · Club-Echo </div>
+  <div class="concert-date">30. Jan 1988 · Club-Echo · </div>
   <div class="concert-band"><a href="../bands/oezay-band.html">Özay & Band</a></div>
   <div class='concert-musiker'>Doug Hammond</div>
 </div><div class="concert-entry">
-  <div class="concert-date">12. Feb 1988 · Club </div>
+  <div class="concert-date">12. Feb 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/blue-brass-connection.html">Blue Brass Connection</a></div>
   <div class='concert-musiker'>Leon Thomas</div>
 </div><div class="concert-entry">
-  <div class="concert-date">12. Feb 1988 · Club </div>
+  <div class="concert-date">12. Feb 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/blue-brass-connection.html">Blue Brass Connection</a></div>
   <div class='concert-musiker'>David Murray</div>
 </div><div class="concert-entry">
-  <div class="concert-date">12. Feb 1988 · Club </div>
+  <div class="concert-date">12. Feb 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/blue-brass-connection.html">Blue Brass Connection</a></div>
   <div class='concert-musiker'>Carter Jefferson</div>
 </div><div class="concert-entry">
-  <div class="concert-date">12. Feb 1988 · Club </div>
+  <div class="concert-date">12. Feb 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/blue-brass-connection.html">Blue Brass Connection</a></div>
   <div class='concert-musiker'>Ray Scott</div>
 </div><div class="concert-entry">
-  <div class="concert-date">12. Feb 1988 · Club </div>
+  <div class="concert-date">12. Feb 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/blue-brass-connection.html">Blue Brass Connection</a></div>
   <div class='concert-musiker'>Malachi Thompson</div>
 </div><div class="concert-entry">
-  <div class="concert-date">12. Feb 1988 · Club </div>
+  <div class="concert-date">12. Feb 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/blue-brass-connection.html">Blue Brass Connection</a></div>
   <div class='concert-musiker'>Stanton Davis</div>
 </div><div class="concert-entry">
-  <div class="concert-date">12. Feb 1988 · Club </div>
+  <div class="concert-date">12. Feb 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/blue-brass-connection.html">Blue Brass Connection</a></div>
   <div class='concert-musiker'>Paul Zauner</div>
 </div><div class="concert-entry">
-  <div class="concert-date">12. Feb 1988 · Club </div>
+  <div class="concert-date">12. Feb 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/blue-brass-connection.html">Blue Brass Connection</a></div>
   <div class='concert-musiker'>Kelvyn Bell</div>
 </div><div class="concert-entry">
-  <div class="concert-date">12. Feb 1988 · Club </div>
+  <div class="concert-date">12. Feb 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/blue-brass-connection.html">Blue Brass Connection</a></div>
   <div class='concert-musiker'>Mark Thompson</div>
 </div><div class="concert-entry">
-  <div class="concert-date">12. Feb 1988 · Club </div>
+  <div class="concert-date">12. Feb 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/blue-brass-connection.html">Blue Brass Connection</a></div>
   <div class='concert-musiker'>James King</div>
 </div><div class="concert-entry">
-  <div class="concert-date">12. Feb 1988 · Club </div>
+  <div class="concert-date">12. Feb 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/blue-brass-connection.html">Blue Brass Connection</a></div>
   <div class='concert-musiker'>Phillip Wilson</div>
 </div><div class="concert-entry">
-  <div class="concert-date">5. Mar 1988 · Club </div>
+  <div class="concert-date">5. Mar 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/takase-joao-duo.html">Takase / Joao Duo</a></div>
   <div class='concert-musiker'>Maria Joao</div>
 </div><div class="concert-entry">
-  <div class="concert-date">5. Mar 1988 · Club </div>
+  <div class="concert-date">5. Mar 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/takase-joao-duo.html">Takase / Joao Duo</a></div>
   <div class='concert-musiker'>Aki Takase</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Mar 1988 · Club </div>
+  <div class="concert-date">19. Mar 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/john-zorn-plays-the-music-of-ornette-coleman.html">John Zorn Plays The Music of Ornette Coleman</a></div>
   <div class='concert-musiker'>John Zorn</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Mar 1988 · Club </div>
+  <div class="concert-date">19. Mar 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/john-zorn-plays-the-music-of-ornette-coleman.html">John Zorn Plays The Music of Ornette Coleman</a></div>
   <div class='concert-musiker'>Tim Berne</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Mar 1988 · Club </div>
+  <div class="concert-date">19. Mar 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/john-zorn-plays-the-music-of-ornette-coleman.html">John Zorn Plays The Music of Ornette Coleman</a></div>
   <div class='concert-musiker'>Mark Dresser</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Mar 1988 · Club </div>
+  <div class="concert-date">19. Mar 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/john-zorn-plays-the-music-of-ornette-coleman.html">John Zorn Plays The Music of Ornette Coleman</a></div>
   <div class='concert-musiker'>Joey Baron</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Mar 1988 · Club </div>
+  <div class="concert-date">19. Mar 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/john-zorn-plays-the-music-of-ornette-coleman.html">John Zorn Plays The Music of Ornette Coleman</a></div>
   <div class='concert-musiker'>Michael Vatcher</div>
 </div><div class="concert-entry">
-  <div class="concert-date">2. Apr 1988 · CLub </div>
+  <div class="concert-date">2. Apr 1988 · CLub · </div>
   <div class="concert-band"><a href="../bands/henry-threadgill-septet.html">Henry Threadgill Septet</a></div>
   <div class='concert-musiker'>Henry Threadgill</div>
 </div><div class="concert-entry">
-  <div class="concert-date">2. Apr 1988 · CLub </div>
+  <div class="concert-date">2. Apr 1988 · CLub · </div>
   <div class="concert-band"><a href="../bands/henry-threadgill-septet.html">Henry Threadgill Septet</a></div>
   <div class='concert-musiker'>Frank Lacy</div>
 </div><div class="concert-entry">
-  <div class="concert-date">2. Apr 1988 · CLub </div>
+  <div class="concert-date">2. Apr 1988 · CLub · </div>
   <div class="concert-band"><a href="../bands/henry-threadgill-septet.html">Henry Threadgill Septet</a></div>
   <div class='concert-musiker'>Rasul Siddik</div>
 </div><div class="concert-entry">
-  <div class="concert-date">2. Apr 1988 · CLub </div>
+  <div class="concert-date">2. Apr 1988 · CLub · </div>
   <div class="concert-band"><a href="../bands/henry-threadgill-septet.html">Henry Threadgill Septet</a></div>
   <div class='concert-musiker'>Diedre Murray</div>
 </div><div class="concert-entry">
-  <div class="concert-date">2. Apr 1988 · CLub </div>
+  <div class="concert-date">2. Apr 1988 · CLub · </div>
   <div class="concert-band"><a href="../bands/henry-threadgill-septet.html">Henry Threadgill Septet</a></div>
   <div class='concert-musiker'>Fred Hopkins</div>
 </div><div class="concert-entry">
-  <div class="concert-date">2. Apr 1988 · CLub </div>
+  <div class="concert-date">2. Apr 1988 · CLub · </div>
   <div class="concert-band"><a href="../bands/henry-threadgill-septet.html">Henry Threadgill Septet</a></div>
   <div class='concert-musiker'>Newman T. Baker</div>
 </div><div class="concert-entry">
-  <div class="concert-date">2. Apr 1988 · CLub </div>
+  <div class="concert-date">2. Apr 1988 · CLub · </div>
   <div class="concert-band"><a href="../bands/henry-threadgill-septet.html">Henry Threadgill Septet</a></div>
   <div class='concert-musiker'>Yoran Israel</div>
 </div><div class="concert-entry">
-  <div class="concert-date">30. Apr 1988 · Club </div>
+  <div class="concert-date">30. Apr 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/the-president.html">The President</a></div>
   <div class='concert-musiker'>Wayne Horvitz</div>
 </div><div class="concert-entry">
-  <div class="concert-date">30. Apr 1988 · Club </div>
+  <div class="concert-date">30. Apr 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/the-president.html">The President</a></div>
   <div class='concert-musiker'>Doug Wieselman</div>
 </div><div class="concert-entry">
-  <div class="concert-date">30. Apr 1988 · Club </div>
+  <div class="concert-date">30. Apr 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/the-president.html">The President</a></div>
   <div class='concert-musiker'>Elliott Sharp</div>
 </div><div class="concert-entry">
-  <div class="concert-date">30. Apr 1988 · Club </div>
+  <div class="concert-date">30. Apr 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/the-president.html">The President</a></div>
   <div class='concert-musiker'>Dave Tronzo</div>
 </div><div class="concert-entry">
-  <div class="concert-date">30. Apr 1988 · Club </div>
+  <div class="concert-date">30. Apr 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/the-president.html">The President</a></div>
   <div class='concert-musiker'>Dave Hofstra</div>
 </div><div class="concert-entry">
-  <div class="concert-date">30. Apr 1988 · Club </div>
+  <div class="concert-date">30. Apr 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/the-president.html">The President</a></div>
   <div class='concert-musiker'>Bobby Previte</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. May 1988 · Club </div>
+  <div class="concert-date">21. May 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/kelvynators.html">Kelvynators</a></div>
   <div class='concert-musiker'>Eric Person</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. May 1988 · Club </div>
+  <div class="concert-date">21. May 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/kelvynators.html">Kelvynators</a></div>
   <div class='concert-musiker'>Kelvyn Bell</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. May 1988 · Club </div>
+  <div class="concert-date">21. May 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/kelvynators.html">Kelvynators</a></div>
   <div class='concert-musiker'>Kevin Bents</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. May 1988 · Club </div>
+  <div class="concert-date">21. May 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/kelvynators.html">Kelvynators</a></div>
   <div class='concert-musiker'>Yossy Fine</div>
 </div><div class="concert-entry">
-  <div class="concert-date">21. May 1988 · Club </div>
+  <div class="concert-date">21. May 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/kelvynators.html">Kelvynators</a></div>
   <div class='concert-musiker'>Zack Alford</div>
 </div><div class="concert-entry">
-  <div class="concert-date">18. Jun 1988 · Club </div>
+  <div class="concert-date">18. Jun 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/craig-harris-tailgaters-tales.html">Craig Harris & Tailgaters Tales</a></div>
   <div class='concert-musiker'>Craig Harris</div>
 </div><div class="concert-entry">
-  <div class="concert-date">18. Jun 1988 · Club </div>
+  <div class="concert-date">18. Jun 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/craig-harris-tailgaters-tales.html">Craig Harris & Tailgaters Tales</a></div>
   <div class='concert-musiker'>Don Byron</div>
 </div><div class="concert-entry">
-  <div class="concert-date">18. Jun 1988 · Club </div>
+  <div class="concert-date">18. Jun 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/craig-harris-tailgaters-tales.html">Craig Harris & Tailgaters Tales</a></div>
   <div class='concert-musiker'>Fred Wells</div>
 </div><div class="concert-entry">
-  <div class="concert-date">18. Jun 1988 · Club </div>
+  <div class="concert-date">18. Jun 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/craig-harris-tailgaters-tales.html">Craig Harris & Tailgaters Tales</a></div>
   <div class='concert-musiker'>Curtis Lundy</div>
 </div><div class="concert-entry">
-  <div class="concert-date">18. Jun 1988 · Club </div>
+  <div class="concert-date">18. Jun 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/craig-harris-tailgaters-tales.html">Craig Harris & Tailgaters Tales</a></div>
   <div class='concert-musiker'>Ralph jr. Peterson</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">26. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/arthur-blythe-quartet.html">Arthur Blythe Quartet</a></div>
   <div class='concert-musiker'>Arthur Blythe</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">26. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/arthur-blythe-quartet.html">Arthur Blythe Quartet</a></div>
   <div class='concert-musiker'>John Hicks</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">26. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/arthur-blythe-quartet.html">Arthur Blythe Quartet</a></div>
   <div class='concert-musiker'>Anthony Cox</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">26. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/arthur-blythe-quartet.html">Arthur Blythe Quartet</a></div>
   <div class='concert-musiker'>Bobby Battle</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">26. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/betty-carter-trio.html">Betty Carter & Trio</a></div>
   <div class='concert-musiker'>Betty Carter</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">26. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/betty-carter-trio.html">Betty Carter & Trio</a></div>
   <div class='concert-musiker'>Darrell Grant</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">26. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/betty-carter-trio.html">Betty Carter & Trio</a></div>
   <div class='concert-musiker'>Ira Coleman</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">26. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/betty-carter-trio.html">Betty Carter & Trio</a></div>
   <div class='concert-musiker'>Troy Davis</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">26. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/fian.html">Fian</a></div>
   <div class='concert-musiker'>Karl „Bumi“ Fian</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">26. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/fian.html">Fian</a></div>
   <div class='concert-musiker'>Harry Stoika</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">26. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/fian.html">Fian</a></div>
   <div class='concert-musiker'>Dejan Pecenko</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">26. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/fian.html">Fian</a></div>
   <div class='concert-musiker'>Stephan Aschböck</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">26. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/fian.html">Fian</a></div>
   <div class='concert-musiker'>Robert Riegler</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">26. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/fian.html">Fian</a></div>
   <div class='concert-musiker'>Wolfgang Reisinger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">26. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/john-zorn-naked-city.html">John Zorn – Naked City</a></div>
   <div class='concert-musiker'>John Zorn</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">26. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/john-zorn-naked-city.html">John Zorn – Naked City</a></div>
   <div class='concert-musiker'>Wayne Horvitz</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">26. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/john-zorn-naked-city.html">John Zorn – Naked City</a></div>
   <div class='concert-musiker'>Bill Frisell</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">26. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/john-zorn-naked-city.html">John Zorn – Naked City</a></div>
   <div class='concert-musiker'>Kermit Driscoll</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">26. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/john-zorn-naked-city.html">John Zorn – Naked City</a></div>
   <div class='concert-musiker'>Joey Baron</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">26. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/ornette-coleman-prime-time-band.html">Ornette Coleman & Prime Time Band</a></div>
   <div class='concert-musiker'>Ornette Coleman</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">26. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/ornette-coleman-prime-time-band.html">Ornette Coleman & Prime Time Band</a></div>
   <div class='concert-musiker'>Ken Wessel</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">26. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/ornette-coleman-prime-time-band.html">Ornette Coleman & Prime Time Band</a></div>
   <div class='concert-musiker'>Chris Rosenberg</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">26. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/ornette-coleman-prime-time-band.html">Ornette Coleman & Prime Time Band</a></div>
   <div class='concert-musiker'>Al McDowell</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">26. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/ornette-coleman-prime-time-band.html">Ornette Coleman & Prime Time Band</a></div>
   <div class='concert-musiker'>Chris Walker</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">26. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/ornette-coleman-prime-time-band.html">Ornette Coleman & Prime Time Band</a></div>
   <div class='concert-musiker'>Denardo Coleman</div>
 </div><div class="concert-entry">
-  <div class="concert-date">26. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">26. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/ornette-coleman-prime-time-band.html">Ornette Coleman & Prime Time Band</a></div>
   <div class='concert-musiker'>Roy Badal</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/ames.html">Ames</a></div>
   <div class='concert-musiker'>Elfie Aichinger</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/ames.html">Ames</a></div>
   <div class='concert-musiker'>Sarah Barrett</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/ames.html">Ames</a></div>
   <div class='concert-musiker'>Renate Burtscher</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/ames.html">Ames</a></div>
   <div class='concert-musiker'>Maria Bayer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/ames.html">Ames</a></div>
   <div class='concert-musiker'>Sascha Otto</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/ames.html">Ames</a></div>
   <div class='concert-musiker'>Helmut Strobl</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/ames.html">Ames</a></div>
   <div class='concert-musiker'>Christoph Cech</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/ames.html">Ames</a></div>
   <div class='concert-musiker'>Werner Dafeldecker</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/ames.html">Ames</a></div>
   <div class='concert-musiker'>Christian Mühlbacher</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/evan-lurie-bandoneon-band.html">Evan Lurie Bandoneon Band</a></div>
   <div class='concert-musiker'>Evan Lurie</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/evan-lurie-bandoneon-band.html">Evan Lurie Bandoneon Band</a></div>
   <div class='concert-musiker'>Alfredo Pedernera</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/evan-lurie-bandoneon-band.html">Evan Lurie Bandoneon Band</a></div>
   <div class='concert-musiker'>Jill Jaffe</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/evan-lurie-bandoneon-band.html">Evan Lurie Bandoneon Band</a></div>
   <div class='concert-musiker'>Marc Ribot</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/evan-lurie-bandoneon-band.html">Evan Lurie Bandoneon Band</a></div>
   <div class='concert-musiker'>Mark Mader</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/henry-threadgill-new-york-danceband.html">Henry Threadgill & New York Danceband</a></div>
   <div class='concert-musiker'>Henry Threadgill</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/henry-threadgill-new-york-danceband.html">Henry Threadgill & New York Danceband</a></div>
   <div class='concert-musiker'>John Stubblefield</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/henry-threadgill-new-york-danceband.html">Henry Threadgill & New York Danceband</a></div>
   <div class='concert-musiker'>Booker T. Williams</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/henry-threadgill-new-york-danceband.html">Henry Threadgill & New York Danceband</a></div>
   <div class='concert-musiker'>Ted Daniels</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/henry-threadgill-new-york-danceband.html">Henry Threadgill & New York Danceband</a></div>
   <div class='concert-musiker'>James Zollar</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/henry-threadgill-new-york-danceband.html">Henry Threadgill & New York Danceband</a></div>
   <div class='concert-musiker'>Craig Harris</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/henry-threadgill-new-york-danceband.html">Henry Threadgill & New York Danceband</a></div>
   <div class='concert-musiker'>Conrad Herwig</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/henry-threadgill-new-york-danceband.html">Henry Threadgill & New York Danceband</a></div>
   <div class='concert-musiker'>Bob Stewart</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/henry-threadgill-new-york-danceband.html">Henry Threadgill & New York Danceband</a></div>
   <div class='concert-musiker'>Diedre Murray</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/henry-threadgill-new-york-danceband.html">Henry Threadgill & New York Danceband</a></div>
   <div class='concert-musiker'>Leroy Jenkins</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/henry-threadgill-new-york-danceband.html">Henry Threadgill & New York Danceband</a></div>
   <div class='concert-musiker'>Terry Jenoure</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/henry-threadgill-new-york-danceband.html">Henry Threadgill & New York Danceband</a></div>
   <div class='concert-musiker'>Charles Burnham</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/henry-threadgill-new-york-danceband.html">Henry Threadgill & New York Danceband</a></div>
   <div class='concert-musiker'>Akura Turre-Dixon</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/henry-threadgill-new-york-danceband.html">Henry Threadgill & New York Danceband</a></div>
   <div class='concert-musiker'>Brandon Ross</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/henry-threadgill-new-york-danceband.html">Henry Threadgill & New York Danceband</a></div>
   <div class='concert-musiker'>Jean-Paul Bourelly</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/henry-threadgill-new-york-danceband.html">Henry Threadgill & New York Danceband</a></div>
   <div class='concert-musiker'>Jerome Harris</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/henry-threadgill-new-york-danceband.html">Henry Threadgill & New York Danceband</a></div>
   <div class='concert-musiker'>Reggie Nicholson</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/henry-threadgill-new-york-danceband.html">Henry Threadgill & New York Danceband</a></div>
   <div class='concert-musiker'>Robert Sanabria</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/henry-threadgill-new-york-danceband.html">Henry Threadgill & New York Danceband</a></div>
   <div class='concert-musiker'>Sherry Scott</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/john-zorn-new-age-on-acid.html">John Zorn – New Age on Acid</a></div>
   <div class='concert-musiker'>John Zorn</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/john-zorn-new-age-on-acid.html">John Zorn – New Age on Acid</a></div>
   <div class='concert-musiker'>Hsin Cheng-Chang</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/john-zorn-new-age-on-acid.html">John Zorn – New Age on Acid</a></div>
   <div class='concert-musiker'>Bill Frisell</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/john-zorn-new-age-on-acid.html">John Zorn – New Age on Acid</a></div>
   <div class='concert-musiker'>Rene Lussier</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/john-zorn-new-age-on-acid.html">John Zorn – New Age on Acid</a></div>
   <div class='concert-musiker'>Eun Gyu Lee</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/john-zorn-new-age-on-acid.html">John Zorn – New Age on Acid</a></div>
   <div class='concert-musiker'>Samm Bennett</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/john-zorn-new-age-on-acid.html">John Zorn – New Age on Acid</a></div>
   <div class='concert-musiker'>Joey Baron</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/pharoah-sanders-quartet-feat-miss-sherry.html">Pharoah Sanders Quartet feat. Miss Sherry</a></div>
   <div class='concert-musiker'>Pharoah Sanders</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/pharoah-sanders-quartet-feat-miss-sherry.html">Pharoah Sanders Quartet feat. Miss Sherry</a></div>
   <div class='concert-musiker'>William Henderson</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/pharoah-sanders-quartet-feat-miss-sherry.html">Pharoah Sanders Quartet feat. Miss Sherry</a></div>
   <div class='concert-musiker'>Stafford James</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/pharoah-sanders-quartet-feat-miss-sherry.html">Pharoah Sanders Quartet feat. Miss Sherry</a></div>
   <div class='concert-musiker'>Eddie Moore</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/pharoah-sanders-quartet-feat-miss-sherry.html">Pharoah Sanders Quartet feat. Miss Sherry</a></div>
   <div class='concert-musiker'>Scott Sherry</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/power-tools.html">Power Tools</a></div>
   <div class='concert-musiker'>Bill Frisell</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/power-tools.html">Power Tools</a></div>
   <div class='concert-musiker'>Melvin Gibbs</div>
 </div><div class="concert-entry">
-  <div class="concert-date">27. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">27. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/power-tools.html">Power Tools</a></div>
   <div class='concert-musiker'>Ronald Shannon Jackson</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">28. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/andy-sheppard-quintet.html">Andy Sheppard Quintet</a></div>
   <div class='concert-musiker'>Andy Sheppard</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">28. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/andy-sheppard-quintet.html">Andy Sheppard Quintet</a></div>
   <div class='concert-musiker'>Dave Buxton</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">28. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/andy-sheppard-quintet.html">Andy Sheppard Quintet</a></div>
   <div class='concert-musiker'>Pete Maxfield</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">28. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/andy-sheppard-quintet.html">Andy Sheppard Quintet</a></div>
   <div class='concert-musiker'>Simon Gore</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">28. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/andy-sheppard-quintet.html">Andy Sheppard Quintet</a></div>
   <div class='concert-musiker'>Mamadi Kamara</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">28. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/coleman-holland-de-johnette.html">Coleman & Holland & De Johnette</a></div>
   <div class='concert-musiker'>Steve Coleman</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">28. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/coleman-holland-de-johnette.html">Coleman & Holland & De Johnette</a></div>
   <div class='concert-musiker'>Dave Holland</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">28. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/coleman-holland-de-johnette.html">Coleman & Holland & De Johnette</a></div>
   <div class='concert-musiker'>Jack DeJohnette</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">28. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/hank-roberts-black-pastels.html">Hank Roberts Black Pastels</a></div>
   <div class='concert-musiker'>Tim Berne</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">28. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/hank-roberts-black-pastels.html">Hank Roberts Black Pastels</a></div>
   <div class='concert-musiker'>Steve Swell</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">28. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/hank-roberts-black-pastels.html">Hank Roberts Black Pastels</a></div>
   <div class='concert-musiker'>Art Baron</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">28. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/hank-roberts-black-pastels.html">Hank Roberts Black Pastels</a></div>
   <div class='concert-musiker'>Dave Taylor</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">28. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/hank-roberts-black-pastels.html">Hank Roberts Black Pastels</a></div>
   <div class='concert-musiker'>Hank Roberts</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">28. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/hank-roberts-black-pastels.html">Hank Roberts Black Pastels</a></div>
   <div class='concert-musiker'>Bill Frisell</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">28. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/hank-roberts-black-pastels.html">Hank Roberts Black Pastels</a></div>
   <div class='concert-musiker'>Joey Baron</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">28. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/joachim-kuehn-trio.html">Joachim Kühn Trio</a></div>
   <div class='concert-musiker'>Joachim Kühn</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">28. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/joachim-kuehn-trio.html">Joachim Kühn Trio</a></div>
   <div class='concert-musiker'>Jean Francois-Jenny Clark</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">28. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/joachim-kuehn-trio.html">Joachim Kühn Trio</a></div>
   <div class='concert-musiker'>Daniel Humair</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">28. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/john-zorn-the-way-it-feels.html">John Zorn – The way it feels</a></div>
   <div class='concert-musiker'>John Zorn</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">28. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/john-zorn-the-way-it-feels.html">John Zorn – The way it feels</a></div>
   <div class='concert-musiker'>James Blood Ulmer</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">28. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/john-zorn-the-way-it-feels.html">John Zorn – The way it feels</a></div>
   <div class='concert-musiker'>Big John Patton</div>
 </div><div class="concert-entry">
-  <div class="concert-date">28. Aug 1988 · Festival 88 </div>
+  <div class="concert-date">28. Aug 1988 · Festival 88 · </div>
   <div class="concert-band"><a href="../bands/john-zorn-the-way-it-feels.html">John Zorn – The way it feels</a></div>
   <div class='concert-musiker'>Bobby Previte</div>
 </div><div class="concert-entry">
-  <div class="concert-date">14. Oct 1988 · Club </div>
+  <div class="concert-date">14. Oct 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/world-saxophone-quartet.html">World Saxophone Quartet</a></div>
   <div class='concert-musiker'>David Murray</div>
 </div><div class="concert-entry">
-  <div class="concert-date">14. Oct 1988 · Club </div>
+  <div class="concert-date">14. Oct 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/world-saxophone-quartet.html">World Saxophone Quartet</a></div>
   <div class='concert-musiker'>Julius Hemphill</div>
 </div><div class="concert-entry">
-  <div class="concert-date">14. Oct 1988 · Club </div>
+  <div class="concert-date">14. Oct 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/world-saxophone-quartet.html">World Saxophone Quartet</a></div>
   <div class='concert-musiker'>Oliver Lake</div>
 </div><div class="concert-entry">
-  <div class="concert-date">14. Oct 1988 · Club </div>
+  <div class="concert-date">14. Oct 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/world-saxophone-quartet.html">World Saxophone Quartet</a></div>
   <div class='concert-musiker'>Hamiet Bluiett</div>
 </div><div class="concert-entry">
-  <div class="concert-date">22. Oct 1988 · Club </div>
+  <div class="concert-date">22. Oct 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/pedro-soler.html">Pedro Soler</a></div>
   <div class='concert-musiker'>Pedro Soler</div>
 </div><div class="concert-entry">
-  <div class="concert-date">12. Nov 1988 · Club </div>
+  <div class="concert-date">12. Nov 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/egberto-gismonti-quartet.html">Egberto Gismonti Quartet</a></div>
   <div class='concert-musiker'>Nivaldo Ornelas</div>
 </div><div class="concert-entry">
-  <div class="concert-date">12. Nov 1988 · Club </div>
+  <div class="concert-date">12. Nov 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/egberto-gismonti-quartet.html">Egberto Gismonti Quartet</a></div>
   <div class='concert-musiker'>Egberto Gismonti</div>
 </div><div class="concert-entry">
-  <div class="concert-date">12. Nov 1988 · Club </div>
+  <div class="concert-date">12. Nov 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/egberto-gismonti-quartet.html">Egberto Gismonti Quartet</a></div>
   <div class='concert-musiker'>Edu Mello e Souza</div>
 </div><div class="concert-entry">
-  <div class="concert-date">12. Nov 1988 · Club </div>
+  <div class="concert-date">12. Nov 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/egberto-gismonti-quartet.html">Egberto Gismonti Quartet</a></div>
   <div class='concert-musiker'>Jaques Morelenbaum</div>
 </div><div class="concert-entry">
-  <div class="concert-date">19. Nov 1988 · Club </div>
+  <div class="concert-date">19. Nov 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/luiz-nonato.html">Luiz Nonato</a></div>
   <div class='concert-musiker'>Luiz Nonato</div>
 </div><div class="concert-entry">
-  <div class="concert-date">3. Dec 1988 · Club </div>
+  <div class="concert-date">3. Dec 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/paul-motian-trio.html">Paul Motian Trio</a></div>
   <div class='concert-musiker'>Joe Lovano</div>
 </div><div class="concert-entry">
-  <div class="concert-date">3. Dec 1988 · Club </div>
+  <div class="concert-date">3. Dec 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/paul-motian-trio.html">Paul Motian Trio</a></div>
   <div class='concert-musiker'>Bill Frisell</div>
 </div><div class="concert-entry">
-  <div class="concert-date">3. Dec 1988 · Club </div>
+  <div class="concert-date">3. Dec 1988 · Club · </div>
   <div class="concert-band"><a href="../bands/paul-motian-trio.html">Paul Motian Trio</a></div>
   <div class='concert-musiker'>Paul Motian</div>
 </div></div>
@@ -1149,16 +654,16 @@ a:hover { text-decoration: underline; color: var(--link-hover); }
   Jazzfest Wiki · 5936 Musiker · 13034 Konzerte · 1975–2025
   · Daten: Jazzfest Wien Chronik + Discogs API
 </footer>
-<script src="../search-data.js"></script>
 <script>
+// Globale Suche
+const SEARCH_DATA = window.JAZZFEST_SEARCH || [];
 const inp = document.getElementById('search-input');
 const res = document.getElementById('search-results');
-const SD = window.JAZZFEST_SEARCH || [];
 inp.addEventListener('input', function() {
   const q = this.value.toLowerCase().trim();
   res.innerHTML = '';
   if (q.length < 2) { res.style.display='none'; return; }
-  const hits = SD.filter(x => x.n.toLowerCase().includes(q)).slice(0, 12);
+  const hits = SEARCH_DATA.filter(x => x.n.toLowerCase().includes(q)).slice(0, 12);
   if (!hits.length) { res.style.display='none'; return; }
   hits.forEach(h => {
     const a = document.createElement('a');
