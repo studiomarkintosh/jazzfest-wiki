@@ -465,6 +465,23 @@ a:hover { text-decoration: underline; color: var(--link-hover); }
   margin-top: 40px;
 }
 
+/* SOCIAL LINKS */
+.social-links { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 12px; }
+.social-link {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 4px 10px; border-radius: 2px; font-size: 12px;
+  text-decoration: none; border: 1px solid var(--border);
+  color: var(--text); background: var(--bg);
+  transition: background 0.15s, border-color 0.15s;
+}
+.social-link:hover { border-color: var(--accent); background: var(--bg-content); }
+.social-instagram { border-color: #c13584; }
+.social-facebook  { border-color: #1877f2; }
+.social-twitter   { border-color: #000; }
+.social-bandcamp  { border-color: #1da0c3; }
+.social-soundcloud{ border-color: #f50; }
+.social-youtube   { border-color: #f00; }
+
 /* SORTIERBARE TABELLEN */
 .wiki-table thead th { cursor: pointer; user-select: none; white-space: nowrap; }
 .wiki-table thead th:hover { background: var(--infobox-header); }
