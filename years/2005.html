@@ -1315,6 +1315,56 @@ inp.addEventListener('input', function() {
 });
 document.addEventListener('click', e => { if (!inp.contains(e.target)) res.style.display='none'; });
 </script>
+<script>
+// Tabellen-Sortierfunktion für alle .wiki-table
+(function(){
+  function cellVal(td) {
+    var t = td.textContent.trim();
+    // Datum: "21. Aug 2019" → sortierbar
+    var dm = t.match(/(\d{1,2})\.\s+\w+\s+(\d{4})/);
+    if (dm) {
+      var months = {Jan:1,Feb:2,Mär:3,Apr:4,Mai:5,Jun:6,Jul:7,Aug:8,Sep:9,Okt:10,Nov:11,Dez:12};
+      var parts = t.split(/\s+/);
+      return dm[2] + '-' + String(months[parts[1]]||0).padStart(2,'0') + '-' + dm[1].padStart(2,'0');
+    }
+    // Zahl
+    var n = parseFloat(t.replace(/[^\d,.-]/g,'').replace(',','.'));
+    if (!isNaN(n) && t.match(/^\d/)) return n;
+    return t.toLowerCase();
+  }
+
+  function sortTable(table, col, asc) {
+    var tbody = table.querySelector('tbody');
+    if (!tbody) return;
+    var rows = Array.from(tbody.querySelectorAll('tr'));
+    rows.sort(function(a, b) {
+      var va = cellVal(a.cells[col] || a.cells[0]);
+      var vb = cellVal(b.cells[col] || b.cells[0]);
+      if (va < vb) return asc ? -1 : 1;
+      if (va > vb) return asc ? 1 : -1;
+      return 0;
+    });
+    rows.forEach(function(r) { tbody.appendChild(r); });
+  }
+
+  document.querySelectorAll('table.wiki-table').forEach(function(table) {
+    var thead = table.querySelector('thead tr');
+    if (!thead) return;
+    var state = {};
+    Array.from(thead.cells).forEach(function(th, i) {
+      th.style.cursor = 'pointer';
+      th.title = 'Sortieren';
+      state[i] = true;
+      th.addEventListener('click', function() {
+        Array.from(thead.cells).forEach(function(h) { h.textContent = h.textContent.replace(/ [▲▼]$/,''); });
+        sortTable(table, i, state[i]);
+        th.textContent += state[i] ? ' ▲' : ' ▼';
+        state[i] = !state[i];
+      });
+    });
+  });
+})();
+</script>
 
 <script>
 (function(){

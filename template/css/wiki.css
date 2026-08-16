@@ -465,6 +465,10 @@ a:hover { text-decoration: underline; color: var(--link-hover); }
   margin-top: 40px;
 }
 
+/* SORTIERBARE TABELLEN */
+.wiki-table thead th { cursor: pointer; user-select: none; white-space: nowrap; }
+.wiki-table thead th:hover { background: var(--infobox-header); }
+
 /* YEAR ACCORDION */
 .year-accordion {
   border: 1px solid var(--border-light);
