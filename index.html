@@ -8,7 +8,7 @@
 </head>
 <body>
 <header id="wiki-header">
-  <a class="logo" href="index.html">Jazz<span>fest</span> Wiki</a>
+  <a class="logo" href="index.html">Jazzfest<span>Saalfelden</span> Wiki</a>
   <div id="search-wrap" style="position:relative">
     <input id="search-input" type="text" placeholder="Musiker, Band, Jahr …" autocomplete="off">
     <div id="search-results"></div>
@@ -23,7 +23,7 @@
 </nav>
 <div id="wiki-body">
   <div class="wiki-page clearfix">
-    <h1 class="page-title">Jazzfest Wien Wiki</h1>
+    <h1 class="page-title">Jazzfest Saalfelden Wiki</h1>
 
 <div class="index-stats">
   <div class="stat-card"><span class="number">5936</span><span class="label">Musiker</span></div>
@@ -76,7 +76,7 @@
 
 <div class="wiki-section">
   <h2>Jahreschroniken</h2>
-  <p><a href="years/2011.html">Jazzfest 11</a> · <a href="years/2012.html">Jazzfest 12</a> · <a href="years/2013.html">Jazzfest 13</a> · <a href="years/2014.html">Jazzfest 14</a> · <a href="years/2015.html">Jazzfest 15</a> · <a href="years/2016.html">Jazzfest 16</a> · <a href="years/2017.html">Jazzfest 17</a> · <a href="years/2018.html">Jazzfest 18</a> · <a href="years/2019.html">Jazzfest 19</a> · <a href="years/2020.html">Jazzfest 20</a> · <a href="years/2021.html">Jazzfest 21</a> · <a href="years/2022.html">Jazzfest 22</a> · <a href="years/2023.html">Jazzfest 23</a> · <a href="years/2024.html">Jazzfest 24</a> · <a href="years/2025.html">Jazzfest 25</a></p>
+  <p><a href="years/2011.html">Jazzfest 2011</a> · <a href="years/2012.html">Jazzfest 2012</a> · <a href="years/2013.html">Jazzfest 2013</a> · <a href="years/2014.html">Jazzfest 2014</a> · <a href="years/2015.html">Jazzfest 2015</a> · <a href="years/2016.html">Jazzfest 2016</a> · <a href="years/2017.html">Jazzfest 2017</a> · <a href="years/2018.html">Jazzfest 2018</a> · <a href="years/2019.html">Jazzfest 2019</a> · <a href="years/2020.html">Jazzfest 2020</a> · <a href="years/2021.html">Jazzfest 2021</a> · <a href="years/2022.html">Jazzfest 2022</a> · <a href="years/2023.html">Jazzfest 2023</a> · <a href="years/2024.html">Jazzfest 2024</a> · <a href="years/2025.html">Jazzfest 2025</a></p>
   <p><a href="years/index.html">→ Alle Jahre</a></p>
 </div>
 
@@ -118,21 +118,25 @@ document.addEventListener('click', e => { if (!inp.contains(e.target)) res.style
   var PW = 'mischa';
   var KEY = 'jfwiki_auth';
   if(localStorage.getItem(KEY) === PW) return;
-  // Gate-Overlay erstellen
   var ov = document.createElement('div');
   ov.id = 'gate-overlay';
   ov.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:#f8f9fa;z-index:9999;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;';
   ov.innerHTML = '<div style="text-align:center;border:1px solid #a2a9b1;padding:40px 48px;background:#fff;max-width:360px;width:90%">'
-    + '<div style="font-size:22px;font-weight:bold;margin-bottom:8px">Jazzfest<span style="color:#3366cc">Wiki</span></div>'
-    + '<div style="font-size:13px;color:#54595d;margin-bottom:24px">Jazzfest Wien Chronik · 1975–2025</div>'
+    + '<div style="font-size:22px;font-weight:bold;margin-bottom:8px">Jazzfest<span style="color:#3366cc">Saalfelden</span></div>'
+    + '<div style="font-size:13px;color:#54595d;margin-bottom:24px">Chronik-Wiki · 1975–2025</div>'
     + '<input id="gate-pw" type="password" placeholder="Passwort" style="width:100%;padding:8px 12px;border:1px solid #a2a9b1;font-size:14px;margin-bottom:12px;box-sizing:border-box;outline:none">'
-    + '<button onclick="(function(){var v=document.getElementById('gate-pw').value;if(v===''+PW+''){localStorage.setItem(''+KEY+'',v);location.reload();}else{document.getElementById('gate-err').style.display='block'}})()" style="width:100%;padding:8px;background:#3366cc;color:#fff;border:none;font-size:14px;cursor:pointer">Öffnen</button>'
+    + '<button id="gate-btn" style="width:100%;padding:8px;background:#3366cc;color:#fff;border:none;font-size:14px;cursor:pointer">Öffnen</button>'
     + '<div id="gate-err" style="display:none;color:#cc0000;font-size:12px;margin-top:10px">Falsches Passwort</div>'
     + '</div>';
   document.body.appendChild(ov);
-  // Enter-Taste
+  function tryLogin(){
+    var v = document.getElementById('gate-pw').value;
+    if(v === PW){ localStorage.setItem(KEY, v); location.reload(); }
+    else { document.getElementById('gate-err').style.display = 'block'; }
+  }
+  document.getElementById('gate-btn').addEventListener('click', tryLogin);
   document.getElementById('gate-pw').addEventListener('keydown', function(e){
-    if(e.key==='Enter') document.querySelector('#gate-overlay button').click();
+    if(e.key === 'Enter') tryLogin();
   });
 })();
 </script>

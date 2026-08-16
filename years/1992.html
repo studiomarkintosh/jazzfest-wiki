@@ -8,7 +8,7 @@
 </head>
 <body>
 <header id="wiki-header">
-  <a class="logo" href="../index.html">Jazz<span>fest</span> Wiki</a>
+  <a class="logo" href="../index.html">Jazzfest<span>Saalfelden</span> Wiki</a>
   <div id="search-wrap" style="position:relative">
     <input id="search-input" type="text" placeholder="Musiker, Band, Jahr …" autocomplete="off">
     <div id="search-results"></div>
@@ -505,21 +505,25 @@ document.addEventListener('click', e => { if (!inp.contains(e.target)) res.style
   var PW = 'mischa';
   var KEY = 'jfwiki_auth';
   if(localStorage.getItem(KEY) === PW) return;
-  // Gate-Overlay erstellen
   var ov = document.createElement('div');
   ov.id = 'gate-overlay';
   ov.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:#f8f9fa;z-index:9999;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;';
   ov.innerHTML = '<div style="text-align:center;border:1px solid #a2a9b1;padding:40px 48px;background:#fff;max-width:360px;width:90%">'
-    + '<div style="font-size:22px;font-weight:bold;margin-bottom:8px">Jazzfest<span style="color:#3366cc">Wiki</span></div>'
-    + '<div style="font-size:13px;color:#54595d;margin-bottom:24px">Jazzfest Wien Chronik · 1975–2025</div>'
+    + '<div style="font-size:22px;font-weight:bold;margin-bottom:8px">Jazzfest<span style="color:#3366cc">Saalfelden</span></div>'
+    + '<div style="font-size:13px;color:#54595d;margin-bottom:24px">Chronik-Wiki · 1975–2025</div>'
     + '<input id="gate-pw" type="password" placeholder="Passwort" style="width:100%;padding:8px 12px;border:1px solid #a2a9b1;font-size:14px;margin-bottom:12px;box-sizing:border-box;outline:none">'
-    + '<button onclick="(function(){var v=document.getElementById('gate-pw').value;if(v===''+PW+''){localStorage.setItem(''+KEY+'',v);location.reload();}else{document.getElementById('gate-err').style.display='block'}})()" style="width:100%;padding:8px;background:#3366cc;color:#fff;border:none;font-size:14px;cursor:pointer">Öffnen</button>'
+    + '<button id="gate-btn" style="width:100%;padding:8px;background:#3366cc;color:#fff;border:none;font-size:14px;cursor:pointer">Öffnen</button>'
     + '<div id="gate-err" style="display:none;color:#cc0000;font-size:12px;margin-top:10px">Falsches Passwort</div>'
     + '</div>';
   document.body.appendChild(ov);
-  // Enter-Taste
+  function tryLogin(){
+    var v = document.getElementById('gate-pw').value;
+    if(v === PW){ localStorage.setItem(KEY, v); location.reload(); }
+    else { document.getElementById('gate-err').style.display = 'block'; }
+  }
+  document.getElementById('gate-btn').addEventListener('click', tryLogin);
   document.getElementById('gate-pw').addEventListener('keydown', function(e){
-    if(e.key==='Enter') document.querySelector('#gate-overlay button').click();
+    if(e.key === 'Enter') tryLogin();
   });
 })();
 </script>
