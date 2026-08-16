@@ -4,22 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Tina Richerson — Jazzfest Wiki</title>
-<link rel="stylesheet" href="../../template/css/wiki.css">
+<link rel="stylesheet" href="../template/css/wiki.css">
 </head>
 <body>
 <header id="wiki-header">
-  <a class="logo" href="../../index.html">Jazz<span>fest</span> Wiki</a>
+  <a class="logo" href="../index.html">Jazz<span>fest</span> Wiki</a>
   <div id="search-wrap" style="position:relative">
     <input id="search-input" type="text" placeholder="Musiker, Band, Jahr …" autocomplete="off">
     <div id="search-results"></div>
   </div>
 </header>
 <nav id="wiki-nav">
-  <a href="../../index.html" >Hauptseite</a>
-  <a href="../../musicians/index.html" class="active">Musiker</a>
-  <a href="../../bands/index.html" >Bands</a>
-  <a href="../../years/index.html" >Jahre</a>
-  <a href="../../graph.html" >Netzwerk</a>
+  <a href="../index.html" >Hauptseite</a>
+  <a href="../musicians/index.html" class="active">Musiker</a>
+  <a href="../bands/index.html" >Bands</a>
+  <a href="../years/index.html" >Jahre</a>
+  <a href="../graph.html" >Netzwerk</a>
 </nav>
 <div id="wiki-body">
   <div class="wiki-page clearfix">
@@ -148,6 +148,15 @@
   </div>
 </div></div></div>
 
+<div class='wiki-section'><h2>Videos</h2><div class="yt-embed-wrap">
+  <div class="yt-embed-title">Nicholas Greenwood ► Melancholy [HQ Audio] Cold Cuts 1972 <span class="yt-rel">aus: Live In Portland · 2026</span></div>
+  <div class="yt-responsive">
+    <iframe src="https://www.youtube-nocookie.com/embed/_BlLN9Mta9U" frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen loading="lazy"></iframe>
+  </div>
+</div><div class="yt-more-list"><a class="yt-more-link" href="https://www.youtube.com/watch?v=3_639mFf3rA" target="_blank">▶ A Sea Of Holy Pleasure. Parts I II and III</a><a class="yt-more-link" href="https://www.youtube.com/watch?v=QOpaBAyg0B0" target="_blank">▶ Hope / Ambitions</a><a class="yt-more-link" href="https://www.youtube.com/watch?v=CB9xFLfIHC4" target="_blank">▶ Corruption</a></div></div>
+
   </div>
 </div>
 <footer id="wiki-footer">
@@ -167,7 +176,7 @@ inp.addEventListener('input', function() {
   if (!hits.length) { res.style.display='none'; return; }
   hits.forEach(h => {
     const a = document.createElement('a');
-    a.href = '../../' + h.u;
+    a.href = '../' + h.u;
     a.innerHTML = h.n + '<span class="sr-type">' + h.t + '</span>';
     res.appendChild(a);
   });

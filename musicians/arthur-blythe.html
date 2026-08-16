@@ -4,22 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Arthur Blythe — Jazzfest Wiki</title>
-<link rel="stylesheet" href="../../template/css/wiki.css">
+<link rel="stylesheet" href="../template/css/wiki.css">
 </head>
 <body>
 <header id="wiki-header">
-  <a class="logo" href="../../index.html">Jazz<span>fest</span> Wiki</a>
+  <a class="logo" href="../index.html">Jazz<span>fest</span> Wiki</a>
   <div id="search-wrap" style="position:relative">
     <input id="search-input" type="text" placeholder="Musiker, Band, Jahr …" autocomplete="off">
     <div id="search-results"></div>
   </div>
 </header>
 <nav id="wiki-nav">
-  <a href="../../index.html" >Hauptseite</a>
-  <a href="../../musicians/index.html" class="active">Musiker</a>
-  <a href="../../bands/index.html" >Bands</a>
-  <a href="../../years/index.html" >Jahre</a>
-  <a href="../../graph.html" >Netzwerk</a>
+  <a href="../index.html" >Hauptseite</a>
+  <a href="../musicians/index.html" class="active">Musiker</a>
+  <a href="../bands/index.html" >Bands</a>
+  <a href="../years/index.html" >Jahre</a>
+  <a href="../graph.html" >Netzwerk</a>
 </nav>
 <div id="wiki-body">
   <div class="wiki-page clearfix">
@@ -213,6 +213,15 @@
   </div>
 </div></div></div>
 
+<div class='wiki-section'><h2>Videos</h2><div class="yt-embed-wrap">
+  <div class="yt-embed-title">Baw sie w ciuciubabke - Niemen & Akwarele - Polish funk organ groove 45 - 1969 - Muza <span class="yt-rel">aus: Four Arthur Blythe Albums On Two Discs - Lenox Avenue Breakdown / In The Tradition / Illusions / Blythe Spirit · 2016</span></div>
+  <div class="yt-responsive">
+    <iframe src="https://www.youtube-nocookie.com/embed/tE4D_-sic7s" frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen loading="lazy"></iframe>
+  </div>
+</div><div class="yt-more-list"><a class="yt-more-link" href="https://www.youtube.com/watch?v=SvnBU_HcD5M" target="_blank">▶ Czesław Niemen - Baw się w ciuciubabkę [Official Audio]</a><a class="yt-more-link" href="https://www.youtube.com/watch?v=LzuTMvATFUc" target="_blank">▶ Czesław Niemen - Obok nas [Official Audio]</a><a class="yt-more-link" href="https://www.youtube.com/watch?v=rfFGJkScOz4" target="_blank">▶ Arthur Blythe & David Eyges - Prayer/ My Son Ra/ Calling Mr. Blythe</a></div></div>
+
   </div>
 </div>
 <footer id="wiki-footer">
@@ -232,7 +241,7 @@ inp.addEventListener('input', function() {
   if (!hits.length) { res.style.display='none'; return; }
   hits.forEach(h => {
     const a = document.createElement('a');
-    a.href = '../../' + h.u;
+    a.href = '../' + h.u;
     a.innerHTML = h.n + '<span class="sr-type">' + h.t + '</span>';
     res.appendChild(a);
   });

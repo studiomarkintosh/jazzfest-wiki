@@ -491,6 +491,20 @@ a:hover { text-decoration: underline; color: var(--link-hover); }
 .acc-cnt { font-size: 12px; color: var(--text-muted); }
 .year-accordion .wiki-table { margin: 0; border-top: none; }
 
+/* YOUTUBE EMBED */
+.yt-embed-wrap { margin: 12px 0; }
+.yt-embed-title { font-size: 13px; font-weight: bold; margin-bottom: 6px; }
+.yt-rel { font-weight: normal; color: var(--text-muted); }
+.yt-responsive { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; }
+.yt-responsive iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+.yt-more-list { margin: 8px 0; display: flex; flex-direction: column; gap: 4px; }
+.yt-more-link { font-size: 13px; color: var(--link); text-decoration: none; }
+.yt-more-link:hover { text-decoration: underline; }
+.yt-channels { margin-top: 8px; }
+.yt-channel-link { display: inline-block; padding: 4px 10px; background: #ff0000; color: #fff;
+  border-radius: 2px; font-size: 12px; text-decoration: none; }
+.yt-channel-link:hover { background: #cc0000; }
+
 /* CLEARFIX */
 .clearfix::after { content: ""; display: table; clear: both; }
 

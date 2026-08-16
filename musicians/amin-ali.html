@@ -4,22 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Amin Ali — Jazzfest Wiki</title>
-<link rel="stylesheet" href="../../template/css/wiki.css">
+<link rel="stylesheet" href="../template/css/wiki.css">
 </head>
 <body>
 <header id="wiki-header">
-  <a class="logo" href="../../index.html">Jazz<span>fest</span> Wiki</a>
+  <a class="logo" href="../index.html">Jazz<span>fest</span> Wiki</a>
   <div id="search-wrap" style="position:relative">
     <input id="search-input" type="text" placeholder="Musiker, Band, Jahr …" autocomplete="off">
     <div id="search-results"></div>
   </div>
 </header>
 <nav id="wiki-nav">
-  <a href="../../index.html" >Hauptseite</a>
-  <a href="../../musicians/index.html" class="active">Musiker</a>
-  <a href="../../bands/index.html" >Bands</a>
-  <a href="../../years/index.html" >Jahre</a>
-  <a href="../../graph.html" >Netzwerk</a>
+  <a href="../index.html" >Hauptseite</a>
+  <a href="../musicians/index.html" class="active">Musiker</a>
+  <a href="../bands/index.html" >Bands</a>
+  <a href="../years/index.html" >Jahre</a>
+  <a href="../graph.html" >Netzwerk</a>
 </nav>
 <div id="wiki-body">
   <div class="wiki-page clearfix">
@@ -155,6 +155,15 @@
   </div>
 </div></div></div>
 
+<div class='wiki-section'><h2>Videos</h2><div class="yt-embed-wrap">
+  <div class="yt-embed-title">Marcos ‎_ Around In Circles <span class="yt-rel">aus: Play The Music Of Jimi Hendrix · 1994</span></div>
+  <div class="yt-responsive">
+    <iframe src="https://www.youtube-nocookie.com/embed/aZ_rlEn9FsU" frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen loading="lazy"></iframe>
+  </div>
+</div><div class="yt-more-list"><a class="yt-more-link" href="https://www.youtube.com/watch?v=D-2mk5ptu-0" target="_blank">▶ 137.94 C - 2005 Trance - Marcos - Around In Circles (Part Two)</a><a class="yt-more-link" href="https://www.youtube.com/watch?v=aZ_rlEn9FsU" target="_blank">▶ Marcos ‎_ Around In Circles</a><a class="yt-more-link" href="https://www.youtube.com/watch?v=D-2mk5ptu-0" target="_blank">▶ 137.94 C - 2005 Trance - Marcos - Around In Circles (Part Two)</a></div></div>
+
   </div>
 </div>
 <footer id="wiki-footer">
@@ -174,7 +183,7 @@ inp.addEventListener('input', function() {
   if (!hits.length) { res.style.display='none'; return; }
   hits.forEach(h => {
     const a = document.createElement('a');
-    a.href = '../../' + h.u;
+    a.href = '../' + h.u;
     a.innerHTML = h.n + '<span class="sr-type">' + h.t + '</span>';
     res.appendChild(a);
   });
