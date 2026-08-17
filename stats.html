@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Statistiken — Jazzfest Wiki</title>
+<link rel="stylesheet" href="template/css/wiki.css">
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@7/dist/fuse.min.js"></script>
+</head>
+<body>
+<header id="wiki-header">
+  <a class="logo" href="index.html">Jazzfest<span>Saalfelden</span> Wiki</a>
+  <div id="search-wrap" style="position:relative">
+    <input id="search-input" type="text" placeholder="Musiker, Band, Jahr …" autocomplete="off">
+    <div id="search-results"></div>
+  </div>
+</header>
+<nav id="wiki-nav">
+  <a href="index.html" >Hauptseite</a>
+  <a href="musicians/index.html" >Musiker</a>
+  <a href="bands/index.html" >Bands</a>
+  <a href="years/index.html" >Jahre</a>
+  <a href="graph.html" >Netzwerk</a>
+  <a href="stats.html" class="active">Statistiken</a>
+</nav>
+<div id="wiki-body">
+  <div class="wiki-page clearfix">
+    <h1 class="page-title">Statistiken</h1>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+
+<div class="wiki-section">
+  <h2>Konzerte pro Jahr</h2>
+  <div class="chart-wrap"><canvas id="chartA"></canvas></div>
+</div>
+
+<div class="wiki-section">
+  <h2>Top 10 Instrumente</h2>
+  <div class="chart-wrap"><canvas id="chartB"></canvas></div>
+</div>
+
+<div class="wiki-section">
+  <h2>Top 10 Nationen</h2>
+  <div class="chart-wrap"><canvas id="chartC"></canvas></div>
+</div>
+
+<div class="wiki-section">
+  <h2>Neue Musiker pro Jahrzehnt</h2>
+  <div class="chart-wrap"><canvas id="chartD"></canvas></div>
+</div>
+
+<script>
+(function() {
+  const accent = '#3366cc';
+  const muted  = '#54595d';
+
+  new Chart(document.getElementById('chartA'), {
+    type: 'line',
+    data: {
+      labels: ["1975", "1977", "1978", "1979", "1980", "1981", "1982", "1983", "1984", "1985", "1986", "1987", "1988", "1989", "1990", "1991", "1992", "1993", "1994", "1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025"],
+      datasets: [{ label: 'Konzerte', data: [6, 9, 17, 26, 30, 35, 30, 23, 21, 22, 19, 20, 29, 9, 19, 26, 24, 26, 27, 31, 39, 25, 28, 29, 29, 30, 53, 213, 202, 217, 259, 292, 272, 255, 234, 230, 239, 218, 216, 225, 230, 240, 239, 277, 108, 63, 57, 62, 69, 70], borderColor: accent,
+        backgroundColor: 'rgba(51,102,204,0.08)', tension: 0.3, fill: true, pointRadius: 3 }]
+    },
+    options: { responsive: true, plugins: { legend: { display: false } } }
+  });
+
+  new Chart(document.getElementById('chartB'), {
+    type: 'bar',
+    data: {
+      labels: ["Schlagzeug", "Kontrabass", "Gitarre", "Gesang", "Klavier", "Trompete", "Saxofon", "Gitarre, Gesang", "Posaune", "Perkussion"],
+      datasets: [{ label: 'Musiker', data: [692, 628, 440, 303, 272, 237, 194, 177, 160, 133], backgroundColor: accent }]
+    },
+    options: { indexAxis: 'y', responsive: true, plugins: { legend: { display: false } } }
+  });
+
+  new Chart(document.getElementById('chartC'), {
+    type: 'bar',
+    data: {
+      labels: ["USA", "\u00d6sterreich", "Deutschland", "Schweiz", "Frankreich", "Gro\u00dfbritannien", "Schweden", "Italien", "Norwegen", "Niederlande"],
+      datasets: [{ label: 'Musiker', data: [118, 58, 12, 7, 7, 6, 4, 3, 3, 3], backgroundColor: '#669933' }]
+    },
+    options: { indexAxis: 'y', responsive: true, plugins: { legend: { display: false } } }
+  });
+
+  new Chart(document.getElementById('chartD'), {
+    type: 'bar',
+    data: {
+      labels: ["1970er", "1980er", "1990er", "2000er", "2010er", "2020er"],
+      datasets: [{ label: 'Neue Musiker', data: [176, 650, 712, 1519, 2069, 810], backgroundColor: '#cc6600' }]
+    },
+    options: { responsive: true, plugins: { legend: { display: false } } }
+  });
+})();
+</script>
+  </div>
+</div>
+<footer id="wiki-footer">
+  Jazzfest Wiki · 5936 Musiker · 13034 Konzerte · 1975–2025
+  · Daten: Jazzfest Wien Chronik + Discogs API
+</footer>
+<script>
+// Globale Suche
+const SEARCH_DATA = window.JAZZFEST_SEARCH || [];
+const inp = document.getElementById('search-input');
+const res = document.getElementById('search-results');
+const fuse = new Fuse(SEARCH_DATA, { keys: ['n'], threshold: 0.3 });
+inp.addEventListener('input', function() {
+  const q = this.value.trim();
+  res.innerHTML = '';
+  if (q.length < 2) { res.style.display='none'; return; }
+  const hits = fuse.search(q).slice(0, 12).map(r => r.item);
+  if (!hits.length) { res.style.display='none'; return; }
+  hits.forEach(h => {
+    const a = document.createElement('a');
+    a.href = '' + h.u;
+    a.innerHTML = h.n + '<span class="sr-type">' + h.t + '</span>';
+    res.appendChild(a);
+  });
+  res.style.display = 'block';
+});
+document.addEventListener('click', e => { if (!inp.contains(e.target)) res.style.display='none'; });
+</script>
+<script>
+// Tabellen-Sortierfunktion für alle .wiki-table
+(function(){
+  function cellVal(td) {
+    var t = td.textContent.trim();
+    // Datum: "21. Aug 2019" → sortierbar
+    var dm = t.match(/(\d{1,2})\.\s+\w+\s+(\d{4})/);
+    if (dm) {
+      var months = {Jan:1,Feb:2,Mär:3,Apr:4,Mai:5,Jun:6,Jul:7,Aug:8,Sep:9,Okt:10,Nov:11,Dez:12};
+      var parts = t.split(/\s+/);
+      return dm[2] + '-' + String(months[parts[1]]||0).padStart(2,'0') + '-' + dm[1].padStart(2,'0');
+    }
+    // Zahl
+    var n = parseFloat(t.replace(/[^\d,.-]/g,'').replace(',','.'));
+    if (!isNaN(n) && t.match(/^\d/)) return n;
+    return t.toLowerCase();
+  }
+
+  function sortTable(table, col, asc) {
+    var tbody = table.querySelector('tbody');
+    if (!tbody) return;
+    var rows = Array.from(tbody.querySelectorAll('tr'));
+    rows.sort(function(a, b) {
+      var va = cellVal(a.cells[col] || a.cells[0]);
+      var vb = cellVal(b.cells[col] || b.cells[0]);
+      if (va < vb) return asc ? -1 : 1;
+      if (va > vb) return asc ? 1 : -1;
+      return 0;
+    });
+    rows.forEach(function(r) { tbody.appendChild(r); });
+  }
+
+  document.querySelectorAll('table.wiki-table').forEach(function(table) {
+    var thead = table.querySelector('thead tr');
+    if (!thead) return;
+    var state = {};
+    Array.from(thead.cells).forEach(function(th, i) {
+      th.style.cursor = 'pointer';
+      th.title = 'Sortieren';
+      state[i] = true;
+      th.addEventListener('click', function() {
+        Array.from(thead.cells).forEach(function(h) { h.textContent = h.textContent.replace(/ [▲▼]$/,''); });
+        sortTable(table, i, state[i]);
+        th.textContent += state[i] ? ' ▲' : ' ▼';
+        state[i] = !state[i];
+      });
+    });
+  });
+})();
+</script>
+
+<script>
+(function(){
+  var PW = 'mischa';
+  var KEY = 'jfwiki_auth';
+  if(localStorage.getItem(KEY) === PW) return;
+  var ov = document.createElement('div');
+  ov.id = 'gate-overlay';
+  ov.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:#f8f9fa;z-index:9999;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;';
+  ov.innerHTML = '<div style="text-align:center;border:1px solid #a2a9b1;padding:40px 48px;background:#fff;max-width:360px;width:90%">'
+    + '<div style="font-size:22px;font-weight:bold;margin-bottom:8px">Jazzfest<span style="color:#3366cc">Saalfelden</span></div>'
+    + '<div style="font-size:13px;color:#54595d;margin-bottom:24px">Chronik-Wiki · 1975–2025</div>'
+    + '<input id="gate-pw" type="password" placeholder="Passwort" style="width:100%;padding:8px 12px;border:1px solid #a2a9b1;font-size:14px;margin-bottom:12px;box-sizing:border-box;outline:none">'
+    + '<button id="gate-btn" style="width:100%;padding:8px;background:#3366cc;color:#fff;border:none;font-size:14px;cursor:pointer">Öffnen</button>'
+    + '<div id="gate-err" style="display:none;color:#cc0000;font-size:12px;margin-top:10px">Falsches Passwort</div>'
+    + '</div>';
+  document.body.appendChild(ov);
+  function tryLogin(){
+    var v = document.getElementById('gate-pw').value;
+    if(v === PW){ localStorage.setItem(KEY, v); location.reload(); }
+    else { document.getElementById('gate-err').style.display = 'block'; }
+  }
+  document.getElementById('gate-btn').addEventListener('click', tryLogin);
+  document.getElementById('gate-pw').addEventListener('keydown', function(e){
+    if(e.key === 'Enter') tryLogin();
+  });
+})();
+</script>
+</body>
+</html>

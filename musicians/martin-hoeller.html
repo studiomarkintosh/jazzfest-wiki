@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Martin Höller — Jazzfest Wiki</title>
 <link rel="stylesheet" href="../template/css/wiki.css">
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@7/dist/fuse.min.js"></script>
 </head>
 <body>
 <header id="wiki-header">
@@ -20,6 +21,7 @@
   <a href="../bands/index.html" >Bands</a>
   <a href="../years/index.html" >Jahre</a>
   <a href="../graph.html" >Netzwerk</a>
+  <a href="../stats.html" >Statistiken</a>
 </nav>
 <div id="wiki-body">
   <div class="wiki-page clearfix">
@@ -35,7 +37,9 @@
     <tr><td>Bands</td><td>1</td></tr>
     <tr><td>Mitschnitte</td><td>0</td></tr>
     
+    
   </table>
+  
 </div>
 
 <p><span class="tag instrument">kabarett</span><a class="tag year" href="../years/2004.html">2004</a></p>
@@ -76,11 +80,12 @@
 const SEARCH_DATA = window.JAZZFEST_SEARCH || [];
 const inp = document.getElementById('search-input');
 const res = document.getElementById('search-results');
+const fuse = new Fuse(SEARCH_DATA, { keys: ['n'], threshold: 0.3 });
 inp.addEventListener('input', function() {
-  const q = this.value.toLowerCase().trim();
+  const q = this.value.trim();
   res.innerHTML = '';
   if (q.length < 2) { res.style.display='none'; return; }
-  const hits = SEARCH_DATA.filter(x => x.n.toLowerCase().includes(q)).slice(0, 12);
+  const hits = fuse.search(q).slice(0, 12).map(r => r.item);
   if (!hits.length) { res.style.display='none'; return; }
   hits.forEach(h => {
     const a = document.createElement('a');

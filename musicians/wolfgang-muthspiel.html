@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Wolfgang Muthspiel — Jazzfest Wiki</title>
 <link rel="stylesheet" href="../template/css/wiki.css">
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@7/dist/fuse.min.js"></script>
 </head>
 <body>
 <header id="wiki-header">
@@ -20,6 +21,7 @@
   <a href="../bands/index.html" >Bands</a>
   <a href="../years/index.html" >Jahre</a>
   <a href="../graph.html" >Netzwerk</a>
+  <a href="../stats.html" >Statistiken</a>
 </nav>
 <div id="wiki-body">
   <div class="wiki-page clearfix">
@@ -35,7 +37,9 @@
     <tr><td>Bands</td><td>13</td></tr>
     <tr><td>Mitschnitte</td><td>0</td></tr>
     <tr><td>Discogs</td><td><a href="https://www.discogs.com/artist/297677-Wolfgang-Muthspiel" target="_blank">Discogs-Profil</a></td></tr>
+    <tr><td>Herkunft</td><td>🇦🇹 Österreich (1965)</td></tr>
   </table>
+  <div style='padding:6px 8px'><span class="tag genre">Pop</span><span class="tag genre">Chanson</span><span class="tag genre">Electronic</span><span class="tag genre">Trance</span></div>
 </div>
 <div class="social-links"><a href="https://myspace.com/wolfgangmuthspiel" target="_blank" class="social-link social-myspace">🔗 Myspace</a><a href="https://en.wikipedia.org/wiki/Wolfgang_Muthspiel" target="_blank" class="social-link social-website">🌐 Website</a></div>
 <p><span class="tag instrument">Gitarre</span><span class="tag instrument">Gitarre, Gesang</span><span class="tag instrument">Gitarre, violin, loops</span><a class="tag year" href="../years/2006.html">2006</a><a class="tag year" href="../years/2007.html">2007</a><a class="tag year" href="../years/2008.html">2008</a></p>
@@ -259,11 +263,12 @@
 const SEARCH_DATA = window.JAZZFEST_SEARCH || [];
 const inp = document.getElementById('search-input');
 const res = document.getElementById('search-results');
+const fuse = new Fuse(SEARCH_DATA, { keys: ['n'], threshold: 0.3 });
 inp.addEventListener('input', function() {
-  const q = this.value.toLowerCase().trim();
+  const q = this.value.trim();
   res.innerHTML = '';
   if (q.length < 2) { res.style.display='none'; return; }
-  const hits = SEARCH_DATA.filter(x => x.n.toLowerCase().includes(q)).slice(0, 12);
+  const hits = fuse.search(q).slice(0, 12).map(r => r.item);
   if (!hits.length) { res.style.display='none'; return; }
   hits.forEach(h => {
     const a = document.createElement('a');

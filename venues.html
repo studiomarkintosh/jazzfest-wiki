@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spielorte — Jazzfest Wiki</title>
+<link rel="stylesheet" href="template/css/wiki.css">
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@7/dist/fuse.min.js"></script>
+</head>
+<body>
+<header id="wiki-header">
+  <a class="logo" href="index.html">Jazzfest<span>Saalfelden</span> Wiki</a>
+  <div id="search-wrap" style="position:relative">
+    <input id="search-input" type="text" placeholder="Musiker, Band, Jahr …" autocomplete="off">
+    <div id="search-results"></div>
+  </div>
+</header>
+<nav id="wiki-nav">
+  <a href="index.html" >Hauptseite</a>
+  <a href="musicians/index.html" >Musiker</a>
+  <a href="bands/index.html" >Bands</a>
+  <a href="years/index.html" >Jahre</a>
+  <a href="graph.html" >Netzwerk</a>
+  <a href="stats.html" >Statistiken</a>
+  <a href="venues.html" class="active">Spielorte</a>
+</nav>
+<div id="wiki-body">
+  <div class="wiki-page clearfix">
+    <h1 class="page-title">Spielorte</h1>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9/dist/leaflet.js"></script>
+
+<div class="wiki-section">
+  <h2>Karte</h2>
+  <div id="venues-map"></div>
+</div>
+
+<div class="wiki-section">
+  <h2>Alle Spielorte</h2>
+  <table class="wiki-table">
+    <thead><tr><th>Ort</th><th>Konzerte</th></tr></thead>
+    <tbody><tr><td>Nexus</td><td>1843</td></tr><tr><td>Nexus Kino</td><td>1351</td></tr><tr><td>Nexus Café</td><td>788</td></tr><tr><td>Club</td><td>665</td></tr><tr><td>Nexus spezial</td><td>549</td></tr><tr><td>Festival 2022</td><td>283</td></tr><tr><td>Festival 2024</td><td>276</td></tr><tr><td>Nexus Theater</td><td>272</td></tr><tr><td>Festival 2025</td><td>253</td></tr><tr><td>Festival 2021</td><td>245</td></tr><tr><td>Festival 2023</td><td>223</td></tr><tr><td>Nexus Kabarett</td><td>159</td></tr><tr><td>Festival 2020 Weekender</td><td>127</td></tr><tr><td>Nexus Vaust</td><td>123</td></tr><tr><td>Nexus Ausstellung</td><td>118</td></tr><tr><td>Festival 96</td><td>115</td></tr><tr><td>Festival 93</td><td>114</td></tr><tr><td>Festival 91</td><td>113</td></tr><tr><td>Festival 94</td><td>110</td></tr><tr><td>Festival 10</td><td>107</td></tr><tr><td>Festival 97</td><td>103</td></tr><tr><td>Festival 85</td><td>100</td></tr><tr><td>Festival 09</td><td>100</td></tr><tr><td>Nexus my Uni</td><td>98</td></tr><tr><td>Festival 88</td><td>96</td></tr><tr><td>Festival 01</td><td>95</td></tr><tr><td>Festival 13 MS</td><td>94</td></tr><tr><td>Festival 15 MS</td><td>94</td></tr><tr><td>Festival 95</td><td>93</td></tr><tr><td>Festival 98</td><td>93</td></tr><tr><td>Festival 81</td><td>92</td></tr><tr><td>Festival 99</td><td>92</td></tr><tr><td>Festival 08</td><td>91</td></tr><tr><td>Festival 87</td><td>90</td></tr><tr><td>Festival 00</td><td>88</td></tr><tr><td>Festival 03</td><td>88</td></tr><tr><td>Festival 17 MS</td><td>87</td></tr><tr><td>Festival 19 MS</td><td>87</td></tr><tr><td>Festival 07</td><td>86</td></tr><tr><td>Festival 82</td><td>85</td></tr><tr><td>Festival 04</td><td>84</td></tr><tr><td>Festival 90</td><td>83</td></tr><tr><td>Festival 80</td><td>78</td></tr><tr><td>Festival 92</td><td>78</td></tr><tr><td>Festival 14 MS</td><td>78</td></tr><tr><td>Festival 84</td><td>76</td></tr><tr><td>Nexus VAust</td><td>76</td></tr><tr><td>Festival 18 MS</td><td>76</td></tr><tr><td>Festival 02</td><td>75</td></tr><tr><td>Festival 16 MS</td><td>72</td></tr><tr><td>Festival 86</td><td>70</td></tr><tr><td>Festival 06</td><td>69</td></tr><tr><td>Festival 12 MS</td><td>69</td></tr><tr><td>Nexus lesung</td><td>67</td></tr><tr><td>Festival 11</td><td>66</td></tr><tr><td>Festival 19 CS</td><td>66</td></tr><tr><td>Festival 07 RH</td><td>65</td></tr><tr><td>Festival 78</td><td>58</td></tr><tr><td>Traum&Leidenschaft 96</td><td>53</td></tr><tr><td>Festival 08 RH</td><td>50</td></tr><tr><td>Nexus Singer Songwriter</td><td>49</td></tr><tr><td>Festival 83</td><td>46</td></tr><tr><td>Festival 14 CS</td><td>45</td></tr><tr><td>Festival 13 CS</td><td>44</td></tr><tr><td>Nexus kino</td><td>41</td></tr><tr><td>Festival 09 RH</td><td>40</td></tr><tr><td>Winterfestival 20</td><td>39</td></tr><tr><td>Festival 16 CS</td><td>38</td></tr><tr><td>Winterfestival 2024</td><td>38</td></tr><tr><td>Festival 79</td><td>37</td></tr><tr><td>Festival 10 RH</td><td>36</td></tr><tr><td>Festival 11 RH</td><td>36</td></tr><tr><td>Festival 17 CS</td><td>35</td></tr><tr><td>Winterfestival 2025</td><td>35</td></tr><tr><td>Festival 18 CS</td><td>34</td></tr><tr><td>Festival 02 SC</td><td>31</td></tr><tr><td>Festival 12 CS</td><td>31</td></tr><tr><td>Festival 15 CS</td><td>31</td></tr><tr><td>Festival 18 SC</td><td>31</td></tr><tr><td>Club-Ranch</td><td>30</td></tr><tr><td>Festival 06 RH</td><td>30</td></tr><tr><td>Winterfestival 23</td><td>30</td></tr><tr><td>Festival 18 Nexus+</td><td>28</td></tr><tr><td>Festival 19 Park</td><td>28</td></tr><tr><td>Festival 99 SC</td><td>27</td></tr><tr><td>Festival 16 SC</td><td>27</td></tr><tr><td>Festival 99 RH</td><td>25</td></tr><tr><td>Festival 01 SC</td><td>25</td></tr><tr><td>Festival 19 Nexus+</td><td>24</td></tr><tr><td>Winterfestival 19</td><td>23</td></tr><tr><td>Festival 97 SC</td><td>22</td></tr><tr><td>Festival 06 SC</td><td>22</td></tr><tr><td>Festival 07 SC</td><td>22</td></tr><tr><td>Festival 19 SC</td><td>22</td></tr><tr><td>Ton um Ton I 92</td><td>21</td></tr><tr><td>Festsaal</td><td>21</td></tr><tr><td>Festival 15 SC</td><td>21</td></tr><tr><td>Festival 17 Nexus</td><td>21</td></tr><tr><td>Ton um Ton III 94</td><td>20</td></tr><tr><td>Festival 11 SC</td><td>20</td></tr><tr><td>Winterfestival 18</td><td>20</td></tr><tr><td>Festival 12 SC</td><td>19</td></tr><tr><td>Nexus vaust</td><td>19</td></tr><tr><td>Festival 00 SC</td><td>18</td></tr><tr><td>Festival 03 SC</td><td>18</td></tr><tr><td>Festival 10 SC</td><td>18</td></tr><tr><td>Festival 13 SC</td><td>18</td></tr><tr><td>Festival 19 CT Gericht</td><td>18</td></tr><tr><td>Festival 17 SC</td><td>17</td></tr><tr><td>HTL-Fest</td><td>16</td></tr><tr><td>Festival 14 SC</td><td>16</td></tr><tr><td>Festival 00 RH</td><td>15</td></tr><tr><td>Festival 08 SC</td><td>15</td></tr><tr><td>Winterfestival 16</td><td>15</td></tr><tr><td>Winterfestival 17</td><td>15</td></tr><tr><td>Nexus Völlerei</td><td>15</td></tr><tr><td>Festival 98 SC</td><td>14</td></tr><tr><td>Festival 09 SC</td><td>14</td></tr><tr><td>Ton um Ton II 93</td><td>13</td></tr><tr><td>Festival 96 Vorzelt</td><td>12</td></tr><tr><td>Festival 03 Nexus</td><td>12</td></tr><tr><td>Ton um Ton IV 95</td><td>11</td></tr><tr><td>Festival 96 SC</td><td>11</td></tr><tr><td>Festival 19 Late Night Show</td><td>10</td></tr><tr><td>CLub</td><td>9</td></tr><tr><td>Festival 04 SC</td><td>9</td></tr><tr><td>Vaust</td><td>9</td></tr><tr><td>Festival 19 Ranch</td><td>9</td></tr><tr><td>Festival 95 SC</td><td>7</td></tr><tr><td>Festival 13 Kinder</td><td>7</td></tr><tr><td>Musiktage 89</td><td>6</td></tr><tr><td>Festival 07 Alte Schmiede</td><td>6</td></tr><tr><td>Festival 09 Kühbühel</td><td>6</td></tr><tr><td>Festival 10 Alte Schmiede</td><td>6</td></tr><tr><td>Festival 13 Kühbühel</td><td>6</td></tr><tr><td>Festival 15 Kinderkonzert</td><td>6</td></tr><tr><td>Festival 16 Huggenberg</td><td>6</td></tr><tr><td>Festival 16 Vorderkühbühel</td><td>6</td></tr><tr><td>Festival 19 CT Fuchs</td><td>6</td></tr><tr><td>Festival 19 Stöcklalm</td><td>6</td></tr><tr><td>Club-Echo</td><td>5</td></tr><tr><td>Festival 07 Huggenberg</td><td>5</td></tr><tr><td>Festival 08 Steinalm</td><td>5</td></tr><tr><td>Festival 11 Alte Schmiede</td><td>5</td></tr><tr><td>Festival 14 Kühbühel</td><td>5</td></tr><tr><td>Festival 15 Huggenberg</td><td>5</td></tr><tr><td>Festival 17 Huggenberg</td><td>5</td></tr><tr><td>Festival 19 Wanderung</td><td>5</td></tr><tr><td>Festival 19 Vorderkühbühelhof</td><td>5</td></tr><tr><td>Club-Simmerl</td><td>4</td></tr><tr><td>Festival 08 Huggenberg</td><td>4</td></tr><tr><td>Festival 08 Alte Schmiede</td><td>4</td></tr><tr><td>Festival 08 Schatzbichl</td><td>4</td></tr><tr><td>Festival 09 Huggenberg</td><td>4</td></tr><tr><td>Festival 09 Schatzbichl</td><td>4</td></tr><tr><td>Festival 10 Huggenberg</td><td>4</td></tr><tr><td>Nexus Kunsthalle</td><td>4</td></tr><tr><td>Festival 12 AK Huggenberg</td><td>4</td></tr><tr><td>Festival 12 AK Steinalm</td><td>4</td></tr><tr><td>Festival 12 AK Vorderkühbühelhof</td><td>4</td></tr><tr><td>Festival 14 Huggenberg</td><td>4</td></tr><tr><td>Festival 14 Stöcklalm</td><td>4</td></tr><tr><td>Festival 15 Kühbühel</td><td>4</td></tr><tr><td>Festival 17 Hubertus</td><td>4</td></tr><tr><td>Festival 17 Kinderkonzert</td><td>4</td></tr><tr><td>Festival 17 Kühbühel</td><td>4</td></tr><tr><td>Festival 17 Stöckl Alm</td><td>4</td></tr><tr><td>Festival 18 Huggenberg</td><td>4</td></tr><tr><td>Festival 18 Schloss Ritzen</td><td>4</td></tr><tr><td>Festival 18 Voderkühbühel</td><td>4</td></tr><tr><td>Festival 19 CT Völlerei</td><td>4</td></tr><tr><td>Festival 19 Forsthofalm</td><td>4</td></tr><tr><td>kino</td><td>4</td></tr><tr><td>Ausstellung 1+1+1+</td><td>3</td></tr><tr><td>Festival 01 RH</td><td>3</td></tr><tr><td>nexus</td><td>3</td></tr><tr><td>Festival 06 Huggenberg</td><td>3</td></tr><tr><td>Festival 06 Steinalm</td><td>3</td></tr><tr><td>Festival 06 Alte Schmiede</td><td>3</td></tr><tr><td>Festival 06 Schatzbichl</td><td>3</td></tr><tr><td>Festival 07 Schatzbichl</td><td>3</td></tr><tr><td>Festival 09 Steinalm</td><td>3</td></tr><tr><td>Festival 09 Alte Schmiede</td><td>3</td></tr><tr><td>Festival 10 Steinalm</td><td>3</td></tr><tr><td>Festival 10 Vorderkühb.</td><td>3</td></tr><tr><td>Festival 11 Huggenberg</td><td>3</td></tr><tr><td>Festival 11 Kühbühel</td><td>3</td></tr><tr><td>Festival 11 Steinalm</td><td>3</td></tr><tr><td>Festival 12 AK Alte Schmiede</td><td>3</td></tr><tr><td>Festival 13 Huggenberg</td><td>3</td></tr><tr><td>Festival 13 Stöcklalm</td><td>3</td></tr><tr><td>Festival 13 Steinalm</td><td>3</td></tr><tr><td>Tschulnigg</td><td>3</td></tr><tr><td>Festival 14 Steinalm</td><td>3</td></tr><tr><td>Festival 15 Stöckl Alm</td><td>3</td></tr><tr><td>Festival 16 Stöckl Alm</td><td>3</td></tr><tr><td>Festival 19 CT Ritzen</td><td>3</td></tr><tr><td>Musiktage 91</td><td>2</td></tr><tr><td>Nexs Kino</td><td>2</td></tr><tr><td>Festival 07 Steinalm</td><td>2</td></tr><tr><td>Festival 16 Kinderkonzert</td><td>2</td></tr><tr><td>Festival 18 Wirthmiller</td><td>2</td></tr><tr><td>Festival 18 Kinderkonzert</td><td>2</td></tr><tr><td>Festival 18 Stöckl Alm</td><td>2</td></tr><tr><td>Festival 19 Cafe Nexus</td><td>2</td></tr><tr><td>Festival 19 CT Wirthmiller</td><td>2</td></tr><tr><td>Festival 19 Kinderkonzert</td><td>2</td></tr></tbody>
+  </table>
+</div>
+
+<script>
+(function() {
+  var map = L.map('venues-map').setView([47.4266, 12.8496], 15);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+  }).addTo(map);
+  var markers = [{"name": "Nexus", "lat": 47.4266, "lng": 12.8496, "count": 1843}, {"name": "Nexus Kino", "lat": 47.4266, "lng": 12.8496, "count": 1351}, {"name": "Nexus Café", "lat": 47.4266, "lng": 12.8496, "count": 788}, {"name": "Nexus spezial", "lat": 47.4266, "lng": 12.8496, "count": 549}, {"name": "Nexus Theater", "lat": 47.4266, "lng": 12.8496, "count": 272}, {"name": "Nexus Kabarett", "lat": 47.4266, "lng": 12.8496, "count": 159}, {"name": "Nexus Vaust", "lat": 47.4266, "lng": 12.8496, "count": 123}, {"name": "Nexus Ausstellung", "lat": 47.4266, "lng": 12.8496, "count": 118}, {"name": "Nexus my Uni", "lat": 47.4266, "lng": 12.8496, "count": 98}, {"name": "Nexus VAust", "lat": 47.4266, "lng": 12.8496, "count": 76}, {"name": "Nexus lesung", "lat": 47.4266, "lng": 12.8496, "count": 67}, {"name": "Traum&Leidenschaft 96", "lat": 47.4275, "lng": 12.8485, "count": 53}, {"name": "Nexus Singer Songwriter", "lat": 47.4266, "lng": 12.8496, "count": 49}, {"name": "Nexus kino", "lat": 47.4266, "lng": 12.8496, "count": 41}, {"name": "Nexus vaust", "lat": 47.4266, "lng": 12.8496, "count": 19}, {"name": "Nexus Völlerei", "lat": 47.4266, "lng": 12.8496, "count": 15}, {"name": "Nexus Kunsthalle", "lat": 47.4266, "lng": 12.8496, "count": 4}, {"name": "nexus", "lat": 47.4266, "lng": 12.8496, "count": 3}, {"name": "Tschulnigg", "lat": 47.4275, "lng": 12.8485, "count": 3}];
+  markers.forEach(function(m) {
+    L.marker([m.lat, m.lng]).addTo(map)
+      .bindPopup('<strong>' + m.name + '</strong><br>' + m.count + ' Konzerte');
+  });
+})();
+</script>
+  </div>
+</div>
+<footer id="wiki-footer">
+  Jazzfest Wiki · 5936 Musiker · 13034 Konzerte · 1975–2025
+  · Daten: Jazzfest Wien Chronik + Discogs API
+</footer>
+<script>
+// Globale Suche
+const SEARCH_DATA = window.JAZZFEST_SEARCH || [];
+const inp = document.getElementById('search-input');
+const res = document.getElementById('search-results');
+const fuse = new Fuse(SEARCH_DATA, { keys: ['n'], threshold: 0.3 });
+inp.addEventListener('input', function() {
+  const q = this.value.trim();
+  res.innerHTML = '';
+  if (q.length < 2) { res.style.display='none'; return; }
+  const hits = fuse.search(q).slice(0, 12).map(r => r.item);
+  if (!hits.length) { res.style.display='none'; return; }
+  hits.forEach(h => {
+    const a = document.createElement('a');
+    a.href = '' + h.u;
+    a.innerHTML = h.n + '<span class="sr-type">' + h.t + '</span>';
+    res.appendChild(a);
+  });
+  res.style.display = 'block';
+});
+document.addEventListener('click', e => { if (!inp.contains(e.target)) res.style.display='none'; });
+</script>
+<script>
+// Tabellen-Sortierfunktion für alle .wiki-table
+(function(){
+  function cellVal(td) {
+    var t = td.textContent.trim();
+    // Datum: "21. Aug 2019" → sortierbar
+    var dm = t.match(/(\d{1,2})\.\s+\w+\s+(\d{4})/);
+    if (dm) {
+      var months = {Jan:1,Feb:2,Mär:3,Apr:4,Mai:5,Jun:6,Jul:7,Aug:8,Sep:9,Okt:10,Nov:11,Dez:12};
+      var parts = t.split(/\s+/);
+      return dm[2] + '-' + String(months[parts[1]]||0).padStart(2,'0') + '-' + dm[1].padStart(2,'0');
+    }
+    // Zahl
+    var n = parseFloat(t.replace(/[^\d,.-]/g,'').replace(',','.'));
+    if (!isNaN(n) && t.match(/^\d/)) return n;
+    return t.toLowerCase();
+  }
+
+  function sortTable(table, col, asc) {
+    var tbody = table.querySelector('tbody');
+    if (!tbody) return;
+    var rows = Array.from(tbody.querySelectorAll('tr'));
+    rows.sort(function(a, b) {
+      var va = cellVal(a.cells[col] || a.cells[0]);
+      var vb = cellVal(b.cells[col] || b.cells[0]);
+      if (va < vb) return asc ? -1 : 1;
+      if (va > vb) return asc ? 1 : -1;
+      return 0;
+    });
+    rows.forEach(function(r) { tbody.appendChild(r); });
+  }
+
+  document.querySelectorAll('table.wiki-table').forEach(function(table) {
+    var thead = table.querySelector('thead tr');
+    if (!thead) return;
+    var state = {};
+    Array.from(thead.cells).forEach(function(th, i) {
+      th.style.cursor = 'pointer';
+      th.title = 'Sortieren';
+      state[i] = true;
+      th.addEventListener('click', function() {
+        Array.from(thead.cells).forEach(function(h) { h.textContent = h.textContent.replace(/ [▲▼]$/,''); });
+        sortTable(table, i, state[i]);
+        th.textContent += state[i] ? ' ▲' : ' ▼';
+        state[i] = !state[i];
+      });
+    });
+  });
+})();
+</script>
+
+<script>
+(function(){
+  var PW = 'mischa';
+  var KEY = 'jfwiki_auth';
+  if(localStorage.getItem(KEY) === PW) return;
+  var ov = document.createElement('div');
+  ov.id = 'gate-overlay';
+  ov.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:#f8f9fa;z-index:9999;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;';
+  ov.innerHTML = '<div style="text-align:center;border:1px solid #a2a9b1;padding:40px 48px;background:#fff;max-width:360px;width:90%">'
+    + '<div style="font-size:22px;font-weight:bold;margin-bottom:8px">Jazzfest<span style="color:#3366cc">Saalfelden</span></div>'
+    + '<div style="font-size:13px;color:#54595d;margin-bottom:24px">Chronik-Wiki · 1975–2025</div>'
+    + '<input id="gate-pw" type="password" placeholder="Passwort" style="width:100%;padding:8px 12px;border:1px solid #a2a9b1;font-size:14px;margin-bottom:12px;box-sizing:border-box;outline:none">'
+    + '<button id="gate-btn" style="width:100%;padding:8px;background:#3366cc;color:#fff;border:none;font-size:14px;cursor:pointer">Öffnen</button>'
+    + '<div id="gate-err" style="display:none;color:#cc0000;font-size:12px;margin-top:10px">Falsches Passwort</div>'
+    + '</div>';
+  document.body.appendChild(ov);
+  function tryLogin(){
+    var v = document.getElementById('gate-pw').value;
+    if(v === PW){ localStorage.setItem(KEY, v); location.reload(); }
+    else { document.getElementById('gate-err').style.display = 'block'; }
+  }
+  document.getElementById('gate-btn').addEventListener('click', tryLogin);
+  document.getElementById('gate-pw').addEventListener('keydown', function(e){
+    if(e.key === 'Enter') tryLogin();
+  });
+})();
+</script>
+</body>
+</html>

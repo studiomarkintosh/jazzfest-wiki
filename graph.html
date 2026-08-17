@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Netzwerk — Jazzfest Wiki</title>
 <link rel="stylesheet" href="template/css/wiki.css">
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@7/dist/fuse.min.js"></script>
 </head>
 <body>
 <header id="wiki-header">
@@ -20,12 +21,17 @@
   <a href="bands/index.html" >Bands</a>
   <a href="years/index.html" >Jahre</a>
   <a href="graph.html" class="active">Netzwerk</a>
+  <a href="stats.html" >Statistiken</a>
 </nav>
 <div id="wiki-body">
   <div class="wiki-page clearfix">
     <h1 class="page-title">Musiker-Netzwerk</h1>
 <p>Interaktiver Force-Graph der 500 meistaufgetretenen Musiker. Kanten = gemeinsame Konzerte (min. 2×).
 Knotengröße = Anzahl Auftritte. Klick auf Knoten öffnet Musiker-Seite.</p>
+<select id="year-filter">
+  <option value="">Alle Jahre</option>
+  <option>1975</option><option>1976</option><option>1977</option><option>1978</option><option>1979</option><option>1980</option><option>1981</option><option>1982</option><option>1983</option><option>1984</option><option>1985</option><option>1986</option><option>1987</option><option>1988</option><option>1989</option><option>1990</option><option>1991</option><option>1992</option><option>1993</option><option>1994</option><option>1995</option><option>1996</option><option>1997</option><option>1998</option><option>1999</option><option>2000</option><option>2001</option><option>2002</option><option>2003</option><option>2004</option><option>2005</option><option>2006</option><option>2007</option><option>2008</option><option>2009</option><option>2010</option><option>2011</option><option>2012</option><option>2013</option><option>2014</option><option>2015</option><option>2016</option><option>2017</option><option>2018</option><option>2019</option><option>2020</option><option>2021</option><option>2022</option><option>2023</option><option>2024</option><option>2025</option>
+</select>
 <div id="graph-container"></div>
 <div id="graph-tooltip"></div>
 <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
@@ -78,6 +84,23 @@ sim.on('tick', () => {
       .attr('x2', d => d.target.x).attr('y2', d => d.target.y);
   node.attr('cx', d => d.x).attr('cy', d => d.y);
 });
+
+document.getElementById('year-filter').addEventListener('change', function() {
+  const yr = this.value;
+  if (!yr) {
+    node.style('display', null);
+    link.style('display', null);
+    sim.nodes(GRAPH.nodes).alpha(0.3).restart();
+    return;
+  }
+  const visibleIds = new Set(GRAPH.nodes.filter(d => d.years && d.years.includes(+yr)).map(d => d.id));
+  node.style('display', d => visibleIds.has(d.id) ? null : 'none');
+  link.style('display', d => {
+    const sid = typeof d.source === 'object' ? d.source.id : d.source;
+    const tid = typeof d.target === 'object' ? d.target.id : d.target;
+    return visibleIds.has(sid) && visibleIds.has(tid) ? null : 'none';
+  });
+});
 </script>
   </div>
 </div>
@@ -90,11 +113,12 @@ sim.on('tick', () => {
 const SEARCH_DATA = window.JAZZFEST_SEARCH || [];
 const inp = document.getElementById('search-input');
 const res = document.getElementById('search-results');
+const fuse = new Fuse(SEARCH_DATA, { keys: ['n'], threshold: 0.3 });
 inp.addEventListener('input', function() {
-  const q = this.value.toLowerCase().trim();
+  const q = this.value.trim();
   res.innerHTML = '';
   if (q.length < 2) { res.style.display='none'; return; }
-  const hits = SEARCH_DATA.filter(x => x.n.toLowerCase().includes(q)).slice(0, 12);
+  const hits = fuse.search(q).slice(0, 12).map(r => r.item);
   if (!hits.length) { res.style.display='none'; return; }
   hits.forEach(h => {
     const a = document.createElement('a');
