@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ton um Ton I 92 — Jazzfest Wiki</title>
+<link rel="stylesheet" href="../template/css/wiki.css">
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@7/dist/fuse.min.js"></script>
+</head>
+<body>
+<header id="wiki-header">
+  <a class="logo" href="../index.html">Jazzfest<span>Saalfelden</span> Wiki</a>
+  <div id="search-wrap" style="position:relative">
+    <input id="search-input" type="text" placeholder="Musiker, Band, Jahr …" autocomplete="off">
+    <div id="search-results"></div>
+  </div>
+</header>
+<nav id="wiki-nav">
+  <a href="../index.html" >Hauptseite</a>
+  <a href="../musicians/index.html" >Musiker</a>
+  <a href="../bands/index.html" >Bands</a>
+  <a href="../years/index.html" >Chronik</a>
+  <a href="../orte/index.html" class="active">Orte</a>
+  <a href="../graph.html" >Netzwerk</a>
+  <a href="../stats.html" >Statistiken</a>
+</nav>
+<div id="wiki-body">
+  <div class="wiki-page clearfix">
+    <h1 class="page-title">Ton um Ton I 92</h1>
+<p>21 Konzerteinträge · 6 Bands/Projekte</p>
+<div class="wiki-section">
+  <table class="wiki-table sortable">
+    <thead><tr><th>Band / Projekt</th><th>Auftritte</th><th>Daten (Auswahl)</th></tr></thead>
+    <tbody><tr>
+  <td><a href="../bands/don-pullen-s-afro-brazilian-connection.html">Don Pullen’s Afro Brazilian Connection</a></td>
+  <td>5</td>
+  <td>9. May 1992, 9. May 1992, 9. May 1992 +2</td>
+</tr><tr>
+  <td><a href="../bands/dewey-redman-quartet.html">Dewey Redman Quartet</a></td>
+  <td>4</td>
+  <td>10. May 1992, 10. May 1992, 10. May 1992 +1</td>
+</tr><tr>
+  <td><a href="../bands/saxofour.html">Saxofour</a></td>
+  <td>4</td>
+  <td>9. May 1992, 9. May 1992, 9. May 1992 +1</td>
+</tr><tr>
+  <td><a href="../bands/zentralquartet.html">Zentralquartet</a></td>
+  <td>4</td>
+  <td>10. May 1992, 10. May 1992, 10. May 1992 +1</td>
+</tr><tr>
+  <td><a href="../bands/malli-dafeldecker.html">Malli & Dafeldecker</a></td>
+  <td>2</td>
+  <td>10. May 1992, 10. May 1992</td>
+</tr><tr>
+  <td><a href="../bands/steiner-aichinger.html">Steiner & Aichinger</a></td>
+  <td>2</td>
+  <td>9. May 1992, 9. May 1992</td>
+</tr></tbody>
+  </table>
+</div>
+  </div>
+</div>
+<footer id="wiki-footer">
+  Jazzfest Wiki · 5936 Musiker · 13034 Konzerte · 1975–2025
+  · Daten: Jazzfest Wien Chronik + Discogs API
+</footer>
+<script>
+// Globale Suche — lazy load
+const ROOT = '../';
+let fuse = null, searchLoaded = false;
+const inp = document.getElementById('search-input');
+const res = document.getElementById('search-results');
+
+function loadSearch(cb) {
+  if (searchLoaded) { cb(); return; }
+  const s = document.createElement('script');
+  s.src = ROOT + 'search-data.js';
+  s.onload = function() {
+    searchLoaded = true;
+    fuse = new Fuse(window.JAZZFEST_SEARCH || [], { keys: ['n'], threshold: 0.3 });
+    cb();
+  };
+  document.head.appendChild(s);
+}
+
+function doSearch(q) {
+  res.innerHTML = '';
+  if (q.length < 2) { res.style.display = 'none'; return; }
+  const hits = fuse.search(q).slice(0, 12).map(r => r.item);
+  if (!hits.length) { res.style.display = 'none'; return; }
+  hits.forEach(h => {
+    const a = document.createElement('a');
+    a.href = ROOT + h.u;
+    a.innerHTML = h.n + '<span class="sr-type">' + h.t + '</span>';
+    res.appendChild(a);
+  });
+  res.style.display = 'block';
+}
+
+inp.addEventListener('focus', () => loadSearch(() => {}), { once: true });
+inp.addEventListener('input', function() {
+  const q = this.value.trim();
+  if (!searchLoaded) loadSearch(() => doSearch(q));
+  else doSearch(q);
+});
+document.addEventListener('click', e => { if (!inp.contains(e.target)) res.style.display = 'none'; });
+</script>
+<script>
+// Tabellen-Sortierfunktion für alle .wiki-table
+(function(){
+  function cellVal(td, mode) {
+    var t = td.textContent.trim();
+    if (mode === 'nachname') {
+      var w = t.split(/\s+/); return (w[w.length-1]||t).toLowerCase();
+    }
+    if (mode === 'vorname') {
+      var w = t.split(/\s+/); return (w.length > 1 ? w.slice(0,-1).join(' ') : t).toLowerCase();
+    }
+    var dm = t.match(/(\d{1,2})\.\s+\w+\s+(\d{4})/);
+    if (dm) {
+      var months = {Jan:1,Feb:2,Mär:3,Apr:4,Mai:5,Jun:6,Jul:7,Aug:8,Sep:9,Okt:10,Nov:11,Dez:12};
+      var parts = t.split(/\s+/);
+      return dm[2] + '-' + String(months[parts[1]]||0).padStart(2,'0') + '-' + dm[1].padStart(2,'0');
+    }
+    var n = parseFloat(t.replace(/[^\d,.-]/g,'').replace(',','.'));
+    if (!isNaN(n) && t.match(/^\d/)) return n;
+    return t.toLowerCase();
+  }
+
+  function sortTable(table, col, asc, mode) {
+    var tbody = table.querySelector('tbody');
+    if (!tbody) return;
+    var rows = Array.from(tbody.querySelectorAll('tr'));
+    rows.sort(function(a, b) {
+      var va = cellVal(a.cells[col] || a.cells[0], mode);
+      var vb = cellVal(b.cells[col] || b.cells[0], mode);
+      if (va < vb) return asc ? -1 : 1;
+      if (va > vb) return asc ? 1 : -1;
+      return 0;
+    });
+    rows.forEach(function(r) { tbody.appendChild(r); });
+  }
+
+  document.querySelectorAll('table.wiki-table').forEach(function(table) {
+    var thead = table.querySelector('thead tr');
+    if (!thead) return;
+    var cycles = {};
+
+    Array.from(thead.cells).forEach(function(th, i) {
+      var base = th.textContent.trim();
+      th.dataset.base = base;
+      th.style.cursor = 'pointer';
+      th.title = 'Sortieren';
+      th.innerHTML = base + ' <span class="si">↕</span>';
+
+      // Name-Spalte: 4 Stufen (Nachname▲▼, Vorname▲▼)
+      if (base === 'Name') {
+        cycles[i] = [
+          {label:'Nachname', mode:'nachname', asc:true},
+          {label:'Nachname', mode:'nachname', asc:false},
+          {label:'Vorname',  mode:'vorname',  asc:true},
+          {label:'Vorname',  mode:'vorname',  asc:false}
+        ];
+      } else {
+        cycles[i] = [
+          {label:base, mode:null, asc:true},
+          {label:base, mode:null, asc:false}
+        ];
+      }
+      th._cycle = 0;
+
+      th.addEventListener('click', function() {
+        // Andere auf ↕ zurücksetzen
+        Array.from(thead.cells).forEach(function(h, j) {
+          if (j !== i) {
+            h.innerHTML = h.dataset.base + ' <span class="si">↕</span>';
+            h._cycle = 0;
+          }
+        });
+        var step = cycles[i][th._cycle % cycles[i].length];
+        sortTable(table, i, step.asc, step.mode);
+        th.innerHTML = step.label + ' <span class="si">' + (step.asc ? '▲' : '▼') + '</span>';
+        th._cycle++;
+      });
+    });
+  });
+})();
+</script>
+
+<script>
+(function(){
+  var PW = 'mischa';
+  var KEY = 'jfwiki_auth';
+  if(localStorage.getItem(KEY) === PW) return;
+  var ov = document.createElement('div');
+  ov.id = 'gate-overlay';
+  ov.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:#f8f9fa;z-index:9999;display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;';
+  ov.innerHTML = '<div style="text-align:center;border:1px solid #a2a9b1;padding:40px 48px;background:#fff;max-width:360px;width:90%">'
+    + '<div style="font-size:22px;font-weight:bold;margin-bottom:8px">Jazzfest<span style="color:#3366cc">Saalfelden</span></div>'
+    + '<div style="font-size:13px;color:#54595d;margin-bottom:24px">Chronik-Wiki · 1975–2025</div>'
+    + '<input id="gate-pw" type="password" placeholder="Passwort" style="width:100%;padding:8px 12px;border:1px solid #a2a9b1;font-size:14px;margin-bottom:12px;box-sizing:border-box;outline:none">'
+    + '<button id="gate-btn" style="width:100%;padding:8px;background:#3366cc;color:#fff;border:none;font-size:14px;cursor:pointer">Öffnen</button>'
+    + '<div id="gate-err" style="display:none;color:#cc0000;font-size:12px;margin-top:10px">Falsches Passwort</div>'
+    + '</div>';
+  document.body.appendChild(ov);
+  function tryLogin(){
+    var v = document.getElementById('gate-pw').value;
+    if(v === PW){ localStorage.setItem(KEY, v); location.reload(); }
+    else { document.getElementById('gate-err').style.display = 'block'; }
+  }
+  document.getElementById('gate-btn').addEventListener('click', tryLogin);
+  document.getElementById('gate-pw').addEventListener('keydown', function(e){
+    if(e.key === 'Enter') tryLogin();
+  });
+})();
+</script>
+</body>
+</html>

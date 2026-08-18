@@ -19,7 +19,8 @@
   <a href="../index.html" >Hauptseite</a>
   <a href="../musicians/index.html" class="active">Musiker</a>
   <a href="../bands/index.html" >Bands</a>
-  <a href="../years/index.html" >Jahre</a>
+  <a href="../years/index.html" >Chronik</a>
+  <a href="../orte/index.html" >Orte</a>
   <a href="../graph.html" >Netzwerk</a>
   <a href="../stats.html" >Statistiken</a>
 </nav>
@@ -37,11 +38,11 @@
     <tr><td>Bands</td><td>9</td></tr>
     <tr><td>Mitschnitte</td><td>0</td></tr>
     <tr><td>Discogs</td><td><a href="https://www.discogs.com/artist/238626-Jack-DeJohnette" target="_blank">Discogs-Profil</a></td></tr>
-    <tr><td>Herkunft</td><td>🇺🇸 USA (1942–2025)</td></tr>
+    
   </table>
-  <div style='padding:6px 8px'><span class="tag genre">Jazz</span><span class="tag genre">Free Improvisation</span><span class="tag genre">Latin</span><span class="tag genre">Folk, World, & Country</span></div>
+  
 </div>
-<div class="social-links"><a href="https://www.jackdejohnette.com" target="_blank" class="social-link social-website">🌐 Website</a><a href="https://myspace.com/jackdejohnette" target="_blank" class="social-link social-myspace">🔗 Myspace</a><a href="https://www.facebook.com/jackdejohnette" target="_blank" class="social-link social-facebook">f Facebook</a></div>
+
 <p><span class="tag instrument">Schlagzeug</span><span class="tag instrument">Schlagzeug, Klavier</span><span class="tag instrument">Schlagzeug, Klavier, Conga</span><a class="tag year" href="../years/1998.html">1998</a><a class="tag year" href="../years/1999.html">1999</a><a class="tag year" href="../years/2002.html">2002</a></p>
 
 <div class="wiki-section">
@@ -234,52 +235,75 @@
   · Daten: Jazzfest Wien Chronik + Discogs API
 </footer>
 <script>
-// Globale Suche
-const SEARCH_DATA = window.JAZZFEST_SEARCH || [];
+// Globale Suche — lazy load
+const ROOT = '../';
+let fuse = null, searchLoaded = false;
 const inp = document.getElementById('search-input');
 const res = document.getElementById('search-results');
-const fuse = new Fuse(SEARCH_DATA, { keys: ['n'], threshold: 0.3 });
-inp.addEventListener('input', function() {
-  const q = this.value.trim();
+
+function loadSearch(cb) {
+  if (searchLoaded) { cb(); return; }
+  const s = document.createElement('script');
+  s.src = ROOT + 'search-data.js';
+  s.onload = function() {
+    searchLoaded = true;
+    fuse = new Fuse(window.JAZZFEST_SEARCH || [], { keys: ['n'], threshold: 0.3 });
+    cb();
+  };
+  document.head.appendChild(s);
+}
+
+function doSearch(q) {
   res.innerHTML = '';
-  if (q.length < 2) { res.style.display='none'; return; }
+  if (q.length < 2) { res.style.display = 'none'; return; }
   const hits = fuse.search(q).slice(0, 12).map(r => r.item);
-  if (!hits.length) { res.style.display='none'; return; }
+  if (!hits.length) { res.style.display = 'none'; return; }
   hits.forEach(h => {
     const a = document.createElement('a');
-    a.href = '../' + h.u;
+    a.href = ROOT + h.u;
     a.innerHTML = h.n + '<span class="sr-type">' + h.t + '</span>';
     res.appendChild(a);
   });
   res.style.display = 'block';
+}
+
+inp.addEventListener('focus', () => loadSearch(() => {}), { once: true });
+inp.addEventListener('input', function() {
+  const q = this.value.trim();
+  if (!searchLoaded) loadSearch(() => doSearch(q));
+  else doSearch(q);
 });
-document.addEventListener('click', e => { if (!inp.contains(e.target)) res.style.display='none'; });
+document.addEventListener('click', e => { if (!inp.contains(e.target)) res.style.display = 'none'; });
 </script>
 <script>
 // Tabellen-Sortierfunktion für alle .wiki-table
 (function(){
-  function cellVal(td) {
+  function cellVal(td, mode) {
     var t = td.textContent.trim();
-    // Datum: "21. Aug 2019" → sortierbar
+    if (mode === 'nachname') {
+      var w = t.split(/\s+/); return (w[w.length-1]||t).toLowerCase();
+    }
+    if (mode === 'vorname') {
+      var w = t.split(/\s+/); return (w.length > 1 ? w.slice(0,-1).join(' ') : t).toLowerCase();
+    }
     var dm = t.match(/(\d{1,2})\.\s+\w+\s+(\d{4})/);
     if (dm) {
       var months = {Jan:1,Feb:2,Mär:3,Apr:4,Mai:5,Jun:6,Jul:7,Aug:8,Sep:9,Okt:10,Nov:11,Dez:12};
       var parts = t.split(/\s+/);
       return dm[2] + '-' + String(months[parts[1]]||0).padStart(2,'0') + '-' + dm[1].padStart(2,'0');
     }
-    // Zahl
     var n = parseFloat(t.replace(/[^\d,.-]/g,'').replace(',','.'));
     if (!isNaN(n) && t.match(/^\d/)) return n;
     return t.toLowerCase();
   }
 
-  function sortTable(table, col, asc) {
+  function sortTable(table, col, asc, mode) {
     var tbody = table.querySelector('tbody');
     if (!tbody) return;
     var rows = Array.from(tbody.querySelectorAll('tr'));
     rows.sort(function(a, b) {
-      var va = cellVal(a.cells[col] || a.cells[0]);
-      var vb = cellVal(b.cells[col] || b.cells[0]);
+      var va = cellVal(a.cells[col] || a.cells[0], mode);
+      var vb = cellVal(b.cells[col] || b.cells[0], mode);
       if (va < vb) return asc ? -1 : 1;
       if (va > vb) return asc ? 1 : -1;
       return 0;
@@ -290,16 +314,43 @@ document.addEventListener('click', e => { if (!inp.contains(e.target)) res.style
   document.querySelectorAll('table.wiki-table').forEach(function(table) {
     var thead = table.querySelector('thead tr');
     if (!thead) return;
-    var state = {};
+    var cycles = {};
+
     Array.from(thead.cells).forEach(function(th, i) {
+      var base = th.textContent.trim();
+      th.dataset.base = base;
       th.style.cursor = 'pointer';
       th.title = 'Sortieren';
-      state[i] = true;
+      th.innerHTML = base + ' <span class="si">↕</span>';
+
+      // Name-Spalte: 4 Stufen (Nachname▲▼, Vorname▲▼)
+      if (base === 'Name') {
+        cycles[i] = [
+          {label:'Nachname', mode:'nachname', asc:true},
+          {label:'Nachname', mode:'nachname', asc:false},
+          {label:'Vorname',  mode:'vorname',  asc:true},
+          {label:'Vorname',  mode:'vorname',  asc:false}
+        ];
+      } else {
+        cycles[i] = [
+          {label:base, mode:null, asc:true},
+          {label:base, mode:null, asc:false}
+        ];
+      }
+      th._cycle = 0;
+
       th.addEventListener('click', function() {
-        Array.from(thead.cells).forEach(function(h) { h.textContent = h.textContent.replace(/ [▲▼]$/,''); });
-        sortTable(table, i, state[i]);
-        th.textContent += state[i] ? ' ▲' : ' ▼';
-        state[i] = !state[i];
+        // Andere auf ↕ zurücksetzen
+        Array.from(thead.cells).forEach(function(h, j) {
+          if (j !== i) {
+            h.innerHTML = h.dataset.base + ' <span class="si">↕</span>';
+            h._cycle = 0;
+          }
+        });
+        var step = cycles[i][th._cycle % cycles[i].length];
+        sortTable(table, i, step.asc, step.mode);
+        th.innerHTML = step.label + ' <span class="si">' + (step.asc ? '▲' : '▼') + '</span>';
+        th._cycle++;
       });
     });
   });
