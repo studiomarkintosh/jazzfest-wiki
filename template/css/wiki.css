@@ -455,6 +455,35 @@ a:hover { text-decoration: underline; color: var(--link-hover); }
 .concert-band { font-weight: bold; }
 .concert-musiker { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
 
+/* WEITERE CHRONIKEN */
+.weitere-gruppe {
+  display: flex;
+  gap: 24px;
+  margin: 20px 0;
+  align-items: flex-start;
+}
+.weitere-titel {
+  min-width: 160px;
+  max-width: 160px;
+  font-weight: bold;
+  font-size: 0.95em;
+  padding-top: 8px;
+  color: var(--text-main);
+  flex-shrink: 0;
+}
+.weitere-count {
+  display: block;
+  font-size: 11px;
+  font-weight: normal;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+.weitere-gruppe .year-concerts { flex: 1; }
+@media (max-width: 600px) {
+  .weitere-gruppe { flex-direction: column; gap: 8px; }
+  .weitere-titel { min-width: unset; max-width: unset; padding-top: 0; }
+}
+
 /* FOOTER */
 #wiki-footer {
   text-align: center;
