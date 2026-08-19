@@ -444,7 +444,111 @@ a:hover { text-decoration: underline; color: var(--link-hover); }
   z-index: 10;
 }
 
-/* YEAR */
+/* YEAR — DAY ACCORDION */
+.day-accordion {
+  border: 1px solid var(--border-light);
+  border-radius: 2px;
+  margin-bottom: 8px;
+  background: var(--bg);
+}
+.day-accordion summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  cursor: pointer;
+  background: var(--bg-content);
+  border-bottom: 1px solid transparent;
+  list-style: none;
+  user-select: none;
+}
+.day-accordion[open] summary { border-bottom: 1px solid var(--border-light); }
+.day-accordion summary::-webkit-details-marker { display: none; }
+.day-accordion summary::before {
+  content: "▶";
+  font-size: 10px;
+  color: var(--text-muted);
+  transition: transform 0.15s;
+  display: inline-block;
+  width: 12px;
+  flex-shrink: 0;
+}
+.day-accordion[open] summary::before { transform: rotate(90deg); }
+.day-name { font-weight: bold; font-size: 14px; flex: 1; font-family: Georgia, serif; }
+.day-count { font-size: 12px; color: var(--text-muted); white-space: nowrap; }
+
+/* CONCERT CARDS */
+.day-concerts { padding: 8px 12px; display: flex; flex-direction: column; gap: 5px; }
+
+.concert-card {
+  padding: 8px 12px;
+  border-left: 3px solid var(--border);
+  background: var(--bg);
+  transition: border-color 0.12s, background 0.12s;
+}
+.concert-card:hover { border-left-color: var(--accent); background: #f4f7ff; }
+
+.concert-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.concert-band-link {
+  font-weight: bold;
+  font-size: 14px;
+  color: var(--link);
+  text-decoration: none;
+  line-height: 1.3;
+}
+.concert-band-link:hover { text-decoration: underline; }
+
+.concert-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  flex-shrink: 0;
+}
+.tag-buehne {
+  background: #e8f0ff;
+  border-color: #99aadd;
+  color: #223;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 1px 7px;
+}
+.tag-mitschnitt {
+  background: #fff8e0;
+  border-color: #ccaa44;
+  color: #664400;
+  font-size: 11px;
+  padding: 1px 7px;
+}
+
+.concert-musicians {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 5px;
+}
+.musician-chip {
+  background: var(--tag-bg);
+  border: 1px solid var(--border-light);
+  border-radius: 2px;
+  padding: 1px 7px;
+  font-size: 11px;
+  color: var(--text);
+  white-space: nowrap;
+}
+.musician-chip em {
+  color: var(--text-muted);
+  font-style: normal;
+  margin-left: 3px;
+}
+
+/* Legacy — keep for band/musician pages */
 .concert-entry {
   border-left: 3px solid var(--border);
   padding: 6px 12px;
